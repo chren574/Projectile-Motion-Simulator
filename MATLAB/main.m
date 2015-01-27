@@ -24,6 +24,53 @@ plot(t,y(:,1));
 
 figure;plot(t, y(:,1), 'x')
 
+
+%% kastbana med funktionen kast.m
+
+clear all
+
+y0=0;
+v0=10; 
+t=45*pi/180;
+
+x=linspace(0,14);
+
+figure;plot(x, kast(x,y0,v0,t),[x(1) x(end)],[0 0],'g')
+
+distance=fzero(@(x)kast(x,y0,v0,t),[0,12]);
+fprintf('distance: %d \n', distance); 
+
+
+%% Eulers step method
+
+clear t % Clears old time steps and
+clear y % y values from previous runs
+
+a=0; % Initial time
+b=1; % Final time
+N=10; % Number of time steps
+y0=0; % Initial value y(a)
+h=(b-a)/N; % Time step
+t(1)=a;
+y(1)=y0;
+
+for n=1:N % For loop, sets next t,y values
+    t(n+1)=t(n)+h;
+    y(n+1)=y(n)+h*f(t(n),y(n)); % Calls the function f(t,y)=dy/dt
+end
+plot(t,y)
+title(['Euler Method using N=',num2str(N),' steps, by MYNAME'])
+% Include your own name
+
+%% Exempel pa Eulers stegmetod
+
+
+[X,Y] = euler1(0,1, 1, 10); 
+[X,Y]
+
+figure;plot(X,Y);
+
+
 %%
 A=[4 -5;-2 1]; x0=[2.9;3.6];
 F=@(t,x)A*x;
@@ -37,7 +84,7 @@ quiver(X1,X2,F1,F2,0.9)
 axis([-3 3 -1 5]);hold on
 plot(X(:,1),X(:,2),'r','LineWidth',2)
 
-%% Kaniner och r?var
+%% Kaniner och ravar
 
 % Alternativet med ode45
 [T,Y]=ode45(@fdjur,[0 9],[300 150]');
