@@ -38,7 +38,7 @@ for n = 1:tmax/N:1000
     x(n+1) = x(n) + vx(n)*deltat + 0.5*ax*deltat.^2;
     y(n+1) = y(n) + vy(n)*deltat + 0.5*ay*deltat.^2;
     
-    % Ökar steglängden
+    % Ökar steglangden
     t = t + deltat;
     
     % Avslutar loppen när y-axeln blir noll (eller väldigt nära noll) 
