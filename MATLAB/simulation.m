@@ -41,8 +41,6 @@ ax_u= zeros(1, len);ay_u= zeros(1, len);
 vx_u=zeros(1, len);vy_u=zeros(1, len);
 x_u=zeros(1, len); y_u=zeros(1, len);
 
-
-
 v(1) = v0*sin(theta);          %
 
 % Start hastigheten
@@ -107,7 +105,7 @@ title('Projectile Trajectories');
 %%
 figure;
 %title('Acceleration and velocity with drag');
-subplot(2,2,1, '');
+subplot(2,2,1);
 plot(t, ax)
 xlabel('Time (s)');
 ylabel('(m/s^s)');
