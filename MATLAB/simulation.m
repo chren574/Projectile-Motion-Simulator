@@ -43,6 +43,7 @@ x_u=zeros(1, len); y_u=zeros(1, len);
 
 v(1) = v0*sin(theta);          %
 
+
 % Start hastigheten
 vx(1) = v0*cos(theta);  vy(1) = v0*sin(theta);
 vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
@@ -50,14 +51,21 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 % N = 100;
 % tmax = N*deltaT;
 
+%v_comp=zeros(1, len);
+
 % Euler bakatsubstitution for hastigheten med luftmotstand.
 for i = 2:len
     v(i) = v(i-1)+ (g-(D/m)*v(i-1)^2)*deltaT ;
+    %v_comp(i) = v(i)-v(i-1);
 end%
 
-% figure;plot(t, v)
-% xlabel('Time (s)');
-% ylabel('Y-speed (m/s)');
+figure;plot(t, v)
+xlabel('Time (s)');
+ylabel('Y-speed (m/s)');
+
+figure;plot(t, v_comp)
+xlabel('Time (s)');
+ylabel('Y-speed (m/s)');
 %%
 
 % for n = 1:1000
@@ -88,9 +96,9 @@ for n = 2:len
     %t = t + deltaT;
     
     % Avslutar loppen nr y-axeln blir noll (eller vldigt nra noll) 
-    if y_u(n) < 0
-        break
-    end
+%     if y_u(n) < 0
+%         break
+%     end
     
 end
 
