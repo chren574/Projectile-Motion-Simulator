@@ -62,7 +62,7 @@ end%
 
 % for n = 1:1000
 for n = 2:len
-  
+ 
     % Berknar aktuella acceleratioen
     ax(n) =    -(D/m)*sqrt(vx(n-1).^2 + vy(n-1).^2)*vx(n-1);
     ay(n) = -g -(D/m)*sqrt(vx(n-1).^2 + vy(n-1).^2)*vy(n-1);
@@ -87,7 +87,7 @@ for n = 2:len
     % steglngden
     %t = t + deltaT;
     
-    % Avslutar loppen nr y-värdet blir vldigt nra noll 
+    % Avslutar loppen nr y-vï¿½rdet blir vldigt nra noll 
     if abs(y_u(n)) <= 0.005
         break
     end
