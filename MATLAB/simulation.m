@@ -11,7 +11,6 @@ angle = 45;              % angle in degrees
 theta = angle*pi/180;    % convert to radians
 
 %%%%% Konstanter luftmotstand %%%%%
-
 A = r.^2*pi;             % Arean A [m^2]
 C = 0.5;
 p = 1.2;                 % Densiteten p []
@@ -95,10 +94,11 @@ for n = 2:len
     % steglngden
     %t = t + deltaT;
     
-    % Avslutar loppen nr y-axeln blir noll (eller vldigt nra noll) 
-%     if y_u(n) < 0
-%         break
-%     end
+    % Avslutar loppen nr y-v?rdet blir vldigt nra noll 
+    if abs(y_u(n)) <= 0.005
+        break
+    end
+>>>>>>> 49d5f3356fcb650336f3dd1f0d1a2a95c2159c52
     
 end
 
@@ -106,6 +106,7 @@ plot(x, y,'r' ,x_u, y_u, 'g');
 grid on;
 hold on;
 axis tight;
+ylim([0, inf]) % Axelgrans i y-led
 xlabel('x (m)');
 ylabel('y (m)');
 title('Projectile Trajectories');
@@ -129,7 +130,7 @@ subplot(2,2,3);
 plot(t, vx)
 xlabel('Time (s)');
 ylabel('(m/s)');
-title('(m/s)');
+title('Velocity x (m/s)');
 
 subplot(2,2,4);
 plot(t, vy)
