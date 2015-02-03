@@ -11,7 +11,6 @@ angle = 45;              % angle in degrees
 theta = angle*pi/180;    % convert to radians
 
 %%%%% Konstanter luftmotstand %%%%%
-
 A = r.^2*pi;             % Arean A [m^2]
 C = 0.5;
 p = 1.2;                 % Densiteten p []
@@ -43,6 +42,7 @@ x_u=zeros(1, len); y_u=zeros(1, len);
 
 v(1) = v0*sin(theta);          %
 
+
 % Start hastigheten
 vx(1) = v0*cos(theta);  vy(1) = v0*sin(theta);
 vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
@@ -50,14 +50,21 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 % N = 100;
 % tmax = N*deltaT;
 
+%v_comp=zeros(1, len);
+
 % Euler bakatsubstitution for hastigheten med luftmotstand.
 for i = 2:len
     v(i) = v(i-1)+ (g-(D/m)*v(i-1)^2)*deltaT ;
+    %v_comp(i) = v(i)-v(i-1);
 end%
 
-% figure;plot(t, v)
-% xlabel('Time (s)');
-% ylabel('Y-speed (m/s)');
+figure;plot(t, v)
+xlabel('Time (s)');
+ylabel('Y-speed (m/s)');
+
+figure;plot(t, v_comp)
+xlabel('Time (s)');
+ylabel('Y-speed (m/s)');
 %%
 
 % for n = 1:1000
@@ -87,11 +94,10 @@ for n = 2:len
     % steglngden
     %t = t + deltaT;
     
-    % Avslutar loppen nr y-v�rdet blir vldigt nra noll 
+    % Avslutar loppen nr y-v?rdet blir vldigt nra noll 
     if abs(y_u(n)) <= 0.005
         break
-    end
-    
+    end    
 end
 
 plot(x, y,'r' ,x_u, y_u, 'g');
