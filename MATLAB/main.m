@@ -67,7 +67,6 @@ title(['Euler Method using N=',num2str(N),' steps, by MYNAME'])
 
 [X,Y] = euler1(0,1, 1, 10); 
 [X,Y]
-
 figure;plot(X,Y);
 
 
@@ -92,6 +91,70 @@ kanin=Y(:,1); raev=Y(:,2);
 figure;
 subplot(1,2,1), plot(T,kanin, T,raev,'--')
 subplot(1,2,2), plot(300,150,'x', kanin,raev), axis 
+
+
+%%
+
+[t,u]=ode45(@ft,[0,1.8],[0;63.1*cos(35*pi/180) ;5 ;63.1*sin(35*pi/180)]);
+plot(u(:,1), u(:,3))
+grid on
+
+
+
+%%
+
+
+%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+[t,u]=ode45(@ft2,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+figure;plot(u(:,1), u(:,3))
+grid on
+
+%% Air res
+
+%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+[t,u_res]=ode45(@func_airres,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+figure;plot(u_res(:,1), u_res(:,3))
+grid on
+
+
+
+%%
+
+s = 100;
+t = 1:100;
+g = 9.81;
+
+theta = pi/3;
+v0 = s*[cos(theta); sin(theta )];
+% %Compute the reference trajectory (absent air resistance )
+% x(y) = s*cos(theta)*t;
+% y(t) = -g*t^2/2 + s*sin(theta)*t;
+% %up to time tfinal = 2*s*sin(theta)/g
+%
+tfinal = 2*v0(2)/g;
+tref = linspace(0,tfinal )';
+xref = v0(1)*tref;
+yref = (v0(2)-g/2*tref).*tref;
+
+% Compute the same reference trajectory with ode45
+y0 = [0; 0; v0];
+refopt = opt;
+refopt.c = 0;
+[tout,yout] = ode45(@(t,y) fball(t,y,refopt ), tref , y0);
+
+% Compute a similar trajectory with air drag on (no wind)
+dopt = opt;
+dopt.w = 0;
+[toutd,youtd] = ode45(@(t,y) fball(t,y,dopt), tref , y0);
+
+% Do a comparison between analytical and numerical solutions (no drag)
+fprintf('Max x error: %g\n', norm( xref-yout(:,1), inf));
+fprintf('Max y error: %g\n', norm( yref-yout(:,2), inf));
+% Visually compare solutions for drag and no drag
+plot(xref, yref , ' r: ' , youtd (:,1), youtd (:,2), 'b-');
+legend('No drag', 'Drag');
+
+
 
 
 
