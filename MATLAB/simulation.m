@@ -17,16 +17,13 @@ p = 1.2;                 % Densiteten p []
 D = (p*C*A)/2;
 
 % Konstanter
-v0 = 20;
-x(1) = 0;
-y(1) = 0;
-x_u(1) = 0;
-y_u(1) = 0;
-
+v0 = 20;                 % initial hastigheten
+x(1) = 0;y(1) = 0;
+x_u(1) = 0;y_u(1) = 0;
 
 t0 = 0;             % starttid
 tf = 6.333 ;        % sluttid
-deltaT = 0.01;      % tidssteg
+deltaT = 0.1;      % tidssteg
 t=t0:deltaT:tf ;    % tidsvektorn
 
 len=length(t);
@@ -37,14 +34,13 @@ vx=zeros(1, len);vy=zeros(1, len);
 x=zeros(1, len); y=zeros(1, len);
 
 ax_u= zeros(1, len);ay_u= zeros(1, len);
-vx_u=zeros(1, len);vy_u=zeros(1, len);
-x_u=zeros(1, len); y_u=zeros(1, len);
+vx_u=zeros(1, len); vy_u=zeros(1, len);
+x_u=zeros(1, len);  y_u=zeros(1, len);
 
 v(1) = v0*sin(theta);          %
 
-
 % Start hastigheten
-vx(1) = v0*cos(theta);  vy(1) = v0*sin(theta);
+vx(1)   = v0*cos(theta);  vy(1) = v0*sin(theta);
 vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
  
 % N = 100;
@@ -54,7 +50,7 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 
 % Euler bakatsubstitution for hastigheten med luftmotstand.
 for i = 2:len
-    v(i) = v(i-1)+ (g-(D/m)*v(i-1)^2)*deltaT ;
+    v(i) = v(i-1)+ (g - (D/m)*v(i-1)^2) * deltaT ;
     %v_comp(i) = v(i)-v(i-1);
 end%
 
@@ -62,20 +58,20 @@ figure;plot(t, v)
 xlabel('Time (s)');
 ylabel('Y-speed (m/s)');
 
-figure;plot(t, v_comp)
-xlabel('Time (s)');
-ylabel('Y-speed (m/s)');
+% figure;plot(t, v_comp)
+% xlabel('Time (s)');
+% ylabel('Y-speed (m/s)');
 %%
 
 % for n = 1:1000
 for n = 2:len
   
     % Berknar aktuella acceleratioen
-    ax(n) =    -(D/m)*sqrt(vx(n-1).^2 + vy(n-1).^2)*vx(n-1);
-    ay(n) = -g -(D/m)*sqrt(vx(n-1).^2 + vy(n-1).^2)*vy(n-1);
+    ax(n) =    -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
+    ay(n) = -g -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
     % Utan luftmotstand
     ax_u(n) = 0;
-    ay_u(n) = -g ;
+    ay_u(n) = -g;
     
     % Berknar hastigheten
     vx(n) = vx(n-1) + ax(n-1)*deltaT;
@@ -98,11 +94,10 @@ for n = 2:len
     if abs(y_u(n)) <= 0.005
         break
     end
->>>>>>> 49d5f3356fcb650336f3dd1f0d1a2a95c2159c52
-    
 end
 
 plot(x, y,'r' ,x_u, y_u, 'g');
+%plot(t, y,'r' , t, y_u, 'g');
 grid on;
 hold on;
 axis tight;
@@ -110,6 +105,14 @@ ylim([0, inf]) % Axelgrans i y-led
 xlabel('x (m)');
 ylabel('y (m)');
 title('Projectile Trajectories');
+
+
+
+% Jamfor med ode45 losning
+%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+[t,u]=ode45(@ft2,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+% plot the solution for the ode45 with the same arguments
+plot(u(:,1), u(:,3), '--')
 
 %%
 figure;
