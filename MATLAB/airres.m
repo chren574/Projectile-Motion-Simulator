@@ -65,7 +65,7 @@ ylabel('Y-speed (m/s)');
 
 % for n = 1:1000
 for n = 2:len
-  
+ 
     % Berknar aktuella acceleratioen
     ax(n) =    -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
     ay(n) = -g -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
@@ -94,6 +94,7 @@ for n = 2:len
     if abs(y_u(n)) <= 0.005
         break
     end
+
 end
 
 plot(x, y,'r' ,x_u, y_u, 'g');
