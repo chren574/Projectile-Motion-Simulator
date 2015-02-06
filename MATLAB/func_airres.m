@@ -9,6 +9,7 @@ function [uprime]=func_airres(t,u)
     
     % Konstanter
 %     k=-.06433; %gammal konstant
+
     m = 0.145;          % Massa m [kg]
     g = 9.82;           % Tyngdacceleration g [m/s^2]
     
@@ -22,11 +23,14 @@ function [uprime]=func_airres(t,u)
     % hastighet x
     uprime(1)= u(2);
     % acceleration x
-    uprime(2)= (D*u(2)*(sqrt(u(2)^2+u(4)^2)))/m;
-    % hastighet x
+%var1 uprime(2)= (D*u(2)*(sqrt(u(2)^2+u(4)^2)))/m;
+    uprime(2)= -(D/m) * sqrt(u(2)^2 + u(4)^2)*u(2);
+    % hastighet y
     uprime(3)= u(4);
     % acceleration y
-    uprime(4)= (D*u(2)*(sqrt(u(2)^2+u(4)^2))-(m*g))/m;
+%var1 uprime(4)= (D*u(2)*(sqrt(u(2)^2+u(4)^2))-(m*g))/m;
+    uprime(4)= -g -(D/m) * sqrt(u(2)^2 + u(4)^2)*u(4);
+
 end
     
 %       Mall

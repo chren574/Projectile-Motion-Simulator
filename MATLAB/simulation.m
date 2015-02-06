@@ -67,8 +67,11 @@ ylabel('Y-speed (m/s)');
 for n = 2:len
   
     % Berknar aktuella acceleratioen
-    ax(n) =    -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
-    ay(n) = -g -(D/m)*sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
+    ax(n) =    -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
+    ay(n) = -g -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
+%var1    ax(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2)))/m;
+%var1    ay(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2))-(m*g))/m;
+
     % Utan luftmotstand
     ax_u(n) = 0;
     ay_u(n) = -g;
@@ -96,7 +99,7 @@ for n = 2:len
     end
 end
 
-plot(x, y,'r' ,x_u, y_u, 'g');
+plot(x, y,'r.' ,x_u, y_u, 'g^');
 %plot(t, y,'r' , t, y_u, 'g');
 grid on;
 hold on;
@@ -110,16 +113,18 @@ title('Projectile Trajectories');
 
 % Jamfor med ode45 losning
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t,u]=ode45(@ft2,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+%options = odeset('RelTol',1*exp(-10),'AbsTol',1*exp(-10));
+
+[t ,u]=ode45(@ft2,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 % plot the solution for the ode45 with the same arguments
-plot(u(:,1), u(:,3), '--')
+plot(u(:,1), u(:,3), '+')
 
-
+% Jamfor med ode45 losning f?r luftmotstand
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t,u_res]=ode45(@func_airres,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+[t ,u_res]=ode45(@func_airres,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 plot(u_res(:,1), u_res(:,3), '*')
 grid on
-
+legend('med luftmotst?nd','utan luftmotstand','ode45-utan','ode45-med luft')
 
 
 %%
