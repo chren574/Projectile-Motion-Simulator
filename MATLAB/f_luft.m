@@ -1,4 +1,4 @@
-function [uprime]=func_airres(t,u)
+function [uprime]=f_luft(t,u)
     
     %input data
     %u = [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
