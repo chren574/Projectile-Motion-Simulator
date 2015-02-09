@@ -7,7 +7,7 @@ m = 0.145;               % Massa m [kg]
 r = 0.0366;              % Radie r [m]
 % theta = 7*pi/36;       % Vinkel theta [radianer]
 
-angle = 85;              % angle in degrees
+angle = 45;              % angle in degrees
 theta = angle*pi/180;    % convert to radians
 
 %%%%% Konstanter luftmotstand %%%%%
@@ -58,8 +58,7 @@ Uang = 0;
 for n = 2:len
   
     
-    vf2 = (vx(n-1) + U*cos(Uang))^2 + (vy(n-1) + U*sin(Uang))^2;
-        
+    vf2 = (vx(n-1) + U*cos(Uang))^2 + (vy(n-1) + U*sin(Uang))^2;      
     vf_ang = atan((vy(n-1) + U*sin(Uang))/(vx(n-1) + U*cos(Uang)));
         
     % Berknar aktuella acceleratioen
@@ -91,7 +90,7 @@ for n = 2:len
     % steglngden
     %t = t + deltaT;
     
-    % Avslutar loppen nr y-v�rdet blir vldigt nra noll 
+    % Avslutar loppen nr y-vardet blir vldigt nra noll 
     if abs(y_u(n)) <= 0.005
         break
     end
@@ -116,6 +115,9 @@ title('Projectile Trajectories');
     %circles(5,10,3)
     %circles(x_u(1:len), y_u(1:len), 1);   
 %end
+
+[t ,u_vind]=ode45(@f_vind,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+plot(u_vind(:,1), u_vind(:,3), '*')
 
 %%
 figure;
