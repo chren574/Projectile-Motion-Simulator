@@ -1,11 +1,13 @@
+
+
+
+
 clear all;
 
 %%%%% Konstanter %%%%%
-
 g = 9.82;                % Tyngdacceleration g [m/s^2]
 m = 0.145;               % Massa m [kg]
 r = 0.0366;              % Radie r [m]
-% theta = 7*pi/36;       % Vinkel theta [radianer]
 
 angle = 45;              % angle in degrees
 theta = angle*pi/180;    % convert to radians
@@ -21,14 +23,14 @@ v0 = 20;                 % initial hastigheten
 x(1) = 0;y(1) = 0;
 x_u(1) = 0;y_u(1) = 0;
 
-t0 = 0;             % starttid
-tf = 6.333 ;        % sluttid
-deltaT = 0.01;      % tidssteg
-t=t0:deltaT:tf ;    % tidsvektorn
+t0 = 0;                  % starttid
+tf = 6.333 ;             % sluttid
+deltaT = 0.1;           % tidssteg
+t=t0:deltaT:tf ;         % tidsvektorn
 
 len=length(t);
 v=zeros(1, len);
-%skapar 
+% allokerar minne for resultatvektorerna 
 ax=zeros(1, len);ay=zeros(1, len);
 vx=zeros(1, len);vy=zeros(1, len);
 x=zeros(1, len); y=zeros(1, len);
@@ -47,7 +49,6 @@ v(1) = v0*sin(theta);          %
 vx(1)   = v0*cos(theta);  vy(1) = v0*sin(theta);
 vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
-
 
 % Parametrar for vind
 % vindens hastighet
@@ -123,8 +124,6 @@ ylim([0, inf]) % Axelgrans i y-led
 xlabel('x (m)');
 ylabel('y (m)');
 title('Projectile Trajectories');
-
-
 
 % Jamfor med ode45 losning
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
