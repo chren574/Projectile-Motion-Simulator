@@ -1,4 +1,4 @@
-function [uprime]=f_luft(t,u)
+function [uprime]=f__runge_luft(t,u)
     % input parameters
     % u = [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)]) 
     % output parameters
