@@ -8,7 +8,7 @@ clear all;
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
 m = 0.145;               % Massa m [kg]
-r = 0.0366;              % Radie r [m]
+r = 0.15;              % Radie r [m]
 %r = 0.0366;              % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
@@ -28,7 +28,7 @@ x_u(1) = 0;y_u(1) = 0;   % Startpositionen x och y-led.
 % Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
 tf = 6.333 ;             % sluttid
-deltaT = 0.1;            % tidssteg --> andra for att se fel
+deltaT = 0.01;            % tidssteg --> andra for att se fel
 t = t0:deltaT:tf;        % tidsvektorn
 
 
@@ -53,11 +53,34 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
 
 % Parametrar for vind
-U = 20;              % vindens hastighet
-Uang = 0;            % vindens vinkel
+U = 0;                    % vindens hastighet
+angle = 180;              % Vinkel  [grader]
+Uang = angle*pi/180;      % Vinkel  [radianer]
 
 % N = 100;
 % tmax = N*deltaT;
+
+[x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
+plot(x_v, y_v)
+%axis tight;
+xlabel('Distance [m]');
+ylabel('Height y [m]');
+titel = ['Wind simulation'];
+title(titel);
+ylim([0, inf]) % Axelgrans i y-led
+legend('r = 0.03','r = 0.3','r = 0.15')
+
+%%
+[x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
+plot(x_v, y_v)
+%axis tight;
+xlabel('Distance [m]');
+ylabel('Height y [m]');
+titel = ['Wind simulation'];
+title(titel);
+ylim([0, inf]) % Axelgrans i y-led
+legend('Motvind','Medvind','Ingen vind')
+%%
 
 %-------------------------------
 
@@ -69,8 +92,7 @@ figure;plot(x_u, y_u, 'g')
 [x, y] = f_euler_luft(len,deltaT,g, x, y, vx ,vy , ax , ay, D, m );
 figure;plot(x, y, 'r')
 
-[x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-figure;plot(x_v, y_v, 'c')
+%--
 
 
 distance = [length(x_u) length(x) length(x_v) ];
@@ -110,10 +132,11 @@ axis tight;
 ylim([0, inf]) % Axelgrans i y-led
 xlabel('Distance [m]');
 ylabel('Height y [m]');
-title('Canon Simulation');
+titel = ['Canon simulation, timestep = ', num2str(deltaT)];
+title(titel);
 
-%pause_extended(); %---------------------------------->
-
+%%pause_extended(); %---------------------------------->
+%%
 %pause(2);
 
 % Jamfor med ode45 losning
