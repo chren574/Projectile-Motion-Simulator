@@ -1,12 +1,15 @@
+% TNM085 - Modelleringsprojekt.
+% Simulering av kastbana.
+% 2015-02-10
+% 
+
 clear all;
 
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
 m = 0.145;               % Massa m [kg]
 r = 0.0366;              % Radie r [m]
-
-angle = 45;              % angle in degrees
-theta = angle*pi/180;    % convert to radians
+%r = 0.0366;              % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
 A = r.^2*pi;             % Arean A [m^2]
@@ -14,15 +17,20 @@ C = 0.5;
 p = 1.2;                 % Densiteten p []
 D = (p*C*A)/2;
 
-% Konstanter
+% initialvarden
 v0 = 20;                 % initial hastigheten
-x(1) = 0;y(1) = 0;
-x_u(1) = 0;y_u(1) = 0;
+angle = 45;              % Vinkel  [grader]
+theta = angle*pi/180;    % Vinkel  [radianer]
 
+x(1) = 0;y(1) = 0;       % Startpositionen x och y-led.
+x_u(1) = 0;y_u(1) = 0;   % Startpositionen x och y-led.
+
+% Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
 tf = 6.333 ;             % sluttid
-deltaT = 0.1;           % tidssteg
-t=t0:deltaT:tf ;         % tidsvektorn
+deltaT = 0.1;            % tidssteg --> andra for att se fel
+t = t0:deltaT:tf;        % tidsvektorn
+
 
 len=length(t);
 v=zeros(1, len);
@@ -39,87 +47,74 @@ ax_v= zeros(1, len);ay_v= zeros(1, len);
 vx_v=zeros(1, len); vy_v=zeros(1, len);
 x_v=zeros(1, len);  y_v=zeros(1, len);
 
-v(1) = v0*sin(theta);          %
-
-% Start hastigheten
+% Initial hastigheten x och y komponent.
 vx(1)   = v0*cos(theta);  vy(1) = v0*sin(theta);
 vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
 
 % Parametrar for vind
-% vindens hastighet
-U = 20;
-% vindens vinkel
-Uang = 0;
- 
+U = 20;              % vindens hastighet
+Uang = 0;            % vindens vinkel
+
 % N = 100;
 % tmax = N*deltaT;
 
-%%
+%-------------------------------
 
-% for n = 1:1000
-for n = 2:len
-  
+%-------------------------------
+
+[x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
+figure;plot(x_u, y_u, 'g')
+
+[x, y] = f_euler_luft(len,deltaT,g, x, y, vx ,vy , ax , ay, D, m );
+figure;plot(x, y, 'r')
+
+[x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
+figure;plot(x_v, y_v, 'c')
+
+
+distance = [length(x_u) length(x) length(x_v) ];
+
+[max_distance, max_index] = max(distance);
+
+if max_index == 1
+    x(length(x):max_distance) = 0;
+    y(length(y):max_distance) = 0;
     
-    %----------------------------------
-    % Utan luftmotstand
-    % Acceleration
-    ax_u(n) = 0;
-    ay_u(n) = -g;
-    % Hastighet
-    vx_u(n) = vx_u(n-1) + ax_u(n-1)*deltaT;
-    vy_u(n) = vy_u(n-1) + ay_u(n-1)*deltaT;
-    % Position
-    x_u(n) = x_u(n-1) + vx_u(n-1)*deltaT + 0.5*ax_u(n-1)*deltaT^2;
-    y_u(n) = y_u(n-1) + vy_u(n-1)*deltaT + 0.5*ay_u(n-1)*deltaT^2;
+    x_v(length(x_v):max_distance) = 0;
+    y_v(length(y_v):max_distance) = 0;
+elseif max_index == 2
+    x_u(length(x_u):max_distance) = 0;
+    y_u(length(y_u):max_distance) = 0;
     
-    %----------------------------------
-    % Med Luftmotstand
-    % Acceleratioen
-    ax(n) =    -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
-    ay(n) = -g -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
-%var1    ax(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2)))/m;
-%var1    ay(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2))-(m*g))/m;
+    x_v(length(x_v):max_distance) = 0;
+    y_v(length(y_v):max_distance) = 0;
+else
+    x_u(length(x_u):max_distance) = 0;
+    y_u(length(y_u):max_distance) = 0;
     
-    % Berknar hastigheten
-    vx(n) = vx(n-1) + ax(n-1)*deltaT;
-    vy(n) = vy(n-1) + ay(n-1)*deltaT;
-    % Berknar den nya positionen 
-    x(n) = x(n-1) + vx(n-1)*deltaT + 0.5*ax(n-1)*deltaT^2;
-    y(n) = y(n-1) + vy(n-1)*deltaT + 0.5*ay(n-1)*deltaT^2;  
-    %----------------------------------
-    % Med Luftmotstand och vind
-    % Berakningar for vinden
-    vf2 = (vx_v(n-1) + U*cos(Uang))^2 + (vy_v(n-1) + U*sin(Uang))^2;      
-    vf_ang = atan((vy_v(n-1) + U*sin(Uang))/(vx_v(n-1) + U*cos(Uang)));     
-    % Acceleratioen
-    ax_v(n) = -(D/m)*vf2*cos(vf_ang);
-    ay_v(n) = -g -(D/m)*vf2*sin(vf_ang);
-    % Berknar hastigheten
-    vx_v(n) = vx_v(n-1) + ax_v(n-1)*deltaT;
-    vy_v(n) = vy_v(n-1) + ay_v(n-1)*deltaT;
-    % Berknar den nya positionen 
-    x_v(n) = x_v(n-1) + vx_v(n-1)*deltaT + 0.5*ax_v(n-1)*deltaT^2;
-    y_v(n) = y_v(n-1) + vy_v(n-1)*deltaT + 0.5*ay_v(n-1)*deltaT^2;  
-    
-    % steglngden
-    %t = t + deltaT;
-    
-    % Avslutar loppen nr y-vardet blir vldigt nra noll 
-    if abs(y_u(n)) <= 0.005
-        break
-    end
+    x(length(x):max_distance) = 0;
+    y(length(y):max_distance) = 0;   
 end
 
+figure;plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
+
+
+
+%%
 plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
-%plot(t, y,'r' , t, y_u, 'g');
+
 grid on;
 hold on;
 axis tight;
 ylim([0, inf]) % Axelgrans i y-led
-xlabel('x (m)');
-ylabel('y (m)');
-title('Projectile Trajectories');
+xlabel('Distance x (m)');
+ylabel('Height y (m)');
+title('Kastbana');
+
+pause_extended(); %---------------------------------->
+
+%pause(2);
 
 % Jamfor med ode45 losning
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
@@ -134,15 +129,20 @@ plot(u(:,1), u(:,3), 'g+')
 [t ,u_luft]=ode45(@f_luft,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 plot(u_luft(:,1), u_luft(:,3), 'r*')
 grid on
-%legend('med luftmotst?nd','utan luftmotstand','ode45-utan','ode45-med luft')
 
 % Jamfor med ode45 losning f?r luftmotstand
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
 [t ,u_vind]=ode45(@f_vind,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 plot(u_vind(:,1), u_vind(:,3), 'b*')
 
+pause_extended(); %---------------------------------->
+legend('Inget','Luftmotstand','Luftmotstand & vind','ode45','ode45 - Luft', 'ode45 - Vind')
 
 %%
+
+
+%%
+
 figure;
 %title('Acceleration and velocity with drag');
 subplot(2,2,1);
