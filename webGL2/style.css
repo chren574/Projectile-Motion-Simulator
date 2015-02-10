@@ -1,0 +1,41 @@
+
+
+
+#wrapper {
+
+font-family: Helvetica; 
+font-size: 12pt; 
+border: 1px solid black;
+
+/*background: gray;*/
+margin: 0.1;
+width: 100%;
+
+}
+
+#container {
+
+	/*width: 70%;
+	height: 100%;*/
+	width: 640px;
+	height: 360px;
+	
+	float:left;
+	/*color: #FF0000;*/
+	border: 2px dotted black;
+	margin: 3px;
+
+}
+
+#settings {
+	width: 28%;
+	height: 100%;
+	/*float:right;*/
+	overflow:auto;
+
+	color: #FF00FF;
+	border: 2px dashed black;
+	margin: 2px;
+	background-color: red;
+}
+
