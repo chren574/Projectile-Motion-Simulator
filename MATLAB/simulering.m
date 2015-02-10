@@ -108,11 +108,11 @@ grid on;
 hold on;
 axis tight;
 ylim([0, inf]) % Axelgrans i y-led
-xlabel('Distance x (m)');
-ylabel('Height y (m)');
-title('Kastbana');
+xlabel('Distance [m]');
+ylabel('Height y [m]');
+title('Canon Simulation');
 
-pause_extended(); %---------------------------------->
+%pause_extended(); %---------------------------------->
 
 %pause(2);
 
@@ -120,22 +120,22 @@ pause_extended(); %---------------------------------->
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
 %options = odeset('RelTol',1*exp(-10),'AbsTol',1*exp(-10));
 
-[t ,u]=ode45(@f_utan,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+[t ,u]=ode45(@f_runge_utan,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 % plot the solution for the ode45 with the same arguments
 plot(u(:,1), u(:,3), 'g+')
 
 % Jamfor med ode45 losning f?r luftmotstand
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t ,u_luft]=ode45(@f_luft,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+[t ,u_luft]=ode45(@f_runge_luft,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 plot(u_luft(:,1), u_luft(:,3), 'r*')
 grid on
 
 % Jamfor med ode45 losning f?r luftmotstand
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t ,u_vind]=ode45(@f_vind,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
+[t ,u_vind]=ode45(@f_runge_vind,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
 plot(u_vind(:,1), u_vind(:,3), 'b*')
 
-pause_extended(); %---------------------------------->
+%pause_extended(); %---------------------------------->
 legend('Inget','Luftmotstand','Luftmotstand & vind','ode45','ode45 - Luft', 'ode45 - Vind')
 
 %%

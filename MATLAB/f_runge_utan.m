@@ -1,4 +1,4 @@
-function [uprime]=f_utan(t,u)
+function [uprime]=f_runge_utan(t,u)
 
 %u = [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
     
