@@ -21,11 +21,16 @@
 
 			<div id="settings">
 			 <h2>Settings</h2>
-    			Starthastighet: <input type="number" id="initialVelocity" name="initialVelocity" value="20"><br>
-				Storlek: <input type="text" id="size" name="size" value="1"><br>
+			 <p>
+    			Initial Velocity: <input type="number" id="initialVelocity" name="initialVelocity" value="20"><br>
+				Angle: <input type="number" id="angle" name="angle" value="70"><br>
+				Size of ball: <input type="number" id="size" name="size" value="1"><br>
+			 </p>
 
-				<button type="Update">Update</button>
-				<button type="Launch">Launch</button>
+				<button onclick="update()">Update</button>
+				<button onclick="clearish()">Clear</button>
+				<button onclick="launch()">Launch</button>
+
 
 				
 			</div>
