@@ -113,7 +113,7 @@ function animate() {
   cube.scale.y = parseFloat(size);
   cube.scale.z = parseFloat(size);*/
 
-  ball.position.x = LIB.distX(velocity,ball_angle,time) -120;
+  ball.position.x = LIB.distX(velocity,ball_angle,time) -160;
   ball.position.y = LIB.distY(velocity,ball_angle,time, gravity);
 
   x = ball.position.x;
