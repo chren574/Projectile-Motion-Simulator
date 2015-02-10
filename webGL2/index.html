@@ -5,11 +5,12 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r70/three.min.js"></script>
 		<script language="javascript" type="text/javascript" src="main.js"></script>
 		<link rel="stylesheet" href="style.css">
+		  <script src="lib.js"></script>
 		
 		<!-- <style> body {padding: 0; margin: 0;} </style> -->
 	</head>
 	
-	<body onload="onLoad();">
+	<body onload="init();">
 
 		<div id="wrapper" >
 
@@ -18,11 +19,15 @@
 				<!-- <script language="javascript" type="text/javascript" src="main.js"></script> -->
 			</div>
 
-			
 			<div id="settings">
-			 <h5>Section 2</h5>
-    			<p>This paragraph would be your content paragraph...</p>
-    			<p>Here's another content article right here.</p>
+			 <h2>Settings</h2>
+    			Starthastighet: <input type="number" id="initialVelocity" name="initialVelocity" value="0.02"><br>
+				Storlek: <input type="text" id="size" name="size" value="1"><br>
+
+				<button type="Update">Update</button>
+				<button type="Launch">Launch</button>
+
+				
 			</div>
 
 		</div>
