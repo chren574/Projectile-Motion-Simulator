@@ -50,6 +50,11 @@ function init() {
   ball  = new THREE.Mesh(circleGeometry, material);
   scene.add(ball);
 
+  var initialVelocity = document.getElementById("initialVelocity").value;
+  var size = document.getElementById("size").value;
+
+  velocity = parseFloat(initialVelocity);
+
   //requestAnimationFrame(render);
 
 }
@@ -58,9 +63,9 @@ function animate() {
 
   requestAnimationFrame(animate);
 
-/*  var initialVelocity = document.getElementById("initialVelocity").value;
-  var size = document.getElementById("size").value;
 
+
+/*
   cube.rotation.y += parseFloat(initialVelocity);
   cube.scale.x = parseFloat(size);
   cube.scale.y = parseFloat(size);
