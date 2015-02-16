@@ -26,19 +26,10 @@ var radius = 1.5;
 //init();
 //animate();
 
-
-
-function update() {
-
-  //window.alert("nej jag gor ingenting");
-
-}
 function launch() {
 
-  //window.alert("asdasd");
   running = true;
   time = 0;
-  velocity = 70;
   animate();
 
 }
