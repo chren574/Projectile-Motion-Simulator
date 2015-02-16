@@ -16,7 +16,7 @@ var geometry, material, mesh;
 var running;
 
 //Start varibles
-var velocity = 60;
+var velocity = 40;
 var time = 0;
 var time_old = 5;
 var ball_angle = 70;
@@ -26,15 +26,19 @@ var radius = 1.5;
 //init();
 //animate();
 
+
+
 function update() {
 
-  window.alert("nej jag gor ingenting");
+  //window.alert("nej jag gor ingenting");
 
 }
 function launch() {
 
   //window.alert("asdasd");
   running = true;
+  time = 0;
+  velocity = 30;
   animate();
 
 }
@@ -43,6 +47,8 @@ function clearish() {
 
 }
 function init() {
+
+
   
   //------------------------------------------------------
   // SCENE 
@@ -66,12 +72,13 @@ function init() {
 
   // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer();
-
-  // start the renderer
-  renderer.setSize(WIDTH, HEIGHT);
-
+  
   // get the DOM element to attach to
   var container = document.getElementById("container");
+  
+  // start the renderer
+  //renderer.setSize(WIDTH, HEIGHT);
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
 
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
@@ -88,7 +95,7 @@ function init() {
   // displays current and past frames per second attained by scene
   stats = new Stats();
   stats.domElement.style.position = 'absolute';
-  stats.domElement.style.bottom = '0px';
+  stats.domElement.style.top = '14px';
   stats.domElement.style.zIndex = 100;
 
   container.appendChild( stats.domElement );
@@ -126,9 +133,27 @@ function init() {
   //requestAnimationFrame(render);
 
 }
+function animate() {
 
+  requestAnimationFrame(animate);
+  render();
+  stats.update();
+}
+function render() {
+
+  //ball.position.x += 0.5;
+
+  ball.position.x = LIB.distX(velocity, ball_angle, time) - 160;
+  ball.position.y = LIB.distY(velocity, ball_angle, time, gravity);
+
+  time = time + 0.05;
+  renderer.render(scene, camera);
+}
+
+/*
 function animate() {
   
+
   requestAnimationFrame(animate);
 
   //Sätter nya variabler beroende på input
@@ -144,26 +169,6 @@ function animate() {
 
     console.log("The time is set: " + time)
 
-  
-    //*************************************************\\
-    /*
-      //väldigtväldigt fult men duger i krig 
-
-  size = document.getElementById("size").value;
-  radius = parseFloat(size);
-  var segments = 32;
-
-  var circleGeometry = new THREE.CircleGeometry( radius, segments );
-    var material = new THREE.MeshBasicMaterial({
-  color: 0x0000ff
-  });
-
-  //Add ball to scene
-  ball  = new THREE.Mesh(circleGeometry, material);
-  scene.add(ball);*/
-
-
-  //*************************************************\\    
     running = false;
   }
 
@@ -200,4 +205,9 @@ function animate() {
 
   renderer.render(scene, camera);
 
-}     
+}    
+
+
+*/
+
+ 
