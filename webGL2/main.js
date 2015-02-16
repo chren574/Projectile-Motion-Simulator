@@ -10,7 +10,6 @@ var VIEW_ANGLE = 75,
 
 var camera, scene, renderer;
 var geometry, material, mesh;
-
 var running;
 
 //Start varibles
@@ -22,7 +21,7 @@ var gravity = 9.8;
 var radius = 1.5;
 
 //init();
-animate();
+//animate();
 
 function update() {
 
@@ -41,15 +40,13 @@ function clearish() {
 
 }
 function init() {
-
   // get the DOM element to attach to
   var container = document.getElementById("container");
 
   // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer();
 
-  // create renderer, camera
-  // and a scene
+  // create camera and a scene
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT , NEAR, FAR);
   scene = new THREE.Scene();
 
@@ -65,8 +62,6 @@ function init() {
 
   // attach the render-supplied DOM element
   container.appendChild(renderer.domElement);
-
-
 
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 5000, 1, 32 );
@@ -93,13 +88,11 @@ function init() {
 }
 
 function animate() {
-
   requestAnimationFrame(animate);
 
-//Sätter nya variabler beroende på input
-  if(running == true)
-  {
-   // window.alert("asda");
+  //Sätter nya variabler beroende på input
+  if(running == true) {
+  // window.alert("asda");
 
     var initialVelocity = document.getElementById("initialVelocity").value;
     velocity = parseFloat(initialVelocity);
@@ -141,15 +134,14 @@ function animate() {
   x = ball.position.x;
   y = ball.position.y;
 
-  if(time_old == 5){  
+  if(time_old == 5) {  
     var circle = ball.clone();
     circle.position.set(x, y, 0);
     scene.add(circle);
     time_old = 0;
   }
 
-  if (y <= -0.01)
-  {
+  if (y <= -0.01) {
     time =0;
     time_old = 5;
     //kör oändligt om velocity inte sätts till 0
