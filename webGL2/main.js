@@ -1,10 +1,18 @@
+// set the scene size
 var WIDTH = 1000,
     HEIGHT = 600;
+
+// set some camera attributes
+var VIEW_ANGLE = 75,
+  ASPECT = WIDTH / HEIGHT,
+  NEAR = 1,
+  FAR = 10000;
 
 var camera, scene, renderer;
 var geometry, material, mesh;
 
 var running;
+
 //Start varibles
 var velocity = 60;
 var time = 0;
@@ -34,17 +42,31 @@ function clearish() {
 }
 function init() {
 
+  // get the DOM element to attach to
   var container = document.getElementById("container");
 
+  // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer();
-  renderer.setSize(WIDTH, HEIGHT);
-  container.appendChild(renderer.domElement);
 
-  camera = new THREE.PerspectiveCamera(75, WIDTH /HEIGHT , 1, 10000);
+  // create renderer, camera
+  // and a scene
+  camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT , NEAR, FAR);
   scene = new THREE.Scene();
 
+  // add the camera to the scene
   scene.add(camera);
+
+  // the camera starts at 0,0,0
+  // so pull it back
   camera.position.z = 200;
+
+  // start the renderer
+  renderer.setSize(WIDTH, HEIGHT);
+
+  // attach the render-supplied DOM element
+  container.appendChild(renderer.domElement);
+
+
 
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 5000, 1, 32 );
@@ -63,7 +85,7 @@ function init() {
   });
 
   //Add ball to scene
-  ball  = new THREE.Mesh(circleGeometry, material);
+  ball  = new THREE.Mesh(circleGeometry, material)
   scene.add(ball);
 
   renderer.render(scene, camera);
