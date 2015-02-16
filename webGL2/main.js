@@ -5,7 +5,7 @@ var WIDTH = 1000,
     HEIGHT = 600;
 
   // set some camera attributes
-  var VIEW_ANGLE = 40,
+  var VIEW_ANGLE = 75,
   ASPECT = WIDTH / HEIGHT,
   NEAR = 1,
   FAR = 10000;
@@ -38,7 +38,7 @@ function launch() {
   //window.alert("asdasd");
   running = true;
   time = 0;
-  velocity = 30;
+  velocity = 70;
   animate();
 
 }
@@ -65,7 +65,8 @@ function init() {
 
   // the camera starts at 0,0,0
   // so pull it back
-  camera.position.z = 200;
+  camera.position.z = 300;
+  camera.position.y = 100;
 
   //------------------------------------------------------
   // RENDERER
@@ -102,8 +103,15 @@ function init() {
 
   //------------------------------------------------------
   // LIGHT
+   
+  var greenPoint = new THREE.PointLight(0x33ff00, 1, 500);
+  greenPoint.position.set( 0, 150, 70 );
+  scene.add(greenPoint);
+  scene.add(new THREE.PointLightHelper(greenPoint, 3));
 
 
+  var ambient = new THREE.AmbientLight( 0x404040 )
+  scene.add ( ambient );
 
   //------------------------------------------------------
   // GEOMETRY
@@ -113,32 +121,24 @@ function init() {
   // a set of surface parameters ("material") 
 
   //Plane geometry and material
-  var geometry = new THREE.PlaneGeometry( 5000, 30, 32 );
+  var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-  var plane = new THREE.Mesh( geometry, material );
+  plane = new THREE.Mesh( geometry, material );
+  plane.rotation.x = Math.PI/2;
   scene.add( plane );
 
   //Ball geometry and material
 
 
-  var spheregeometry = new THREE.SphereGeometry( 5, 32, 32 );
+  var spheregeometry = new THREE.SphereGeometry( 15, 32, 32 );
 
-  var material = new THREE.MeshBasicMaterial({
-  color: 0x0000ff
+  var material = new THREE.MeshPhongMaterial({
+  color: 0x0033ff
   });
-  
   ball  = new THREE.Mesh(spheregeometry, material);
+  ball.position.y = 10;
   scene.add(ball);
 
-var bluePoint = new THREE.PointLight(0x0033ff, 3, 150);
-bluePoint.position.set( 70, 5, 70 );
-scene.add(bluePoint);
-scene.add(new THREE.PointLightHelper(bluePoint, 3));
- 
-var greenPoint = new THREE.PointLight(0x33ff00, 1, 150);
-greenPoint.position.set( -70, 5, 70 );
-scene.add(greenPoint);
-scene.add(new THREE.PointLightHelper(greenPoint, 3));
 
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
@@ -217,8 +217,4 @@ function animate() {
   renderer.render(scene, camera);
 
 }    
-
-
 */
-
- 
