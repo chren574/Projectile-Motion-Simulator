@@ -13,8 +13,8 @@ var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
 
-//init();
-animate();
+init();
+//animate();
 
 function update() {
 
@@ -66,6 +66,7 @@ function init() {
   ball  = new THREE.Mesh(circleGeometry, material);
   scene.add(ball);
 
+  renderer.render(scene, camera);
   //requestAnimationFrame(render);
 
 }
@@ -75,6 +76,7 @@ function animate() {
   requestAnimationFrame(animate);
 
 //Sätter nya variabler beroende på input
+  
   if(running == true)
   {
    // window.alert("asda");
