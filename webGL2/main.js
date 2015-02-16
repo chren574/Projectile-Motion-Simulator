@@ -5,7 +5,7 @@ var WIDTH = 1000,
     HEIGHT = 600;
 
   // set some camera attributes
-  var VIEW_ANGLE = 75,
+  var VIEW_ANGLE = 40,
   ASPECT = WIDTH / HEIGHT,
   NEAR = 1,
   FAR = 10000;
@@ -113,21 +113,31 @@ function init() {
   // a set of surface parameters ("material") 
 
   //Plane geometry and material
-  var geometry = new THREE.PlaneGeometry( 5000, 1, 32 );
-  var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+  var geometry = new THREE.PlaneGeometry( 5000, 30, 32 );
+  var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
   var plane = new THREE.Mesh( geometry, material );
   scene.add( plane );
 
   //Ball geometry and material
   //var radius = 5;
   var segments = 32;
-  var circleGeometry = new THREE.CircleGeometry( radius, segments );
-  var material = new THREE.MeshBasicMaterial({
+  var circleGeometry = new THREE.CircleGeometry( 3, segments );
+  var material = new THREE.MeshPhongMaterial({
   color: 0x0000ff
   });
   //Add ball to scene
   ball  = new THREE.Mesh(circleGeometry, material)
   scene.add(ball);
+
+var bluePoint = new THREE.PointLight(0x0033ff, 3, 150);
+bluePoint.position.set( 70, 5, 70 );
+scene.add(bluePoint);
+scene.add(new THREE.PointLightHelper(bluePoint, 3));
+ 
+var greenPoint = new THREE.PointLight(0x33ff00, 1, 150);
+greenPoint.position.set( -70, 5, 70 );
+scene.add(greenPoint);
+scene.add(new THREE.PointLightHelper(greenPoint, 3));
 
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
