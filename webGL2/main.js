@@ -76,16 +76,18 @@ function init() {
 
   //Ball geometry and material
   //var radius = 5;
-  var segments = 32;
-  var circleGeometry = new THREE.CircleGeometry( radius, segments );
+  //var segments = 32;
+  //var circleGeometry = new THREE.CircleGeometry( radius, segments );
 
+  var spheregeometry = new THREE.SphereGeometry( 5, 32, 32 );
 
   var material = new THREE.MeshBasicMaterial({
   color: 0x0000ff
   });
 
   //Add ball to scene
-  ball  = new THREE.Mesh(circleGeometry, material)
+  //ball  = new THREE.Mesh(circleGeometry, material);
+  ball  = new THREE.Mesh(spheregeometry, material);
   scene.add(ball);
 
   renderer.render(scene, camera);
