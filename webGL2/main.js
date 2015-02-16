@@ -20,7 +20,11 @@ var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
 
+<<<<<<< HEAD
 //init();
+=======
+init();
+>>>>>>> 7b8ca1ebe709780a7c065ef4c88dd70cdcd28159
 //animate();
 
 function update() {
@@ -83,6 +87,7 @@ function init() {
   ball  = new THREE.Mesh(circleGeometry, material)
   scene.add(ball);
 
+  renderer.render(scene, camera);
   //requestAnimationFrame(render);
 
 }
@@ -90,9 +95,17 @@ function init() {
 function animate() {
   requestAnimationFrame(animate);
 
+<<<<<<< HEAD
   //Sätter nya variabler beroende på input
   if(running == true) {
   // window.alert("asda");
+=======
+//Sätter nya variabler beroende på input
+  
+  if(running == true)
+  {
+   // window.alert("asda");
+>>>>>>> 7b8ca1ebe709780a7c065ef4c88dd70cdcd28159
 
     var initialVelocity = document.getElementById("initialVelocity").value;
     velocity = parseFloat(initialVelocity);
