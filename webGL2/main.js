@@ -119,14 +119,15 @@ function init() {
   scene.add( plane );
 
   //Ball geometry and material
-  //var radius = 5;
-  var segments = 32;
-  var circleGeometry = new THREE.CircleGeometry( 3, segments );
-  var material = new THREE.MeshPhongMaterial({
+
+
+  var spheregeometry = new THREE.SphereGeometry( 5, 32, 32 );
+
+  var material = new THREE.MeshBasicMaterial({
   color: 0x0000ff
   });
-  //Add ball to scene
-  ball  = new THREE.Mesh(circleGeometry, material)
+  
+  ball  = new THREE.Mesh(spheregeometry, material);
   scene.add(ball);
 
 var bluePoint = new THREE.PointLight(0x0033ff, 3, 150);
