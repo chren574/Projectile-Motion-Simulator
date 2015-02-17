@@ -4,11 +4,11 @@
 var WIDTH = 1000,
     HEIGHT = 600;
 
-  // set some camera attributes
-  var VIEW_ANGLE = 75,
-  ASPECT = WIDTH / HEIGHT,
-  NEAR = 1,
-  FAR = 10000;
+// set some camera attributes
+var VIEW_ANGLE = 75,
+ASPECT = WIDTH / HEIGHT,
+NEAR = 1,
+FAR = 10000;
 
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
@@ -27,8 +27,15 @@ window.addEventListener("keydown", keyPress, false);
 
 function keyPress(e) {
  if (e.keyCode == "32") {
-        launch();
-    }
+      launch();
+  }else if (e.keyCode == "38") {
+    ball_angle++;
+    document.getElementById("angle").value=ball_angle;
+  }else if (e.keyCode == "40") {
+    ball_angle--;
+    document.getElementById("angle").value=ball_angle;
+  }
+
 }
 
 function launch() {
@@ -155,6 +162,7 @@ function createBall (velocity, radius, angle) {
   ball.time = 0;
   ball.velocity = velocity;
   ball.angle = angle;
+  ball.radius = radius;
   
   scene.add(ball);
   cannonBallArray.push(ball);
@@ -180,15 +188,15 @@ function render() {
    }
 
   ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity);
+  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
 
 
-  if (y < 0) {
+  if ( (ball.position.y - ball.radius ) < 0) {
     cancelAnimationFrame(id);
   }
 
   time_old += 1;
-  ball.time += 0.05;
+  ball.time += 0.1;
 
   renderer.render(scene, camera);
 
