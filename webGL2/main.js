@@ -16,7 +16,7 @@ var running;
 
 //Start varibles
 var velocity = 40;
-var time_old = 5;
+var time_old = 0;
 var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
@@ -118,6 +118,12 @@ function init() {
   // a collection of points ("geometry") and
   // a set of surface parameters ("material") 
 
+  //Dots
+  var dotGeometry = new THREE.Geometry();
+  dotGeometry.vertices.push(new THREE.Vector3( 0, 0, 0));
+  var dotMaterial = new THREE.PointCloudMaterial( { size: 3, sizeAttenuation: false } );
+  dot = new THREE.PointCloud( dotGeometry, dotMaterial );
+
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
@@ -158,10 +164,17 @@ function animate() {
 }
 function render() {
 
-  //ball.position.x += 0.5;
+  if(time_old == 2) {  
+    var point = dot.clone();
+    point.position.set( ball.position.x, ball.position.y, 0 )
+    scene.add ( point );
+
+    time_old = 0;
+   }
 
   ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
   ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity);
+
 
   if (y < 0) {
     cancelAnimationFrame(id);
