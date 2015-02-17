@@ -147,9 +147,6 @@ function render() {
 
   renderer.render(scene, camera);
 
-}
-
-  
 /*
 
   //Sätter nya variabler beroende på input
@@ -167,3 +164,8 @@ function render() {
 
     running = false;
   }
+*/
+}
+
+  
+
