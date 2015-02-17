@@ -21,7 +21,8 @@ var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
 
-cannonBallArray = [];
+var canonBallArray = [];
+var pointArray = [];
 
 window.addEventListener("keydown", keyPress, false);
 
@@ -76,26 +77,19 @@ function launch() {
 
 }
 function clearish() {
-  
-/*  var obj, i;
-
-  for ( i = scene.children.length; i >= 0 ; i -- ) {
-    obj = scene.children[ i ];
-      
-      if ( obj === ball ) {
-        scene.remove(obj);
-        delete cannonBallArray[i];
-        scene.remove(canonBallArray[i]);
-      }
-    }*/
-    var obj, i;
-for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
-    obj = scene.children[ i ];
-    if ( obj !== scene && obj !== camera ) {
-        scene.remove(obj);
-    }
+    var obj, ob, i, j;
+for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
+    obj = canonBallArray[ i ];
+       // scene.remove(ball);
+     //   scene.remove(point);
+       scene.remove(obj);
 }
-animate();
+for (j = pointArray.length - 1; j>=0;j--) {
+  ob = pointArray[j]
+  scene.remove(ob);
+}
+
+launch();
   
 }
 function init() {
@@ -168,7 +162,8 @@ function init() {
   dotGeometry.vertices.push(new THREE.Vector3( 0, 0, 0));
   var dotMaterial = new THREE.PointCloudMaterial( { size: 3, sizeAttenuation: false } );
   dot = new THREE.PointCloud( dotGeometry, dotMaterial );
-
+//canonBallArray.push(dot);
+pointArray.push(dot);
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
@@ -196,7 +191,7 @@ function createBall (velocity, radius, angle) {
   ball.radius = radius;
   
   scene.add(ball);
-  cannonBallArray.push(ball);
+  canonBallArray.push(ball);
 
 
   renderer.render(scene, camera);
@@ -213,7 +208,9 @@ function render() {
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
     scene.add ( point );
+      pointArray.push(point);
 
+     // window.alert(pointArray.length);
     time_old = 0;
    }
 
