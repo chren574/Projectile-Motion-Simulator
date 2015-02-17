@@ -25,17 +25,38 @@ cannonBallArray = [];
 
 window.addEventListener("keydown", keyPress, false);
 
-function keyPress(e) {
- if (e.keyCode == "32") {
-      launch();
-  }else if (e.keyCode == "38") {
-    ball_angle++;
-    document.getElementById("angle").value=ball_angle;
-  }else if (e.keyCode == "40") {
-    ball_angle--;
-    document.getElementById("angle").value=ball_angle;
-  }
 
+function keyPress(e) {
+  switch(e.keyCode) {
+      case 32:
+          launch();
+          break;
+      case 37:
+          // left key pressed
+          velocity--;
+          document.getElementById("initialVelocity").value=velocity;
+          break;
+      case 38:
+          // up key pressed
+          ball_angle++;
+          document.getElementById("angle").value=ball_angle;
+          break;
+      case 39:
+          // right key pressed
+          velocity++;
+          document.getElementById("initialVelocity").value=velocity;
+          break;
+      case 40:
+          // down key pressed
+          ball_angle--;
+          document.getElementById("angle").value=ball_angle;
+          break;
+      case 65:
+          camera.position.set(-300,300,0);
+          camera.up = new THREE.Vector3(1,0,0);
+          camera.lookAt(new THREE.Vector3(0,0,0));
+          break; 
+    }
 }
 
 function launch() {
@@ -56,15 +77,25 @@ function launch() {
 }
 function clearish() {
   
-  var obj, i;
+/*  var obj, i;
 
-  for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
+  for ( i = scene.children.length; i >= 0 ; i -- ) {
     obj = scene.children[ i ];
       
       if ( obj === ball ) {
         scene.remove(obj);
+        delete cannonBallArray[i];
+        scene.remove(canonBallArray[i]);
       }
+    }*/
+    var obj, i;
+for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
+    obj = scene.children[ i ];
+    if ( obj !== scene && obj !== camera ) {
+        scene.remove(obj);
     }
+}
+animate();
   
 }
 function init() {
@@ -178,7 +209,6 @@ function animate() {
   stats.update();
 }
 function render() {
-
   if(time_old == 2) {  
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
