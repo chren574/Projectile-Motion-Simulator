@@ -10,31 +10,21 @@ var WIDTH = 1000,
   NEAR = 1,
   FAR = 10000;
 
-
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running;
 
 //Start varibles
 var velocity = 40;
-var time = 0;
 var time_old = 5;
 var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
 
-//init();
-//animate();
-
 cannonBallArray = [];
 
-// var testBoll = {
-//   mass : 100,
-//   velocity : 2000
-// };
 
 function launch() {
-
 
   var initialVelocity = document.getElementById("initialVelocity").value;
   velocity = parseFloat(initialVelocity);
@@ -46,18 +36,13 @@ function launch() {
   radius = parseFloat(radius);
 
   running = true;
-  //time = 0;
-  //velocity = 40;
   createBall(velocity, radius, angle);
   animate();
 
 }
 function clearish() {
-
   cannonBallArray = [];
   
-  
-
 }
 function init() {
 
@@ -94,12 +79,6 @@ function init() {
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
 
-  // renderer.setSize(container.offsetWidth, container.offsetHeight);
-  // container.appendChild(renderer.domElement);
-
-  // var HEIGHT = document.getElementById('container').clientHeight;
-  // var WIDTH = document.getElementById('container').clientWidth;
-
   //------------------------------------------------------
   // STATS 
 
@@ -133,10 +112,9 @@ function init() {
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-  plane = new THREE.Mesh( geometry, material );
+  var plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
-
 
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
@@ -145,14 +123,11 @@ function init() {
 
 function createBall (velocity, radius, angle) {
 
-
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   var material = new THREE.MeshPhongMaterial({
   color: 0x0033ff
   });
 
-
-  //ball = testBoll;
   ball  = new THREE.Mesh(spheregeometry, material);
   ball.position.y = 10;
   ball.time = 0;
@@ -162,6 +137,8 @@ function createBall (velocity, radius, angle) {
   scene.add(ball);
   cannonBallArray.push(ball);
 
+
+  renderer.render(scene, camera);
 }
 
 function animate() {
@@ -174,27 +151,18 @@ function render() {
 
   //ball.position.x += 0.5;
 
-  console.log('hastighet ' + velocity + 'time ' + time);
-
   ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
   ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity);
 
   if (y < 0) {
-    time = 0;
-    //ball.velocity = 0;
     cancelAnimationFrame(id);
   }
 
   ball.time = ball.time + 0.05;
 
   renderer.render(scene, camera);
-}
 
 /*
-function animate() {
-  
-
-  requestAnimationFrame(animate);
 
   //Sätter nya variabler beroende på input
   if( running ) {
@@ -211,39 +179,8 @@ function animate() {
 
     running = false;
   }
-
-  ball.position.x = LIB.distX(velocity, ball_angle, time) - 160;
-  ball.position.y = LIB.distY(velocity, ball_angle, time, gravity);
-
-  x = ball.position.x;
-  y = ball.position.y;
-
-//   if(time_old == 5) {  
-//     var circle = ball.clone();
-//     circle.position.set(x, y, 0);
-//     scene.add(circle);
-//     time_old = 0;
-//   }
-
-//   if (y <= -0.01) {
-//     time =0;
-//     time_old = 5;
-//     //kör oändligt om velocity inte sätts till 0
-//     velocity = 0;
-//     cancelRequestAnimationFrame(animate);
-//    //--oklart om de ska sättas till 0, spelar ingen större roll--\\
-//    //x = 0;
-//    //y = 0;
-//    // ball.position.x = 0;
-//    // ball.position.y = 0;
-//   }
-
-  time_old = time_old + 1;
-  time = time + 0.05;
-
-  stats.update();
-
-  renderer.render(scene, camera);
-
-}    
 */
+}
+
+  
+
