@@ -21,29 +21,37 @@ var ball_angle = 70;
 var gravity = 9.8;
 var radius = 1.5;
 
+cannonBallArray = [];
+
+
 function launch() {
 
+  var initialVelocity = document.getElementById("initialVelocity").value;
+  velocity = parseFloat(initialVelocity);
+
+  var angle = document.getElementById("angle").value;
+  ball_angle = parseFloat(angle);
+
+  var radius = document.getElementById("ballSize").value;
+  radius = parseFloat(radius);
+
   running = true;
-  time = 0;
+  createBall(velocity, radius, angle);
   animate();
 
 }
 function clearish() {
-
-  //window.alert("asdasdasdd");
-
+  cannonBallArray = [];
+  
 }
 function init() {
 
-
-  
   //------------------------------------------------------
   // SCENE 
   scene = new THREE.Scene();
 
   //------------------------------------------------------
   // CAMERA
-
   // create camera and a scene
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT , NEAR, FAR);
 
@@ -114,17 +122,31 @@ function init() {
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
 
-  //Ball geometry and material
-  var spheregeometry = new THREE.SphereGeometry( 15, 32, 32 );
-  var material = new THREE.MeshPhongMaterial( {color: 0x0033ff } );
+  renderer.render(scene, camera);
+  //requestAnimationFrame(render);
+
+}
+
+function createBall (velocity, radius, angle) {
+
+  var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
+  var material = new THREE.MeshPhongMaterial({
+  color: 0x0033ff
+  });
+
   ball  = new THREE.Mesh(spheregeometry, material);
   ball.position.y = 10;
+  ball.time = 0;
+  ball.velocity = velocity;
+  ball.angle = angle;
+  
   scene.add(ball);
+  cannonBallArray.push(ball);
 
 
   renderer.render(scene, camera);
-
 }
+
 function animate() {
 
   id = requestAnimationFrame(animate);
@@ -132,9 +154,6 @@ function animate() {
   stats.update();
 }
 function render() {
-
-  ball.position.x = LIB.distX(velocity, ball_angle, time) - 160;
-  ball.position.y = LIB.distY(velocity, ball_angle, time, gravity);
 
   if(time_old == 2) {  
     var point = dot.clone();
@@ -144,13 +163,15 @@ function render() {
     time_old = 0;
    }
 
-  time_old = time_old + 1;
-  time = time + 0.05;
+  ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
+  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity);
 
-  if (ball.position.y < 0)
-  {
-    cancelAnimationFrame( id );
+
+  if (y < 0) {
+    cancelAnimationFrame(id);
   }
+
+  ball.time = ball.time + 0.05;
 
   renderer.render(scene, camera);
 
