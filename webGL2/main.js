@@ -23,6 +23,13 @@ var radius = 1.5;
 
 cannonBallArray = [];
 
+window.addEventListener("keydown", keyPress, false);
+
+function keyPress(e) {
+ if (e.keyCode == "32") {
+        launch();
+    }
+}
 
 function launch() {
 
@@ -180,7 +187,8 @@ function render() {
     cancelAnimationFrame(id);
   }
 
-  ball.time = ball.time + 0.05;
+  time_old += 1;
+  ball.time += 0.05;
 
   renderer.render(scene, camera);
 
