@@ -1,10 +1,15 @@
+/*body, html, main {
+	 important 
+	height: 100%;
+}
+
+*/
+
+html {
+	overflow: hidden;
+}
+
 #wrapper {
-
-font-family: Helvetica; 
-font-size: 12pt; 
-border: 1px solid black;
-
-/*background: gray;*/
 margin: 0.1;
 width: 100%;
 
@@ -14,14 +19,8 @@ width: 100%;
 
 	width: 85%;
 	height: 100%;
-	/*width: 100px;
-	height: 60px; */
-	
+	margin: 1px;
 	float:left;
-	background-color: #FF0000;
-	border: 2px dotted black;
-	margin: 3px;
-
 }
 
 #settings {
@@ -31,10 +30,7 @@ width: 100%;
 	/*float:right;*/
 	overflow:auto;
 	text-align: center;
-	color: #FF00FF;
-	border: 2px dashed black;
-	margin: 2px;
-	background-color: #808080;
+	margin: 1px;
 }
 #button {
     background-color: #cc234c;
