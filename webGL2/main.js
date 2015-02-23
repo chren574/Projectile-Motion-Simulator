@@ -201,6 +201,7 @@ function createBall (velocity, radius, angle) {
     return color;
   }
 
+<<<<<<< HEAD
 /*
   ball = new THREE.Mesh(
   new THREE.SphereGeometry(0.5, 32, 32),
@@ -209,6 +210,24 @@ function createBall (velocity, radius, angle) {
     specular: new THREE.Color('grey')      })
 );
 */
+=======
+  var ball1 = {
+    velocity: 20, 
+    angle: 45,
+    time : 0,
+    radius : 10,
+
+    printVelocity: function () {
+      return this.velocity;
+    },
+    changeVelocity: function () {
+      this.velocity += 5;
+    }
+                  
+  }
+
+
+>>>>>>> 3c40e09dee04b839b8ffbc823bcf68fc5844b4e8
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   
   var material = new THREE.MeshPhongMaterial({
@@ -216,13 +235,28 @@ function createBall (velocity, radius, angle) {
   //color : newColor()  //om slumpfärg ska användas
   });
 
+<<<<<<< HEAD
   ball = new THREE.Mesh(spheregeometry, material);
+=======
+  ball  = new THREE.Mesh(spheregeometry, material);
+  
+
+  //ball.__proto__ = ball1
+
+
+>>>>>>> 3c40e09dee04b839b8ffbc823bcf68fc5844b4e8
   
   ball.position.y = 0 + radius;
   ball.time = 0;
   ball.velocity = velocity;
   ball.angle = angle;
   ball.radius = radius;
+  
+
+/*
+  ball.toSt = function () {
+        return this.angle;
+  };*/
   
   scene.add(ball);
   canonBallArray.push(ball);
@@ -249,8 +283,20 @@ function render() {
     time_old = 0;
    }
 
-  ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+  // myString = ball.toSt();
+  // console.log(myString);
+
+  var deltaT = 0.1;
+
+  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
+  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+
+
+  console.log(ball.position.x + " " + ball.position.y);
+  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time) - 160;
+  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+
+  //console.log(ball.time)
 
 
   if ( (ball.position.y - ball.radius ) < 0) {
