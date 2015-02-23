@@ -201,7 +201,6 @@ function createBall (velocity, radius, angle) {
     return color;
   }
 
-<<<<<<< HEAD
 /*
   ball = new THREE.Mesh(
   new THREE.SphereGeometry(0.5, 32, 32),
@@ -210,7 +209,7 @@ function createBall (velocity, radius, angle) {
     specular: new THREE.Color('grey')      })
 );
 */
-=======
+
   var ball1 = {
     velocity: 20, 
     angle: 45,
@@ -227,7 +226,6 @@ function createBall (velocity, radius, angle) {
   }
 
 
->>>>>>> 3c40e09dee04b839b8ffbc823bcf68fc5844b4e8
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   
   var material = new THREE.MeshPhongMaterial({
@@ -235,16 +233,11 @@ function createBall (velocity, radius, angle) {
   //color : newColor()  //om slumpfärg ska användas
   });
 
-<<<<<<< HEAD
   ball = new THREE.Mesh(spheregeometry, material);
-=======
-  ball  = new THREE.Mesh(spheregeometry, material);
   
 
   //ball.__proto__ = ball1
 
-
->>>>>>> 3c40e09dee04b839b8ffbc823bcf68fc5844b4e8
   
   ball.position.y = 0 + radius;
   ball.time = 0;
