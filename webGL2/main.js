@@ -19,7 +19,7 @@ var velocity = 40;
 var time_old = 0;
 var ball_angle = 70;
 var gravity = 9.8;
-var radius = 1.5;
+var radius = 0.5;
 
 var canonBallArray = [];
 var pointArray = [];
@@ -152,10 +152,12 @@ function init() {
   //------------------------------------------------------
   // LIGHT
    
-  var greenPoint = new THREE.PointLight(0x33ff00, 3, 500);
+  var greenPoint = new THREE.PointLight(0x404040, 3, 500);
   greenPoint.position.set( 0, 150, 70 );
   scene.add(greenPoint);
   scene.add(new THREE.PointLightHelper(greenPoint, 3));
+
+  //HemisphereLight(skyColorHex, groundColorHex, intensity)
 
   var ambient = new THREE.AmbientLight( 0x404040 )
   scene.add ( ambient );
@@ -199,14 +201,23 @@ function createBall (velocity, radius, angle) {
     return color;
   }
 
-
+/*
+  ball = new THREE.Mesh(
+  new THREE.SphereGeometry(0.5, 32, 32),
+  new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('textures/ball.jpg'),
+    specular: new THREE.Color('grey')      })
+);
+*/
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
+  
   var material = new THREE.MeshPhongMaterial({
   color : 0x0033ff
   //color : newColor()  //om slumpfärg ska användas
   });
 
-  ball  = new THREE.Mesh(spheregeometry, material);
+  ball = new THREE.Mesh(spheregeometry, material);
+  
   ball.position.y = 0 + radius;
   ball.time = 0;
   ball.velocity = velocity;
