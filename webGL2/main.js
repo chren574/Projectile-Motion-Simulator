@@ -261,8 +261,13 @@ function render() {
 
   var deltaT = 0.1;
 
-  ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
+  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+
+
+  console.log(ball.position.x + " " + ball.position.y);
+  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time) - 160;
+  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
 
   //console.log(ball.time)
 
