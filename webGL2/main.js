@@ -88,7 +88,7 @@ function clearish() {
     scene.remove(ob);
 }
 
-launch();
+renderer.render(scene, camera);
   
 }
 
