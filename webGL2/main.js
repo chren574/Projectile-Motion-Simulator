@@ -25,7 +25,6 @@ cannonBallArray = [];
 
 window.addEventListener("keydown", keyPress, false);
 
-
 function keyPress(e) {
   switch(e.keyCode) {
       case 32:
@@ -70,7 +69,6 @@ function launch() {
   var radius = document.getElementById("ballSize").value;
   radius = parseFloat(radius);
 
-  running = true;
   createBall(velocity, radius, angle);
   animate();
 
@@ -88,16 +86,17 @@ function clearish() {
         scene.remove(canonBallArray[i]);
       }
     }*/
+    
     var obj, i;
-for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
-    obj = scene.children[ i ];
-    if ( obj !== scene && obj !== camera ) {
-        scene.remove(obj);
+    for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
+        obj = scene.children[ i ];
+        if ( obj !== scene && obj !== camera ) {
+            scene.remove(obj);
+        }
     }
+
 }
-animate();
-  
-}
+
 function init() {
 
   //------------------------------------------------------
@@ -147,11 +146,10 @@ function init() {
   //------------------------------------------------------
   // LIGHT
    
-  var greenPoint = new THREE.PointLight(0x33ff00, 1, 500);
+  var greenPoint = new THREE.PointLight(0x33ff00, 3, 500);
   greenPoint.position.set( 0, 150, 70 );
   scene.add(greenPoint);
   scene.add(new THREE.PointLightHelper(greenPoint, 3));
-
 
   var ambient = new THREE.AmbientLight( 0x404040 )
   scene.add ( ambient );
@@ -183,9 +181,22 @@ function init() {
 
 function createBall (velocity, radius, angle) {
 
+  // funktion som ska slumpa fram en random hexadecimal färg
+  var newColor = function getRandomColor() {
+    var letters = '0123456789abcdef'.split('');
+    var color = '0x';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    console.log(color);
+    return color;
+  }
+
+
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   var material = new THREE.MeshPhongMaterial({
-  color: 0x0033ff
+  color : 0x0033ff
+  //color : newColor()  //om slumpfärg ska användas
   });
 
   ball  = new THREE.Mesh(spheregeometry, material);
@@ -230,25 +241,10 @@ function render() {
 
   renderer.render(scene, camera);
 
-/*
-
-  //Sätter nya variabler beroende på input
-  if( running ) {
-  // window.alert("asda");
-    var initialVelocity = document.getElementById("initialVelocity").value;
-    velocity = parseFloat(initialVelocity);
-    
-    var angle = document.getElementById("angle").value;
-    ball_angle = parseFloat(angle);
-
-    time = 0;
-
-    console.log("The time is set: " + time)
-
-    running = false;
-  }
-*/
 }
+
+
+
 
   
 
