@@ -12,7 +12,7 @@ FAR = 10000;
 
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
-var running;
+var running = false;
 
 //Start varibles
 var velocity = 40;
@@ -61,6 +61,8 @@ function keyPress(e) {
 
 function launch() {
 
+  if(running == false) {
+
   var initialVelocity = document.getElementById("initialVelocity").value;
   velocity = parseFloat(initialVelocity);
 
@@ -73,8 +75,14 @@ function launch() {
   createBall(velocity, radius, angle);
   animate();
 
+  }
+
+
 }
 function clearish() {
+
+  running = false;
+  cancelAnimationFrame(id);
 
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
@@ -214,6 +222,7 @@ function createBall (velocity, radius, angle) {
 
 function animate() {
 
+  running = true;
   id = requestAnimationFrame(animate);
   render();
   stats.update();
@@ -235,6 +244,7 @@ function render() {
 
   if ( (ball.position.y - ball.radius ) < 0) {
     cancelAnimationFrame(id);
+    running = false;
   }
 
   time_old += 1;
