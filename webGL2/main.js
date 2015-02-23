@@ -15,9 +15,11 @@ var geometry, material, mesh;
 var running = false;
 
 //Start varibles
-var velocity = 40;
+//var velocity = 40;
+//var velocity_wind = 10;
 var time_old = 0;
-var ball_angle = 70;
+//var ball_angle = 70;
+//var wind_angle = 70;
 var gravity = 9.8;
 var radius = 0.5;
 
@@ -66,8 +68,14 @@ function launch() {
   var initialVelocity = document.getElementById("initialVelocity").value;
   velocity = parseFloat(initialVelocity);
 
+  var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
+  velocity_wind = parseFloat(initialVelocity_wind);
+
   var angle = document.getElementById("angle").value;
   ball_angle = parseFloat(angle);
+
+  var angle_wind = document.getElementById("angle_wind").value;
+  wind_angle = parseFloat(angle_wind);
 
   var radius = document.getElementById("ballSize").value;
   radius = parseFloat(radius);
@@ -209,7 +217,7 @@ function createBall (velocity, radius, angle) {
     specular: new THREE.Color('grey')      })
 );
 */
-
+/*
   var ball1 = {
     velocity: 20, 
     angle: 45,
@@ -224,7 +232,7 @@ function createBall (velocity, radius, angle) {
     }
                   
   }
-
+*/
 
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   
@@ -286,8 +294,8 @@ function render() {
 
 
   console.log(ball.position.x + " " + ball.position.y);
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
 
   //console.log(ball.time)
 
