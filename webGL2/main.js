@@ -24,7 +24,7 @@ var radius = 1.5;
 var canonBallArray = [];
 var pointArray = [];
 
-window.addEventListener("keydown", keyPress, false);
+window.addEventListener("click", keyPress, false);
 
 function keyPress(e) {
   switch(e.keyCode) {
@@ -79,13 +79,16 @@ function clearish() {
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
     obj = canonBallArray[ i ];
+    
        // scene.remove(ball);
      //   scene.remove(point);
     scene.remove(obj);
+    delete canonBallArray[ i ];
   }
   for (j = pointArray.length - 1; j>=0;j--) {
     ob = pointArray[j]
     scene.remove(ob);
+    delete pointArray[ i ];
 }
 
 renderer.render(scene, camera);
@@ -196,7 +199,7 @@ function createBall (velocity, radius, angle) {
   });
 
   ball  = new THREE.Mesh(spheregeometry, material);
-  ball.position.y = 10;
+  ball.position.y = 0 + radius;
   ball.time = 0;
   ball.velocity = velocity;
   ball.angle = angle;
