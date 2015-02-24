@@ -147,8 +147,23 @@ var LIB = {
 
 
 	return [x, y];
-  }
+  },
 
+    //Function for linear drag
+  distXdrag: function(v, vt, ball_angle, time, gravity) {
 
+    x = (vt / gravity) * (v * Math.cos(ball_angle * Math.PI / 180)) * (1 - Math.exp(-gravity * time / vt));
+
+    return(x)
+
+  },
+    //Function for linear drag
+  distYdrag: function(v, vt, ball_angle, time, gravity) {
+
+    y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
+
+    return(y)
+
+}
 
 };

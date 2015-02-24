@@ -288,14 +288,25 @@ function render() {
   // console.log(myString);
 
   var deltaT = 0.1;
-
-  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+  
+  ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
+  ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
 
 
   console.log(ball.position.x + " " + ball.position.y);
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+
+  //-------------------------------------------------------------------------------------------------
+  //Terminal velocoty for linear drag model
+  //var constant = 0.2;       //Must be positive
+  //var mass = 1;
+  //var vt = (mass * gravity) / constant;
+
+  //Linear drag
+  //ball.position.x = LIB.distXdrag(ball.velocity, vt, ball.angle, ball.time, gravity) - 160;
+  //ball.position.y = LIB.distYdrag(ball.velocity, vt, ball.angle, ball.time, gravity) + ball.radius;
+  //---------------------------------------------------------------------------------------------------
 
   //console.log(ball.time)
 
