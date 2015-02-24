@@ -268,13 +268,45 @@ function createBall (velocity, radius, angle) {
 
 function animate() {
 
-  running = true;
-  id = requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
   render();
   stats.update();
+
 }
 function render() {
-  if(time_old == 2) {  
+  
+  //print the location for the ball
+  console.log(ball.position.x + " " + ball.position.y);
+
+  //draw the shadows for the ball
+  drawBallShadow();
+
+  //calculate and update the ball position
+  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
+  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+  
+  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+
+  //Avsluta renderingsloopen nar bollen slår i marken
+  if ( (ball.position.y - ball.radius ) < 0) {
+    stopRender();
+  }
+
+  //update the time for the ball
+  ball.time += 0.01;
+
+  //render the scene
+  renderer.render(scene, camera);
+}
+
+function stopRender() {
+  cancelAnimationFrame(animationId);
+}
+
+function drawBallShadow() {
+
+    if(time_old == 2) {  
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
     scene.add ( point );
@@ -284,31 +316,7 @@ function render() {
     time_old = 0;
    }
 
-  // myString = ball.toSt();
-  // console.log(myString);
-
-  var deltaT = 0.1;
-
-  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
-
-
-  console.log(ball.position.x + " " + ball.position.y);
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
-
-  //console.log(ball.time)
-
-
-  if ( (ball.position.y - ball.radius ) < 0) {
-    cancelAnimationFrame(id);
-    running = false;
-  }
-
   time_old += 1;
-  ball.time += 0.1;
-
-  renderer.render(scene, camera);
 
 }
 
