@@ -32,17 +32,18 @@ t = t0:deltaT:tf;        % tidsvektorn
 len=length(t);
 v=zeros(1, len);
 % allokerar minne for resultatvektorerna 
-ax=zeros(1, len);ay=zeros(1, len);
-vx=zeros(1, len);vy=zeros(1, len);
-x=zeros(1, len); y=zeros(1, len);
+ax = zeros(1, len);ay = zeros(1, len);
+vx = zeros(1, len);vy = zeros(1, len);
+x  = zeros(1, len); y = zeros(1, len);
 
-ax_u= zeros(1, len);ay_u= zeros(1, len);
-vx_u=zeros(1, len); vy_u=zeros(1, len);
-x_u=zeros(1, len);  y_u=zeros(1, len);
+%allokerar minne u
+ax_u = zeros(1, len); ay_u = zeros(1, len);
+vx_u = zeros(1, len); vy_u = zeros(1, len);
+x_u  = zeros(1, len);  y_u = zeros(1, len);
 
-ax_v= zeros(1, len);ay_v= zeros(1, len);
-vx_v=zeros(1, len); vy_v=zeros(1, len);
-x_v=zeros(1, len);  y_v=zeros(1, len);
+ax_v = zeros(1, len); ay_v = zeros(1, len);
+vx_v = zeros(1, len); vy_v = zeros(1, len);
+x_v  = zeros(1, len);  y_v = zeros(1, len);
 
 % Initial hastigheten x och y komponent.
 vx(1)   = v0*cos(theta);  vy(1) = v0*sin(theta);
@@ -55,7 +56,6 @@ wind_angle = 0;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 %%
-
 
 [x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
 plot(x_v, y_v, 'b')
@@ -77,7 +77,37 @@ plot(x, y, 'r*')
 %plot(x_u, y_u, 'g')
 
 
+
 %%
+% Argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+
+% Ej luftmotstand med ode45 losning
+
+[t ,u]=ode45(@f_runge_utan,[0, 10],[0 ;v0*cos(theta) ;0 ;v0*sin(theta)]);
+
+plot(u(:,1), u(:,3), 'g+')
+ylim([0, inf]) % Axelgrans i y-led
+
+
+%%
+% Luftmotstand med ode45 losning 
+
+[t ,u_luft]=ode45(@f_runge_luft,[0, 10],[0 ; v0*cos(theta) ;0 ;v0*sin(theta)]);
+
+plot(u_luft(:,1), u_luft(:,3), 'r*')
+ylim([0, inf]) % Axelgrans i y-led
+
+%%
+% Vind ekvationen med ode45 losning 
+
+[t ,u_vind]=ode45(@f_runge_vind,[0, 10],[0 ; v0*cos(theta) ;0 ;v0*sin(theta)]);
+plot(u_vind(:,1), u_vind(:,3), 'b*')
+ylim([0, inf]) % Axelgrans i y-led
+
+
+%%
+
+
 plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
 
 grid on;
@@ -89,40 +119,6 @@ ylabel('Height y [m]');
 titel = ['Canon simulation, timestep = ', num2str(deltaT)];
 title(titel);
 
-%%pause_extended(); %---------------------------------->
-%%
-%pause(2);
-
-% Jamfor med ode45 losning
-%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-%options = odeset('RelTol',1*exp(-10),'AbsTol',1*exp(-10));
-
-[t ,u]=ode45(@f_runge_utan,[0, 10],[0 ;v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
-% plot the solution for the ode45 with the same arguments
-plot(u(:,1), u(:,3), 'g+')
-ylim([0, inf]) % Axelgrans i y-led
-
-
-%%
-% Jamfor med ode45 losning f?r luftmotstand
-%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t ,u_luft]=ode45(@f_runge_luft,[0, 10],[0 ; v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
-plot(u_luft(:,1), u_luft(:,3), 'r*')
-grid on
-ylim([0, inf]) % Axelgrans i y-led
-
-%%
-v0 = 20;
-% Jamfor med ode45 losning vind ekvationen
-
-[t ,u_vind]=ode45(@f_runge_vind,[0, 10],[0 ; v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
-plot(u_vind(:,1), u_vind(:,3), 'b*')
-ylim([0, inf]) % Axelgrans i y-led
-
-%pause_extended(); %---------------------------------->
-%legend('Inget','Luftmotstand','Luftmotstand & vind','ode45','ode45 - Luft', 'ode45 - Vind')
-
-%%
 %%
 
 distance = [length(x_u) length(x) length(x_v) ];
@@ -153,32 +149,6 @@ figure;plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
 
 %%
 
-figure;
-%title('Acceleration and velocity with drag');
-subplot(2,2,1);
-plot(t, ax)
-xlabel('Time (s)');
-ylabel('(m/s^s)');
-title('Acceleration x (m/s^2)');
-
-subplot(2,2,2);
-plot(t, ay)
-xlabel('Time (s)');
-ylabel('(m/s^2)');
-title('Acceleration y (m/s^2)');
-
-subplot(2,2,3);
-plot(t, vx)
-xlabel('Time (s)');
-ylabel('(m/s)');
-title('Velocity x (m/s)');
-
-subplot(2,2,4);
-plot(t, vy)
-xlabel('Time (s)');
-ylabel('(m/s)');
-title('Velocity y (m/s)');
-%%
 
 
 
