@@ -15,12 +15,12 @@ var geometry, material, mesh;
 var running = false;
 
 //Start varibles
-//var velocity = 40;
+//var initialVelocity = 40;
 //var velocity_wind = 10;
 var time_old = 0;
 //var ball_angle = 70;
 //var wind_angle = 70;
-var gravity = 9.8;
+var gravity = 9.82;
 var radius = 0.5;
 
 var canonBallArray = [];
@@ -35,7 +35,7 @@ function keyPress(e) {
           break;
       case 37:
           // left key pressed
-          velocity--;
+          initialVelocity--;
           document.getElementById("initialVelocity").value=velocity;
           break;
       case 38:
@@ -45,7 +45,7 @@ function keyPress(e) {
           break;
       case 39:
           // right key pressed
-          velocity++;
+          initialVelocity++;
           document.getElementById("initialVelocity").value=velocity;
           break;
       case 40:
@@ -65,42 +65,42 @@ function launch() {
 
   if(running == false) {
 
-  var initialVelocity = document.getElementById("initialVelocity").value;
-  velocity = parseFloat(initialVelocity);
+    initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
+    
 
-  var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
-  velocity_wind = parseFloat(initialVelocity_wind);
+    var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
+    velocity_wind = parseFloat(initialVelocity_wind);
 
-  var angle = document.getElementById("angle").value;
-  ball_angle = parseFloat(angle);
+    var angle = document.getElementById("angle").value;
+    ball_angle = parseFloat(angle);
 
-  var angle_wind = document.getElementById("angle_wind").value;
-  wind_angle = parseFloat(angle_wind);
+    var angle_wind = document.getElementById("angle_wind").value;
+    wind_angle = parseFloat(angle_wind);
 
-  var radius = document.getElementById("ballSize").value;
-  radius = parseFloat(radius);
+    var radius = document.getElementById("ballSize").value;
+    radius = parseFloat(radius);
 
   var ballMass = document.getElementById("ballMass").value;
   mass = parseFloat(ballMass);
 
-  createBall(velocity, radius, angle);
-  animate();
+    createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
+    t = new Date().getTime(); 
+    animate();
 
   }
-
-
 }
+
 function clearish() {
 
   running = false;
-  cancelAnimationFrame(id);
+  cancelAnimationFrame(animationId);
 
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
     obj = canonBallArray[ i ];
     
-       // scene.remove(ball);
-     //   scene.remove(point);
+    // scene.remove(ball);
+    //   scene.remove(point);
     scene.remove(obj);
     delete canonBallArray[ i ];
   }
@@ -108,7 +108,7 @@ function clearish() {
     ob = pointArray[j]
     scene.remove(ob);
     delete pointArray[ i ];
-}
+  }
 
 renderer.render(scene, camera);
   
@@ -185,8 +185,9 @@ function init() {
   dotGeometry.vertices.push(new THREE.Vector3( 0, 0, 0));
   var dotMaterial = new THREE.PointCloudMaterial( { size: 3, sizeAttenuation: false } );
   dot = new THREE.PointCloud( dotGeometry, dotMaterial );
-//canonBallArray.push(dot);
-pointArray.push(dot);
+  //canonBallArray.push(dot);
+  pointArray.push(dot);
+
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
@@ -199,7 +200,8 @@ pointArray.push(dot);
 
 }
 
-function createBall (velocity, radius, angle) {
+
+function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) {
 
   // funktion som ska slumpa fram en random hexadecimal färg
   var newColor = function getRandomColor() {
@@ -222,16 +224,16 @@ function createBall (velocity, radius, angle) {
 */
 /*
   var ball1 = {
-    velocity: 20, 
+    initialVelocity: 20, 
     angle: 45,
     time : 0,
     radius : 10,
 
     printVelocity: function () {
-      return this.velocity;
+      return this.initialVelocity;
     },
     changeVelocity: function () {
-      this.velocity += 5;
+      this.initialVelocity += 5;
     }
                   
   }
@@ -246,76 +248,94 @@ function createBall (velocity, radius, angle) {
 
   ball = new THREE.Mesh(spheregeometry, material);
   
-
   //ball.__proto__ = ball1
 
-  
+  ball.position.x = -180;
   ball.position.y = 0 + radius;
+
   ball.time = 0;
-  ball.velocity = velocity;
+  //ball.initialVelocity = initialVelocity;
+  
   ball.angle = angle;
   ball.radius = radius;
-  
 
-/*
-  ball.toSt = function () {
-        return this.angle;
-  };*/
+  ball.accelX = 0;
+  ball.accelY = -gravity;
   
+  ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
+  ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
+
+  ball.vf2 = 0;
+  ball.vf_ang = 0;
+
+  ball.velocity_wind = velocity_wind;
+  ball.Uang = wind_angle;
+
+  ball.D = 0.002;
+  ball.m = 0.5;
+
   scene.add(ball);
+
+  // Add the ball to the list with all the balls
   canonBallArray.push(ball);
 
-
+  //render the new ball thats been added
   renderer.render(scene, camera);
 }
+
 
 function animate() {
 
   animationId = requestAnimationFrame(animate);
   render();
   stats.update();
-
 }
+
+
 function render() {
   
-  //print the location for the ball
-  console.log(ball.position.x + " " + ball.position.y);
-
-  //draw the shadows for the ball
-  drawBallShadow();
-
-  //calculate and update the ball position
-  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
-  
-
-  console.log(ball.position.x + " " + ball.position.y);
-  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
-
-  //-------------------------------------------------------------------------------------------------
-  //Terminal velocoty for linear drag model
-  //var constant = 0.2;       //Must be positive
-  //var mass = 1;
-  //var vt = (mass * gravity) / constant;
-
-  //Linear drag
-  //ball.position.x = LIB.distXdrag(ball.velocity, vt, ball.angle, ball.time, gravity) - 160;
-  //ball.position.y = LIB.distYdrag(ball.velocity, vt, ball.angle, ball.time, gravity) + ball.radius;
-  //---------------------------------------------------------------------------------------------------
-
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius, mass) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius, mass) + ball.radius;
-
-
-  //Avsluta renderingsloopen nar bollen slår i marken
+  //Avsluta renderingsloopen nar bollen slår i marken 
   if ( (ball.position.y - ball.radius ) < 0) {
     stopRender();
   }
 
+  //calculate the delta time.
+  var dt = (new Date().getTime() - t )/200; //1000 default
+  t = new Date().getTime(); //reset t
+
+/*
+  //calculate and update the ball position
+  updateVelocity(ball, dt);
+  //update position of the ball 
+  updatePosition(ball, dt);
+  
+*/
+  
+  console.log(dt);
+
+  calculateVelocitiesWind(ball);
+
+  updateAccelWind(ball)
+
+  updateVelocity(ball, dt);
+  //update position of the ball 
+  updatePosition(ball, dt);
+
+
+  //draw the shadows for the ball
+  drawBallShadow();
+
+  /*
+  ball.position.x = LIB.distX(ball.velocity, ball.angle, dt) - 160;
+  ball.position.y = LIB.distY(ball.velocity, ball.angle, dt, gravity) + ball.radius;
+  */
+
+  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, initialVelocity_wind, radius) + ball.radius;
+
   //update the time for the ball
-  time_old += 1;
-  ball.time += 0.01;
+
+  //ball.time += 0.01;
 
   //render the scene
   renderer.render(scene, camera);
@@ -327,7 +347,7 @@ function stopRender() {
 
 function drawBallShadow() {
 
-    if(time_old == 2) {  
+    if(time_old == 4) {  
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
     scene.add ( point );
@@ -336,10 +356,32 @@ function drawBallShadow() {
      // window.alert(pointArray.length);
     time_old = 0;
    }
-
   time_old += 1;
-
 }
+
+function updateVelocity(obj, dt) {
+  obj.velocityX = ball.velocityX + obj.accelX*dt;;
+  obj.velocityY = ball.velocityY + obj.accelY*dt;
+}
+
+function updatePosition(obj, dt) {
+  obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
+  obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
+}
+
+//pure vector calculus
+function calculateVelocitiesWind(obj) {
+
+  // vind 
+  obj.vf2    = Math.pow((obj.velocityX  + (ball.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + ball.velocity_wind*Math.sin(obj.Uang)),2);     
+  obj.vf_ang = Math.atan((obj.velocityY + (ball.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + ball.velocity_wind*Math.cos(obj.Uang))); 
+}
+
+function updateAccelWind(obj) {
+  obj.accelX =          -(obj.D/obj.m) * obj.vf2*Math.cos(obj.vf_ang);
+  obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin(obj.vf_ang);
+}
+
 
 
 

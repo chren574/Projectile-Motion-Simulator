@@ -6,7 +6,7 @@ clear all;
 
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
-m = 0.145;               % Massa m [kg]
+m = 2;               % Massa m [kg]
 r = 0.15;                % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
@@ -25,7 +25,7 @@ x_u(1)=0;y_u(1) = 0;     % Startpositionen x och y-led.
 
 % Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
-tf = 6.333 ;             % sluttid
+tf = 10 ;             % sluttid
 deltaT = 0.01;           % tidssteg --> andra for att se fel
 t = t0:deltaT:tf;        % tidsvektorn
 
@@ -59,6 +59,7 @@ Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 [x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
 plot(x_v, y_v, 'b')
+
 %axis tight;
 xlabel('Distance [m]');
 ylabel('Height y [m]');
@@ -68,7 +69,6 @@ ylim([0, inf]) % Axelgrans i y-led
 
 hold on;
 
-%%
 
 [x, y] = f_euler_luft(len,deltaT,g, x, y, vx ,vy , ax , ay, D, m );
 plot(x, y, 'r*')

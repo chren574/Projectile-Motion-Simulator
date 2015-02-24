@@ -1,44 +1,44 @@
 
 var LIB = {
 
-  distX : function(v, ball_angle, time){
+  distX : function(v, ball_angle, dt){
 	  
-	ax_u = 0;
+	//ax_u = 0;
 
     // Hastighet
-    vx_u = v * Math.cos( ball_angle * Math.PI / 180 );
+    //vx_u = v * Math.cos( ball_angle * Math.PI / 180 );
 
     // Position
-    x_u = vx_u *time + 0.5*ax_u*Math.pow(time,2);
+    //x_u = vx_u *time + 0.5*ax_u*Math.pow(time,2);
    
 	//Calculate trajetory with gravity
-	//x = v * Math.cos( ball_angle * Math.PI / 180 ) * time;
+	x = v * Math.cos( ball_angle * Math.PI / 180 ) * dt;
 	  
-	return(x_u)
+	return(x)
   },
   
-  distY : function(v, ball_angle, time, gravity){
+  distY : function(v, ball_angle, dt, gravity){
 
-  	  var ay_u = -gravity;
+  	  //var ay_u = -gravity;
 
   	  //vy_u + 
-  	  var vy_u = v * Math.sin(ball_angle * Math.PI/ 180);
+  	  //var vy_u = v * Math.sin(ball_angle * Math.PI/ 180);
 	  //var vy_u = ay_u *time;
 
 	  //y_u + 
-	  var y_u = vy_u*time + 0.5*ay_u*Math.pow(time,2);
+	  //var y_u = vy_u*time + 0.5*ay_u*Math.pow(time,2);
 	  
 	  //Calculate trajetory with gravity
-	  //y = v * Math.sin(ball_angle * Math.PI/ 180) * time - ( gravity * Math.pow(time,2) * 0.5);
+	  y = v * Math.sin(ball_angle * Math.PI/ 180) * dt - ( gravity * Math.pow(dt,2) * 0.5);
 	  
-	  return(y_u)
+	  return(y)
   },
 
   distX_vind : function(x_pos, v, ball_angle, time, wind_angle, U, r, mass){
 	
   	// Constants
   	C = 0.5;
-  	p = 1.2;
+  	p = 0.5;
   	A = Math.PI*Math.pow(r, 2);
 
 	//luftmotstånd parametrar
@@ -74,7 +74,7 @@ var LIB = {
 
   	// Constants
   	C = 0.5;
-  	p = 1.2;
+  	p = 0.5;
   	A = Math.PI*Math.pow(r, 2);
 
 	//luftmotstånd parametrar
@@ -107,7 +107,6 @@ var LIB = {
 
 
 	return(y)
-<<<<<<< HEAD
   },
   
   dist_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r){
@@ -162,9 +161,7 @@ var LIB = {
   distYdrag: function(v, vt, ball_angle, time, gravity) {
 
     y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
-=======
   }
->>>>>>> origin/master
 
     return(y)
 
