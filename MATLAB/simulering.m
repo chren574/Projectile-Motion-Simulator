@@ -6,7 +6,7 @@ clear all;
 
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
-m = 2;               % Massa m [kg]
+m = 0.5;               % Massa m [kg]
 r = 0.15;                % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
@@ -51,7 +51,7 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
 
 % Parametrar for vind
-U = 10;                        % vindens hastighet
+U = 5;                        % vindens hastighet
 wind_angle = 180;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 

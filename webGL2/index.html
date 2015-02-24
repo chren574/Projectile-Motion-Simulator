@@ -25,18 +25,18 @@
 			 <h2>Boll Properties</h2>
 			 <p>
     			Initial Velocity <br> <input type="number" id="initialVelocity" name="initialVelocity" min="0" max="500" value="50"><br><br>
-				Angle <br> <input type="number" id="angle" name="angle" min="0" max="319" value="45"><br><br>
+				Angle <br> <input type="number" id="angle" name="angle" min="0" max="359" value="45"><br><br>
 				Radie <br> <input type="number" id="ballSize" name="ballSize" min="0" max="0.25" step="0.01" value="0.05"><br><br>
-				Mass <br> <input type="number" id="ballMass" name="ballMass" min="0" max="3" step="0.01" value="0.10"><br><br>
+				Mass <br> <input type="number" id="ballMass" name="ballMass" min="0" max="20" value="5"><br><br>
 			 </p>
 			 <h2>Wind Properties</h2>
 			 <p>
-    			Initial Velocity <br> <input type="number" id="initialVelocity_wind" name="initialVelocity_wind" min="0" max="30" value="0"><br><br>
-				Angle <br> <input type="number" id="angle_wind" name="angle_wind" min="0" max="360" value="180"><br><br>
+    			Initial Velocity <br> <input type="number" id="initialVelocity_wind" name="initialVelocity_wind"value="0"><br><br>
+				Angle <br> <input type="number" id="angle_wind" name="angle_wind" value="180"><br><br>
 			 </p>
 			 <h2>Ground Properties</h2>
 			 <p>
-    			Ground coefficients <br> <input type="number" id="initialVelocity" name="initialVelocity" min="0" max="1" step="0.01" value="1"><br><br>
+    			Ground coefficients <br> <input type="number" id="ground" name="ground" min="0" max="1" step="0.01" value="1"><br><br>
 			 </p>			 			 
 				<button onclick="clearish()" id="button">Clear</button>
 				<button onclick="launch()" id="button">Launch</button>

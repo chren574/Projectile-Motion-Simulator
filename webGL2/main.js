@@ -13,6 +13,7 @@ FAR = 10000;
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
+wind_angle = 180;
 
 //Start varibles
 //var initialVelocity = 40;
@@ -66,7 +67,6 @@ function launch() {
   if(running == false) {
 
     initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-    
 
     var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
     velocity_wind = parseFloat(initialVelocity_wind);
@@ -94,6 +94,8 @@ function clearish() {
 
   running = false;
   cancelAnimationFrame(animationId);
+
+  scene.remove(arrowHelper);
 
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
@@ -132,6 +134,17 @@ function init() {
   // so pull it back
   camera.position.z = 300;
   camera.position.y = 100;
+
+  // Arrowhelper - wind
+
+  var dir = new THREE.Vector3( Math.cos(wind_angle*Math.PI/180), Math.sin(wind_angle*Math.PI/180), 0 );
+  var origin = new THREE.Vector3( 0, 0, 0 );
+  var hex = 0xffff00;
+
+  arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+  arrowHelper.setLength (50, 10, 10);
+  arrowHelper.position.set( -200, 100, 0 );
+  scene.add( arrowHelper );
 
   //------------------------------------------------------
   // RENDERER
@@ -238,6 +251,9 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
                   
   }
 */
+  // Windvector
+
+
 
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   
@@ -271,11 +287,11 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   ball.velocity_wind = velocity_wind;
   ball.Uang = (wind_angle);
   //ball.Uang = (wind_angle*Math.PI/180); //bollen drar iväg
-  console.log(wind_angle);
-  console.log(ball.Uang);
+  //console.log(wind_angle);
+  //console.log(ball.Uang);
 
   ball.D = 0.02;
-  ball.m = 2;
+  ball.m = 1;
 
   scene.add(ball);
 
@@ -297,6 +313,7 @@ function animate() {
 
 
 function render() {
+
   
   //Avsluta renderingsloopen nar bollen slår i marken 
   if ( (ball.position.y - ball.radius ) < 0) {
@@ -315,7 +332,7 @@ function render() {
   
 */
   
-  console.log(dt);
+  //console.log(dt);
 
   calculateVelocitiesWind(ball);
 
@@ -364,7 +381,7 @@ function drawBallShadow() {
 }
 
 function updateVelocity(obj, dt) {
-  obj.velocityX = obj.velocityX + obj.accelX*dt;;
+  obj.velocityX = obj.velocityX + obj.accelX*dt;
   obj.velocityY = obj.velocityY + obj.accelY*dt;
 }
 
@@ -377,13 +394,36 @@ function updatePosition(obj, dt) {
 function calculateVelocitiesWind(obj) {
 
   // vind 
-  obj.vf2    = Math.pow(( obj.velocityX + (obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2);     
-  obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang))); 
+  obj.vf2    =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
+
+
+  //console.log ( (obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang)) / (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) );
+
+  //if (obj.Uang)
+  //if ( (obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang)) / (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) )
+  obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)));
+
+  console.log(obj.vf_ang)
+
+
+  //console.log( (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) ) 
+  //console.log( obj.vf_ang ) 
+
 }
 
 function updateAccelWind(obj) {
-  obj.accelX =          -(obj.D/obj.m) * obj.vf2*Math.cos(obj.vf_ang);
-  obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin(obj.vf_ang);
+
+
+  //vilkor for att cos ar jamn
+  if (obj.vf_ang > 0) {
+    obj.accelX =        -(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
+  }else {
+  obj.accelX =          +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
+  }
+
+  obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
+
+ // console.log ( obj.accelX );
 }
 
 
