@@ -9,6 +9,6 @@ function [uprime]=f_runge_utan(t,u)
     uprime(1)=u(2);         % hastighet x
     uprime(2)=0;            % acceleration x
     uprime(3)=u(4);         % hastighet y
-    uprime(4)=(-9.82);      % acceleration y
+    uprime(4)=(-g);      % acceleration y
     
 end

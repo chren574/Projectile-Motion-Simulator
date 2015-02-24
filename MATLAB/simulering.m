@@ -2,35 +2,32 @@
 % Simulering av kastbana.
 % 2015-02-10
 % 
-
 clear all;
 
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
 m = 0.145;               % Massa m [kg]
-r = 0.15;              % Radie r [m]
-%r = 0.0366;              % Radie r [m]
+r = 0.15;                % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
-A = r.^2*pi;             % Arean A [m^2]
+A = r^2*pi;             % Arean A [m^2]
 C = 0.5;
-p = 1.2;                 % Densiteten p []
+p = 1.2;                % Densiteten p []
 D = (p*C*A)/2;
 
-% initialvarden
-v0 = 20;                 % initial hastigheten
+% initialv?rden
+v0 = 80;                 % initial hastigheten
 angle = 45;              % Vinkel  [grader]
 theta = angle*pi/180;    % Vinkel  [radianer]
 
-x(1) = 0;y(1) = 0;       % Startpositionen x och y-led.
-x_u(1) = 0;y_u(1) = 0;   % Startpositionen x och y-led.
+x(1) = 0;y(1)   = 0;     % Startpositionen x och y-led.
+x_u(1)=0;y_u(1) = 0;     % Startpositionen x och y-led.
 
 % Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
 tf = 6.333 ;             % sluttid
-deltaT = 0.01;            % tidssteg --> andra for att se fel
+deltaT = 0.01;           % tidssteg --> andra for att se fel
 t = t0:deltaT:tf;        % tidsvektorn
-
 
 len=length(t);
 v=zeros(1, len);
@@ -53,47 +50,80 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
 
 % Parametrar for vind
-U = 0;                    % vindens hastighet
-angle = 180;              % Vinkel  [grader]
-Uang = angle*pi/180;      % Vinkel  [radianer]
+U = 0;                   % vindens hastighet
+wind_angle = 0;              % Vinkel  [grader]
+Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
-% N = 100;
-% tmax = N*deltaT;
+%%
+
 
 [x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-plot(x_v, y_v)
+plot(x_v, y_v, 'b')
 %axis tight;
 xlabel('Distance [m]');
 ylabel('Height y [m]');
 titel = ['Wind simulation'];
 title(titel);
 ylim([0, inf]) % Axelgrans i y-led
-legend('r = 0.03','r = 0.3','r = 0.15')
+
+hold on;
 
 %%
-[x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-plot(x_v, y_v)
-%axis tight;
-xlabel('Distance [m]');
-ylabel('Height y [m]');
-titel = ['Wind simulation'];
-title(titel);
-ylim([0, inf]) % Axelgrans i y-led
-legend('Motvind','Medvind','Ingen vind')
-%%
-
-%-------------------------------
-
-%-------------------------------
-
-[x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
-figure;plot(x_u, y_u, 'g')
 
 [x, y] = f_euler_luft(len,deltaT,g, x, y, vx ,vy , ax , ay, D, m );
-figure;plot(x, y, 'r')
+plot(x, y, 'r*')
 
-%--
+[x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
+%plot(x_u, y_u, 'g')
 
+
+%%
+plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
+
+grid on;
+hold on;
+axis tight;
+ylim([0, inf]) % Axelgrans i y-led
+xlabel('Distance [m]');
+ylabel('Height y [m]');
+titel = ['Canon simulation, timestep = ', num2str(deltaT)];
+title(titel);
+
+%%pause_extended(); %---------------------------------->
+%%
+%pause(2);
+
+% Jamfor med ode45 losning
+%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+%options = odeset('RelTol',1*exp(-10),'AbsTol',1*exp(-10));
+
+[t ,u]=ode45(@f_runge_utan,[0, 10],[0 ;v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
+% plot the solution for the ode45 with the same arguments
+plot(u(:,1), u(:,3), 'g+')
+ylim([0, inf]) % Axelgrans i y-led
+
+
+%%
+% Jamfor med ode45 losning f?r luftmotstand
+%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
+[t ,u_luft]=ode45(@f_runge_luft,[0, 10],[0 ; v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
+plot(u_luft(:,1), u_luft(:,3), 'r*')
+grid on
+ylim([0, inf]) % Axelgrans i y-led
+
+%%
+v0 = 20;
+% Jamfor med ode45 losning vind ekvationen
+
+[t ,u_vind]=ode45(@f_runge_vind,[0, 10],[0 ; v0*cos(45*pi/180) ;0 ;v0*sin(45*pi/180)]);
+plot(u_vind(:,1), u_vind(:,3), 'b*')
+ylim([0, inf]) % Axelgrans i y-led
+
+%pause_extended(); %---------------------------------->
+%legend('Inget','Luftmotstand','Luftmotstand & vind','ode45','ode45 - Luft', 'ode45 - Vind')
+
+%%
+%%
 
 distance = [length(x_u) length(x) length(x_v) ];
 
@@ -120,49 +150,6 @@ else
 end
 
 figure;plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
-
-
-
-%%
-plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c');
-
-grid on;
-hold on;
-axis tight;
-ylim([0, inf]) % Axelgrans i y-led
-xlabel('Distance [m]');
-ylabel('Height y [m]');
-titel = ['Canon simulation, timestep = ', num2str(deltaT)];
-title(titel);
-
-%%pause_extended(); %---------------------------------->
-%%
-%pause(2);
-
-% Jamfor med ode45 losning
-%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-%options = odeset('RelTol',1*exp(-10),'AbsTol',1*exp(-10));
-
-[t ,u]=ode45(@f_runge_utan,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
-% plot the solution for the ode45 with the same arguments
-plot(u(:,1), u(:,3), 'g+')
-
-% Jamfor med ode45 losning f?r luftmotstand
-%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t ,u_luft]=ode45(@f_runge_luft,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
-plot(u_luft(:,1), u_luft(:,3), 'r*')
-grid on
-
-% Jamfor med ode45 losning f?r luftmotstand
-%argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
-[t ,u_vind]=ode45(@f_runge_vind,[0, 4.5],[0 ; 20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
-plot(u_vind(:,1), u_vind(:,3), 'b*')
-
-%pause_extended(); %---------------------------------->
-legend('Inget','Luftmotstand','Luftmotstand & vind','ode45','ode45 - Luft', 'ode45 - Vind')
-
-%%
-
 
 %%
 

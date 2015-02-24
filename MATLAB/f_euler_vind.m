@@ -21,19 +21,20 @@ for n = 2:len
 
     % Avslutar loppen nr y-vardet blir vldigt nra noll 
     if y_v(n) < 0
+        break
         fprintf('%i \n',n);
         %berakna ett extra steg
         x_v(n+1) = x_v(n) + vx_v(n)*deltaT + 0.5*ax_v(n)*deltaT^2;
         y_v(n+1) = y_v(n) + vy_v(n)*deltaT + 0.5*ay_v(n)*deltaT^2;  
-        break
+        %break
     end
 end
 
 steps = length(x_v);
 fprintf('Number of steps: %i \n',steps);
 % resize the vector
-x_v = x_v(1:n+1);
-y_v = y_v(1:n+1);
+x_v = x_v(1:n);
+y_v = y_v(1:n);
 % test = length(x);
 % fprintf('%i \n',test);
 
