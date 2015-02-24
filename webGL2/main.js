@@ -78,7 +78,7 @@ function launch() {
     wind_angle = parseFloat(angle_wind);
 
     var radius = document.getElementById("ballSize").value;
-    radius = parseFloat(radius);
+    radius = parseFloat(radius)*200;
 
   var ballMass = document.getElementById("ballMass").value;
   mass = parseFloat(ballMass);
