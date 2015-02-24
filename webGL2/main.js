@@ -269,7 +269,10 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   ball.vf_ang = 0;
 
   ball.velocity_wind = velocity_wind;
-  ball.Uang = wind_angle;
+  ball.Uang = (wind_angle);
+  //ball.Uang = (wind_angle*Math.PI/180); //bollen drar iväg
+  console.log(wind_angle);
+  console.log(ball.Uang);
 
   ball.D = 0.002;
   ball.m = 0.5;
@@ -360,8 +363,8 @@ function drawBallShadow() {
 }
 
 function updateVelocity(obj, dt) {
-  obj.velocityX = ball.velocityX + obj.accelX*dt;;
-  obj.velocityY = ball.velocityY + obj.accelY*dt;
+  obj.velocityX = obj.velocityX + obj.accelX*dt;;
+  obj.velocityY = obj.velocityY + obj.accelY*dt;
 }
 
 function updatePosition(obj, dt) {
@@ -373,8 +376,8 @@ function updatePosition(obj, dt) {
 function calculateVelocitiesWind(obj) {
 
   // vind 
-  obj.vf2    = Math.pow((obj.velocityX  + (ball.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + ball.velocity_wind*Math.sin(obj.Uang)),2);     
-  obj.vf_ang = Math.atan((obj.velocityY + (ball.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + ball.velocity_wind*Math.cos(obj.Uang))); 
+  obj.vf2    = Math.pow((obj.velocityX  + (obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2);     
+  obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang))); 
 }
 
 function updateAccelWind(obj) {
@@ -387,4 +390,3 @@ function updateAccelWind(obj) {
 
 
   
-
