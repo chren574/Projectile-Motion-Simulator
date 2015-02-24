@@ -34,7 +34,7 @@ var LIB = {
 	  return(y_u)
   },
 
-  distX_vind : function(x_pos, v, ball_angle, time, wind_angle, U, r){
+  distX_vind : function(x_pos, v, ball_angle, time, wind_angle, U, r, mass){
 	
   	// Constants
   	C = 0.5;
@@ -43,11 +43,11 @@ var LIB = {
 
 	//luftmotstånd parametrar
 	var D = (p*C*A)/2;
-	var m = 0.5;
+	var m = mass;
 
 	//vind parametrar  
-  	var angle = wind_angle;              		  //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);      //Vinkel  [radianer]
+  	var angle = wind_angle;              //Vinkel  [grader]
+	var Uang = (angle*Math.PI / 180);    //Vinkel  [radianer]
   	var U = U;
 
   	// Hastighet komponenter
@@ -70,7 +70,7 @@ var LIB = {
 	return(x)
   },
   
-  distY_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r){
+  distY_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r, mass){
 
   	// Constants
   	C = 0.5;
@@ -79,7 +79,7 @@ var LIB = {
 
 	//luftmotstånd parametrar
 	var D = (p*C*A)/2;
-	var m = 0.5;
+	var m = mass;
 	var U = U;
   	
   	//vind parametrar 
@@ -107,6 +107,7 @@ var LIB = {
 
 
 	return(y)
+<<<<<<< HEAD
   },
   
   dist_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r){
@@ -147,8 +148,26 @@ var LIB = {
 
 
 	return [x, y];
+  },
+
+    //Function for linear drag
+  distXdrag: function(v, vt, ball_angle, time, gravity) {
+
+    x = (vt / gravity) * (v * Math.cos(ball_angle * Math.PI / 180)) * (1 - Math.exp(-gravity * time / vt));
+
+    return(x)
+
+  },
+    //Function for linear drag
+  distYdrag: function(v, vt, ball_angle, time, gravity) {
+
+    y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
+=======
   }
+>>>>>>> origin/master
 
+    return(y)
 
+}
 
 };

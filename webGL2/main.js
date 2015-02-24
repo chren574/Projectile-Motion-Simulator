@@ -80,6 +80,9 @@ function launch() {
   var radius = document.getElementById("ballSize").value;
   radius = parseFloat(radius);
 
+  var ballMass = document.getElementById("ballMass").value;
+  mass = parseFloat(ballMass);
+
   createBall(velocity, radius, angle);
   animate();
 
@@ -285,8 +288,25 @@ function render() {
   //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
   //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
   
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+
+  console.log(ball.position.x + " " + ball.position.y);
+  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+
+  //-------------------------------------------------------------------------------------------------
+  //Terminal velocoty for linear drag model
+  //var constant = 0.2;       //Must be positive
+  //var mass = 1;
+  //var vt = (mass * gravity) / constant;
+
+  //Linear drag
+  //ball.position.x = LIB.distXdrag(ball.velocity, vt, ball.angle, ball.time, gravity) - 160;
+  //ball.position.y = LIB.distYdrag(ball.velocity, vt, ball.angle, ball.time, gravity) + ball.radius;
+  //---------------------------------------------------------------------------------------------------
+
+  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius, mass) - 160;
+  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius, mass) + ball.radius;
+
 
   //Avsluta renderingsloopen nar bollen slår i marken
   if ( (ball.position.y - ball.radius ) < 0) {
@@ -294,6 +314,7 @@ function render() {
   }
 
   //update the time for the ball
+  time_old += 1;
   ball.time += 0.01;
 
   //render the scene
