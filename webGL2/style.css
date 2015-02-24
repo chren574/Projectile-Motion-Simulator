@@ -23,6 +23,11 @@ width: 100%;
 	float:left;
 }
 
+input[type="number"] {
+    width: 50px;
+    text-align: center;
+}
+
 #settings {
 	/*width: 10%;*/
 	height: 100%;
