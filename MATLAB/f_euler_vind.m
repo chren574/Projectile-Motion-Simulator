@@ -10,7 +10,7 @@ for n = 2:len
     vf2 = (vx_v(n-1) + U*cos(Uang))^2 + (vy_v(n-1) + U*sin(Uang))^2;      
     vf_ang = atan((vy_v(n-1) + U*sin(Uang))/(vx_v(n-1) + U*cos(Uang)));     
     % Acceleratioen
-    ax_v(n) = -(D/m)*vf2*cos(vf_ang);
+    ax_v(n) =    -(D/m)*vf2*cos(vf_ang);
     ay_v(n) = -g -(D/m)*vf2*sin(vf_ang);
     % Berknar hastigheten
     vx_v(n) = vx_v(n-1) + ax_v(n-1)*deltaT;

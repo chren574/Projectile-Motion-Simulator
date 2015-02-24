@@ -16,8 +16,8 @@ p = 1.2;                % Densiteten p []
 D = (p*C*A)/2;
 
 % initialv?rden
-v0 = 80;                 % initial hastigheten
-angle = 45;              % Vinkel  [grader]
+v0 = 40;                 % initial hastigheten
+angle = 90;              % Vinkel  [grader]
 theta = angle*pi/180;    % Vinkel  [radianer]
 
 x(1) = 0;y(1)   = 0;     % Startpositionen x och y-led.
@@ -51,14 +51,14 @@ vx_u(1) = v0*cos(theta);vy_u(1) = v0*sin(theta);
 vx_v(1) = v0*cos(theta);vy_v(1) = v0*sin(theta);
 
 % Parametrar for vind
-U = 0;                   % vindens hastighet
-wind_angle = 0;              % Vinkel  [grader]
+U = 10;                        % vindens hastighet
+wind_angle = 180;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 %%
 
 [x_v, y_v] = f_euler_vind(len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-plot(x_v, y_v, 'b')
+figure;plot(x_v, y_v, 'b')
 
 %axis tight;
 xlabel('Distance [m]');
@@ -69,14 +69,11 @@ ylim([0, inf]) % Axelgrans i y-led
 
 hold on;
 
-
 [x, y] = f_euler_luft(len,deltaT,g, x, y, vx ,vy , ax , ay, D, m );
 plot(x, y, 'r*')
 
 [x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
 %plot(x_u, y_u, 'g')
-
-
 
 %%
 % Argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])

@@ -72,16 +72,16 @@ function launch() {
     velocity_wind = parseFloat(initialVelocity_wind);
 
     var angle = document.getElementById("angle").value;
-    ball_angle = parseFloat(angle);
+    ball_angle = parseFloat(angle*Math.PI/180);
 
     var angle_wind = document.getElementById("angle_wind").value;
-    wind_angle = parseFloat(angle_wind);
+    wind_angle = parseFloat(angle_wind*Math.PI/180);
 
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
-  var ballMass = document.getElementById("ballMass").value;
-  mass = parseFloat(ballMass);
+    var ballMass = document.getElementById("ballMass").value;
+    mass = parseFloat(ballMass);
 
     createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
     t = new Date().getTime(); 
@@ -274,8 +274,8 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   console.log(wind_angle);
   console.log(ball.Uang);
 
-  ball.D = 0.002;
-  ball.m = 0.5;
+  ball.D = 0.02;
+  ball.m = 2;
 
   scene.add(ball);
 
@@ -290,6 +290,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 function animate() {
 
   animationId = requestAnimationFrame(animate);
+
   render();
   stats.update();
 }
@@ -376,7 +377,7 @@ function updatePosition(obj, dt) {
 function calculateVelocitiesWind(obj) {
 
   // vind 
-  obj.vf2    = Math.pow((obj.velocityX  + (obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2);     
+  obj.vf2    = Math.pow(( obj.velocityX + (obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2);     
   obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang))); 
 }
 
