@@ -161,10 +161,10 @@ var LIB = {
   distYdrag: function(v, vt, ball_angle, time, gravity) {
 
     y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
-  }
 
     return(y)
+  }
 
-}
+    
 
 };

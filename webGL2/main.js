@@ -13,6 +13,7 @@ FAR = 10000;
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
+wind_angle = 180;
 
 //Start varibles
 //var initialVelocity = 40;
@@ -66,7 +67,6 @@ function launch() {
   if(running == false) {
 
     initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-    
 
     var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
     velocity_wind = parseFloat(initialVelocity_wind);
@@ -80,8 +80,8 @@ function launch() {
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
-  var ballMass = document.getElementById("ballMass").value;
-  mass = parseFloat(ballMass);
+    var ballMass = document.getElementById("ballMass").value;
+    mass = parseFloat(ballMass);
 
     createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
     t = new Date().getTime(); 
@@ -94,6 +94,8 @@ function clearish() {
 
   running = false;
   cancelAnimationFrame(animationId);
+
+  scene.remove(arrowHelper);
 
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
@@ -132,6 +134,17 @@ function init() {
   // so pull it back
   camera.position.z = 300;
   camera.position.y = 100;
+
+  // Arrowhelper - wind
+
+  var dir = new THREE.Vector3( Math.cos(wind_angle*Math.PI/180), Math.sin(wind_angle*Math.PI/180), 0 );
+  var origin = new THREE.Vector3( 0, 0, 0 );
+  var hex = 0xffff00;
+
+  arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+  arrowHelper.setLength (50, 10, 10);
+  arrowHelper.position.set( -200, 100, 0 );
+  scene.add( arrowHelper );
 
   //------------------------------------------------------
   // RENDERER
@@ -238,6 +251,9 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
                   
   }
 */
+  // Windvector
+
+
 
   var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   
@@ -293,6 +309,7 @@ function animate() {
 
 
 function render() {
+
   
   //Avsluta renderingsloopen nar bollen slår i marken 
   if ( (ball.position.y - ball.radius ) < 0) {
