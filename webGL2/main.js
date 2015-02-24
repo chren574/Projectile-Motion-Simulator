@@ -80,7 +80,7 @@ function launch() {
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius);
 
-    createBall(initialVelocity, radius, angle);
+    createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
     t = new Date().getTime(); 
     animate();
 
@@ -198,7 +198,7 @@ function init() {
 }
 
 
-function createBall (initialVelocity, radius, angle) {
+function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) {
 
   // funktion som ska slumpa fram en random hexadecimal färg
   var newColor = function getRandomColor() {
@@ -262,7 +262,14 @@ function createBall (initialVelocity, radius, angle) {
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
   ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
 
+  ball.vf2 = 0;
+  ball.vf_ang = 0;
 
+  ball.velocity_wind = velocity_wind;
+  ball.Uang = wind_angle;
+
+  ball.D = 0.002;
+  ball.m = 0.5;
 
   scene.add(ball);
 
@@ -290,16 +297,33 @@ function render() {
   }
 
   //calculate the delta time.
-  var dt = (new Date().getTime() - t )/500; //1000 default
+  var dt = (new Date().getTime() - t )/200; //1000 default
   t = new Date().getTime(); //reset t
 
+/*
   //calculate and update the ball position
   updateVelocity(ball, dt);
   //update position of the ball 
   updatePosition(ball, dt);
+  
+*/
+  
+  console.log(dt);
+
+  calculateVelocitiesWind(ball);
+
+  updateAccelWind(ball)
+
+  updateVelocity(ball, dt);
+  //update position of the ball 
+  updatePosition(ball, dt);
+
 
   //draw the shadows for the ball
   drawBallShadow();
+
+
+
   /*
   ball.position.x = LIB.distX(ball.velocity, ball.angle, dt) - 160;
   ball.position.y = LIB.distY(ball.velocity, ball.angle, dt, gravity) + ball.radius;
@@ -321,7 +345,7 @@ function stopRender() {
 
 function drawBallShadow() {
 
-    if(time_old == 2) {  
+    if(time_old == 4) {  
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
     scene.add ( point );
@@ -334,14 +358,29 @@ function drawBallShadow() {
 }
 
 function updateVelocity(obj, dt) {
-  obj.velocityX = ball.velocityX;
-  obj.velocityY = ball.velocityY - gravity*dt;;
+  obj.velocityX = ball.velocityX + obj.accelX*dt;;
+  obj.velocityY = ball.velocityY + obj.accelY*dt;
+}
 
-}
 function updatePosition(obj, dt) {
-  obj.position.x += obj.velocityX * dt;
-  obj.position.y += obj.velocityY * dt - ( gravity * Math.pow(dt,2) * 0.5);
+  obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
+  obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
 }
+
+//pure vector calculus
+function calculateVelocitiesWind(obj) {
+
+  // vind 
+  obj.vf2    = Math.pow((obj.velocityX  + (ball.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + ball.velocity_wind*Math.sin(obj.Uang)),2);     
+  obj.vf_ang = Math.atan((obj.velocityY + (ball.velocity_wind)*Math.sin(obj.Uang))/(obj.velocityX + ball.velocity_wind*Math.cos(obj.Uang))); 
+}
+
+function updateAccelWind(obj) {
+  obj.accelX =          -(obj.D/obj.m) * obj.vf2*Math.cos(obj.vf_ang);
+  obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin(obj.vf_ang);
+}
+
+
 
 
 
