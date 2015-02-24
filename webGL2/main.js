@@ -20,7 +20,7 @@ var running = false;
 var time_old = 0;
 //var ball_angle = 70;
 //var wind_angle = 70;
-var gravity = 9.8;
+var gravity = 9.82;
 var radius = 0.5;
 
 var canonBallArray = [];
@@ -65,39 +65,39 @@ function launch() {
 
   if(running == false) {
 
-  var initialVelocity = document.getElementById("initialVelocity").value;
-  velocity = parseFloat(initialVelocity);
+    var initialVelocity = document.getElementById("initialVelocity").value;
+    velocity = parseFloat(initialVelocity);
 
-  var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
-  velocity_wind = parseFloat(initialVelocity_wind);
+    var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
+    velocity_wind = parseFloat(initialVelocity_wind);
 
-  var angle = document.getElementById("angle").value;
-  ball_angle = parseFloat(angle);
+    var angle = document.getElementById("angle").value;
+    ball_angle = parseFloat(angle);
 
-  var angle_wind = document.getElementById("angle_wind").value;
-  wind_angle = parseFloat(angle_wind);
+    var angle_wind = document.getElementById("angle_wind").value;
+    wind_angle = parseFloat(angle_wind);
 
-  var radius = document.getElementById("ballSize").value;
-  radius = parseFloat(radius);
+    var radius = document.getElementById("ballSize").value;
+    radius = parseFloat(radius);
 
-  createBall(velocity, radius, angle);
-  animate();
+    createBall(velocity, radius, angle);
+    t = new Date().getTime(); 
+    animate();
 
   }
-
-
 }
+
 function clearish() {
 
   running = false;
-  cancelAnimationFrame(id);
+  cancelAnimationFrame(animationId);
 
   var obj, ob, i, j;
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
     obj = canonBallArray[ i ];
     
-       // scene.remove(ball);
-     //   scene.remove(point);
+    // scene.remove(ball);
+    //   scene.remove(point);
     scene.remove(obj);
     delete canonBallArray[ i ];
   }
@@ -105,7 +105,7 @@ function clearish() {
     ob = pointArray[j]
     scene.remove(ob);
     delete pointArray[ i ];
-}
+  }
 
 renderer.render(scene, camera);
   
@@ -182,8 +182,9 @@ function init() {
   dotGeometry.vertices.push(new THREE.Vector3( 0, 0, 0));
   var dotMaterial = new THREE.PointCloudMaterial( { size: 3, sizeAttenuation: false } );
   dot = new THREE.PointCloud( dotGeometry, dotMaterial );
-//canonBallArray.push(dot);
-pointArray.push(dot);
+  //canonBallArray.push(dot);
+  pointArray.push(dot);
+
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
@@ -195,6 +196,7 @@ pointArray.push(dot);
   //requestAnimationFrame(render);
 
 }
+
 
 function createBall (velocity, radius, angle) {
 
@@ -246,47 +248,68 @@ function createBall (velocity, radius, angle) {
 
   //ball.__proto__ = ball1
 
-  
+  ball.position.x = -180;
   ball.position.y = 0 + radius;
+
   ball.time = 0;
-  ball.velocity = velocity;
+  //ball.velocity = velocity;
+  ball.velocityX = velocity*Math.cos(angle*Math.PI/180)
+  ball.velocityY = velocity*Math.sin(angle*Math.PI/180)
+
   ball.angle = angle;
   ball.radius = radius;
   
-
-/*
-  ball.toSt = function () {
-        return this.angle;
-  };*/
-  
   scene.add(ball);
+
+  // Add the ball to the list with all the balls
   canonBallArray.push(ball);
 
-
+  //render the new ball thats been added
   renderer.render(scene, camera);
 }
+
 
 function animate() {
 
   animationId = requestAnimationFrame(animate);
   render();
   stats.update();
-
 }
+
+
 function render() {
   
   //print the location for the ball
-  console.log(ball.position.x + " " + ball.position.y);
+  //console.log(ball.position.x + " " + ball.position.y);
 
   //draw the shadows for the ball
   drawBallShadow();
 
+  var dt = (new Date().getTime() - t )/100;
+  t = new Date().getTime(); //reset t
+
+  //console.log(dt);
+  //console.log(gravity);
+  console.log(ball.velocityX);
+  console.log(ball.velocityY);
+
   //calculate and update the ball position
-  //ball.position.x = LIB.distX(ball.velocity, ball.angle, ball.time) - 160;
-  //ball.position.y = LIB.distY(ball.velocity, ball.angle, ball.time, gravity) + ball.radius;
+
+  ball.velocityX = ball.velocityX;
+  ball.velocityY = ball.velocityY - gravity*dt;
+
+  ball.position.x += ball.velocityX * dt;
+  ball.position.y += ball.velocityY * dt - ( gravity * Math.pow(dt,2) * 0.5);
   
-  ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
+
+  //ball.angle -= 1;
+  /*
+  ball.position.x = LIB.distX(ball.velocity, ball.angle, dt) - 160;
+  ball.position.y = LIB.distY(ball.velocity, ball.angle, dt, gravity) + ball.radius;
+  */
+
+  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
+  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, velocity_wind, radius) + ball.radius;
 
   //Avsluta renderingsloopen nar bollen slår i marken
   if ( (ball.position.y - ball.radius ) < 0) {
@@ -294,7 +317,7 @@ function render() {
   }
 
   //update the time for the ball
-  ball.time += 0.01;
+  //ball.time += 0.01;
 
   //render the scene
   renderer.render(scene, camera);

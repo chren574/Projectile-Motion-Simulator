@@ -1,54 +1,56 @@
 
 var LIB = {
 
-  distX : function(v, ball_angle, time){
+  distX : function(v, ball_angle, dt){
 	  
-	ax_u = 0;
+	//ax_u = 0;
 
     // Hastighet
-    vx_u = v * Math.cos( ball_angle * Math.PI / 180 );
+    //vx_u = v * Math.cos( ball_angle * Math.PI / 180 );
 
     // Position
-    x_u = vx_u *time + 0.5*ax_u*Math.pow(time,2);
+    //x_u = vx_u *time + 0.5*ax_u*Math.pow(time,2);
    
 	//Calculate trajetory with gravity
-	//x = v * Math.cos( ball_angle * Math.PI / 180 ) * time;
+	x = v * Math.cos( ball_angle * Math.PI / 180 ) * dt;
 	  
-	return(x_u)
+	return(x)
   },
   
-  distY : function(v, ball_angle, time, gravity){
+  distY : function(v, ball_angle, dt, gravity){
 
-  	  var ay_u = -gravity;
+  	  //var ay_u = -gravity;
 
   	  //vy_u + 
-  	  var vy_u = v * Math.sin(ball_angle * Math.PI/ 180);
+  	  //var vy_u = v * Math.sin(ball_angle * Math.PI/ 180);
 	  //var vy_u = ay_u *time;
 
 	  //y_u + 
-	  var y_u = vy_u*time + 0.5*ay_u*Math.pow(time,2);
+	  //var y_u = vy_u*time + 0.5*ay_u*Math.pow(time,2);
 	  
 	  //Calculate trajetory with gravity
-	  //y = v * Math.sin(ball_angle * Math.PI/ 180) * time - ( gravity * Math.pow(time,2) * 0.5);
+	  y = v * Math.sin(ball_angle * Math.PI/ 180) * dt - ( gravity * Math.pow(dt,2) * 0.5);
 	  
-	  return(y_u)
+	  return(y)
   },
 
   distX_vind : function(x_pos, v, ball_angle, time, wind_angle, U, r){
 	
   	// Constants
   	C = 0.5;
-  	p = 1.2;
+  	p = 0.5;
   	A = Math.PI*Math.pow(r, 2);
 
 	//luftmotstånd parametrar
-	var D = (p*C*A)/2;
+	//var D = (p*C*A)/2;
+	var D = 0.001;
+	console.log(D);
 	var m = 0.5;
 
 	//vind parametrar  
-  	var angle = wind_angle;              		  //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);      //Vinkel  [radianer]
-  	var U = U;
+  	//var angle = 0;              		   // testvinkel  [grader]
+	var Uang = (wind_angle*Math.PI / 180);      //Vinkel  [radianer]
+  	//var U = 0;
 
   	// Hastighet komponenter
     vx_v = v * Math.cos( ball_angle * Math.PI / 180 );
@@ -74,17 +76,19 @@ var LIB = {
 
   	// Constants
   	C = 0.5;
-  	p = 1.2;
+  	p = 0.5;
   	A = Math.PI*Math.pow(r, 2);
 
 	//luftmotstånd parametrar
-	var D = (p*C*A)/2;
+	//var D = (p*C*A)/2;
+	var D = 0.001;
+	console.log(D);
 	var m = 0.5;
-	var U = U;
-  	
-  	//vind parametrar 
-  	var angle = wind_angle;              		  //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);      //Vinkel  [radianer]
+
+	//vind parametrar  
+  	//var angle = 0;              		   // testvinkel  [grader]
+	var Uang = (wind_angle*Math.PI / 180);      //Vinkel  [radianer]
+  	//var U = 0;
 
 	// Hastighet komponenter
 	vx_v = v * Math.cos( ball_angle * Math.PI / 180 );
