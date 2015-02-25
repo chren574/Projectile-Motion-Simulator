@@ -13,7 +13,7 @@ FAR = 10000;
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
-wind_angle = 180;
+
 
 //Start varibles
 //var initialVelocity = 40;
@@ -135,17 +135,6 @@ function init() {
   camera.position.z = 300;
   camera.position.y = 100;
 
-  // Arrowhelper - wind
-
-  var dir = new THREE.Vector3( Math.cos(wind_angle*Math.PI/180), Math.sin(wind_angle*Math.PI/180), 0 );
-  var origin = new THREE.Vector3( 0, 0, 0 );
-  var hex = 0xffff00;
-
-  arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
-  arrowHelper.setLength (50, 10, 10);
-  arrowHelper.position.set( -200, 100, 0 );
-  scene.add( arrowHelper );
-
   //------------------------------------------------------
   // RENDERER
 
@@ -207,6 +196,25 @@ function init() {
   var plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
+
+
+
+  //TODO parse the initial value for the direction of the vector.
+  // Arrowhelper - wind
+  var wind_angle = 180*Math.PI/180;
+
+  dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
+  var origin = new THREE.Vector3( 300, 300, 0 );
+  var hex = 0xffff00;
+
+  arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
+  //arrowHelper.setLength (50, 10, 10);
+  //arrowHelper.position.set( 300, 300, 0 );
+
+  //arrowHelper.setDirection(dir)
+  scene.add( arrowHelper );
+
+
 
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
@@ -292,6 +300,10 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   ball.D = 0.02;
   ball.m = 1;
+
+
+  dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
+  arrowHelper.setDirection(dir);
 
   scene.add(ball);
 
@@ -394,34 +406,22 @@ function updatePosition(obj, dt) {
 function calculateVelocitiesWind(obj) {
 
   // vind 
-  obj.vf2    =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
-
-
-  //console.log ( (obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang)) / (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) );
-
-  //if (obj.Uang)
-  //if ( (obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang)) / (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) )
+  obj.vf2 =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
   obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)));
-
-  console.log(obj.vf_ang)
-
-
-  //console.log( (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) ) 
-  //console.log( obj.vf_ang ) 
 
 }
 
 function updateAccelWind(obj) {
 
-
   //vilkor for att cos ar jamn
-  if (obj.vf_ang > 0) {
-    obj.accelX =        -(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
-  }else {
-  obj.accelX =          +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
+  if (obj.vf_ang >= 0) {
+
+    obj.accelX =   -(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
+  } else {
+    obj.accelX =   +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
   }
 
-  obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
+    obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
 
  // console.log ( obj.accelX );
 }
