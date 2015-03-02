@@ -28,9 +28,27 @@ input[type="number"] {
     text-align: center;
 }
 
-#settings {
+#ballsettings{
 	/*width: 10%;*/
-	height: 100%;
+	height: 55%;
+	/*height: 100%;*/
+	/*float:right;*/
+	overflow:auto;
+	text-align: center;
+	margin: 1px;
+}
+#windsettings{
+	/*width: 10%;*/
+	height: 30%;
+	/*height: 100%;*/
+	/*float:right;*/
+	overflow:auto;
+	text-align: center;
+	margin: 1px;
+}
+#groundsettings{
+	/*width: 10%;*/
+	height: 15%;
 	/*height: 100%;*/
 	/*float:right;*/
 	overflow:auto;
