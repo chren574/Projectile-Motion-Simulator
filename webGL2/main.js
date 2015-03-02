@@ -392,6 +392,9 @@ function calculateVelocitiesWind(obj) {
   obj.vf2 =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
   obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)));
 
+
+
+
 }
 
 /**
@@ -399,6 +402,8 @@ function calculateVelocitiesWind(obj) {
  */
 function updateAccelWind(obj) {
 
+
+  console.log(obj.vf_ang);
   //vilkor for att cos ar jamn
   if (obj.vf_ang > 0) {
 
@@ -406,7 +411,7 @@ function updateAccelWind(obj) {
   } else {
     obj.accelX =   +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
   }
-    obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
+    obj.accelY = -gravity - (obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
 
  // console.log ( obj.accelX );
 }
@@ -416,29 +421,31 @@ function updateAccelWind(obj) {
  */
 function checkCollision(obj) {
 
-  var studskoefficient = 0.8;
-  var stuts = true;  
+  var studskoefficient = 0.5;
   
 
   // check if the ball hits the ground 
 
-  if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
-    // change sign of the velocity in y-direction.
-    obj.velocityY = -obj.velocityY * studskoefficient;
-    obj.velocityX = obj.velocityX * studskoefficient;
+  if (obj.velocityY < 0 ) {
 
-    //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-    console.log(obj.velocityY);
+    if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
+      // change sign of the velocity in y-direction.
+      obj.velocityY = -obj.velocityY * studskoefficient;
+      obj.velocityX = obj.velocityX * studskoefficient;
+
+      //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
+      console.log(obj.velocityY);
 
 
-    // check if the total velocity is to low for a bounce. the number 5 need to be checked
-    if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 0.5) {
+      // check if the total velocity is to low for a bounce. the number 5 need to be checked
+      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 0.5) {
 
-      stopRender();
+        stopRender();
 
-    } 
+      } 
+    }
+
   }
-
 }
 
 // Converted from Python version: http://doswa.com/2009/01/02/fourth-order-runge-kutta-numerical-integration.html
@@ -452,8 +459,8 @@ function checkCollision(obj) {
   //        a: acceleration function a(x,v,dt) (must be callable)
   //        dt: timestep
 
-  var x1 = obj.position.x;
-  var v1 = obj.velocityX ;
+  var x1 = obj.position.y;
+  var v1 = obj.velocityY ;
   var a1 = a(x1, v1, 0);
 
   var x2 = x + 0.5*v1*dt;
