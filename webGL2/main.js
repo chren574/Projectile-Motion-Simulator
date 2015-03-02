@@ -80,9 +80,29 @@ function launch() {
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
-    var ballMass = document.getElementById("ballMass").value;
-    mass = parseFloat(ballMass);
+    //var ballMass = document.getElementById("ballMass").value;
+    //mass = parseFloat(ballMass);
+	
+	//----------------------------------------------------------
+	//Material
+	var material = document.getElementById("material").value;
+    materialList = parseFloat(material);
+	
+	var Glas = [2.6, 0.9];
+	var Steel = [7.82, 0.8];
+	var Brass = [0.48, 0.4];
+	var Lead = [11.35, 0.2];
+	var Wood = [0.57, 0.6];
+	
+	var matList = [Glas, Steel, Brass, Lead, Wood];
+	
+	var density = matList[materialList][0];
+	var mass = density * (4*Math.PI*Math.pow(radius,2))/3;
+	groundMaterial = matList[materialList][1];
 
+	console.log("material properties=" + groundMaterial);
+	//----------------------------------------------------------
+	
     var wind_angle = (180+wind_angle)*Math.PI/180;
 
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
@@ -331,7 +351,7 @@ function render() {
   //update position of the ball 
   updatePosition(ball, dt);
 
-  checkCollision(ball);
+  checkCollision(ball, groundMaterial);
 
   //draw the shadows for the ball
   drawBallShadow();
@@ -403,7 +423,7 @@ function calculateVelocitiesWind(obj) {
 function updateAccelWind(obj) {
 
 
-  console.log(obj.vf_ang);
+  //console.log(obj.vf_ang);
   //vilkor for att cos ar jamn
   if (obj.vf_ang > 0) {
 
@@ -419,10 +439,7 @@ function updateAccelWind(obj) {
 /**
  * .
  */
-function checkCollision(obj) {
-
-  var studskoefficient = 0.5;
-  
+function checkCollision(obj, groundMaterial) {
 
   // check if the ball hits the ground 
 
@@ -430,11 +447,11 @@ function checkCollision(obj) {
 
     if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
-      obj.velocityY = -obj.velocityY * studskoefficient;
-      obj.velocityX = obj.velocityX * studskoefficient;
+      obj.velocityY = -obj.velocityY * groundMaterial;
+      obj.velocityX = obj.velocityX * groundMaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      console.log(obj.velocityY);
+      //console.log(obj.velocityY);
 
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
