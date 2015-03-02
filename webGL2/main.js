@@ -97,8 +97,8 @@ function launch() {
 	
 	var matList = [Glas, Steel, Brass, Lead, Wood];
 	
-	var density = matList[materialList][0];
-	var mass = density * (4*Math.PI*Math.pow(radius,2))/3;
+	density = matList[materialList][0];
+	mass = density * (4*Math.PI*Math.pow(radius,2))/3;
 	groundMaterial = matList[materialList][1];
 
 	console.log("material properties=" + groundMaterial);
@@ -297,6 +297,14 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   ball.velocity_wind = velocity_wind;
   ball.Uang = (wind_angle);
+
+  
+  C = 0.5;
+  A = Math.PI*Math.pow(radius, 2);
+
+  //luftmotstånd parametrar
+  //ball.D = (density*C*A)/2;
+  //ball.m = mass;
 
   ball.D = 0.02;
   ball.m = 1;
