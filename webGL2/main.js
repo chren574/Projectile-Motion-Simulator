@@ -115,6 +115,9 @@ function clearish() {
 renderer.render(scene, camera);
   
 }
+function showWind(){
+  document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
+}
 
 function init() {
 
