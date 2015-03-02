@@ -251,7 +251,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   var sphereGeom =  new THREE.SphereGeometry( radius, 32, 16 ); 
     
   // basic moon
-  var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.jpg' );
+  var moonTexture = THREE.ImageUtils.loadTexture( 'images/ball.jpg' );
   var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
   ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
 
