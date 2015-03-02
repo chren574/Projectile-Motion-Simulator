@@ -14,6 +14,8 @@ var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
 
+arrowHelper = 0;
+
 
 //Start varibles
 //var initialVelocity = 40;
@@ -66,6 +68,8 @@ function launch() {
 
   if(running == false) {
 
+    scene.remove(arrowHelper);
+
     initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
 
     var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
@@ -75,13 +79,21 @@ function launch() {
     ball_angle = parseFloat(angle*Math.PI/180);
 
     var angle_wind = document.getElementById("angle_wind").value;
-    wind_angle = parseFloat(angle_wind*Math.PI/180);
+    wind_angle = parseFloat((angle_wind));
 
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
     var ballMass = document.getElementById("ballMass").value;
     mass = parseFloat(ballMass);
+
+    var wind_angle = (180+wind_angle)*Math.PI/180;
+
+    dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
+    origin = new THREE.Vector3( 300, 300, 0 );
+    hex = 0xffff00;
+    arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
+    scene.add( arrowHelper );
 
     createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
     t = new Date().getTime(); 
@@ -200,18 +212,18 @@ function init() {
 
   //TODO parse the initial value for the direction of the vector.
   // Arrowhelper - wind
-  var wind_angle = 180*Math.PI/180;
+  //var wind_angle = 180*Math.PI/180;
 
-  dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
-  var origin = new THREE.Vector3( 300, 300, 0 );
-  var hex = 0xffff00;
+  //dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
+  //origin = new THREE.Vector3( 300, 300, 0 );
+  //hex = 0xffff00;
 
-  arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
+  //arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
   //arrowHelper.setLength (50, 10, 10);
   //arrowHelper.position.set( 300, 300, 0 );
 
   //arrowHelper.setDirection(dir)
-  scene.add( arrowHelper );
+  //scene.add( arrowHelper );
 
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
@@ -311,6 +323,7 @@ function animate() {
 
   render();
   stats.update();
+
 }
 
 
