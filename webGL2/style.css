@@ -1,10 +1,3 @@
-/*body, html, main {
-	 important 
-	height: 100%;
-}
-
-*/
-
 html {
 	overflow: hidden;
 }
@@ -12,11 +5,10 @@ html {
 #wrapper {
 margin: 0.1;
 width: 100%;
-
+text-align: center;
 }
 
 #container {
-
 	width: 85%;
 	height: 100%;
 	margin: 1px;
@@ -29,28 +21,20 @@ input[type="number"] {
 }
 
 #ballsettings{
-	/*width: 10%;*/
-	height: 55%;
-	/*height: 100%;*/
-	/*float:right;*/
+	height: min;
 	overflow:auto;
 	text-align: center;
 	margin: 1px;
 }
 #windsettings{
-	/*width: 10%;*/
-	height: 30%;
-	/*height: 100%;*/
-	/*float:right;*/
+	height: min;
 	overflow:auto;
 	text-align: center;
 	margin: 1px;
 }
 #groundsettings{
-	/*width: 10%;*/
-	height: 15%;
-	/*height: 100%;*/
-	/*float:right;*/
+	height: min;
+
 	overflow:auto;
 	text-align: center;
 	margin: 1px;
