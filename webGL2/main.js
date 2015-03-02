@@ -14,14 +14,22 @@ var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
 
+// Materials skrivet som JSON -- JavaScript Object Notation.
+//Density and bounce property
+var Materials = {
+  "Glas"  : { density : 2.6 , ballMaterial : 0.9 },
+  "Steel" : { density : 7.82, ballMaterial : 0.8 },
+  "Brass" : { density : 0.48 , ballMaterial : 0.4 },
+  "Lead"  : { density : 11.35, ballMaterial : 0.2 },
+  "Wood"  : { density : 0.57 , ballMaterial : 0.6 },
+};
+
 arrowHelper = 0;
 
 //Start varibles
 
 var time_old = 0;
-var gravity = 9.82;
-var radius = 0.5;
-
+var GRAVITY = 9.82;
 var canonBallArray = [];
 var pointArray = [];
 
@@ -80,14 +88,15 @@ function launch() {
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
-    //var ballMass = document.getElementById("ballMass").value;
-    //mass = parseFloat(ballMass);
-	
-	var material = document.getElementById("material").value;
-    matt = parseFloat(material);
+  	//Material - this is a string.
+  	var chosenMaterial = document.getElementById("material").value;
+    //chosenMaterial = parseFloat(material);
 
-	console.log(matt);
-	
+    var density = Materials[chosenMaterial].density;
+    var ballMaterial = Materials[chosenMaterial].ballMaterial;
+
+	  //----------------------------------------------------------
+    
     var wind_angle = (180+wind_angle)*Math.PI/180;
 
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
@@ -96,7 +105,8 @@ function launch() {
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
 
-    createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
+    createBall(initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial );
+    
     t = new Date().getTime(); 
     animate();
   }
@@ -240,7 +250,7 @@ function init() {
 }
 
 
-function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) {
+function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial) {
  
  /*
  //custom shaders
@@ -255,7 +265,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   var sphereGeom =  new THREE.SphereGeometry( radius, 32, 32 ); 
     
   // basic moon
-  var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.jpg' );
+  var moonTexture = THREE.ImageUtils.loadTexture( 'images/ball.jpg' );
   var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
   ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
 
@@ -270,7 +280,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   ball.radius = radius;
 
   ball.accelX = 0;
-  ball.accelY = -gravity;
+  ball.accelY = -GRAVITY;
   
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
   ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
@@ -280,6 +290,17 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   ball.velocity_wind = velocity_wind;
   ball.Uang = (wind_angle);
+
+  ball.density = density;
+  ball.bmaterial = ballMaterial;
+  ball.mass = density * (4*Math.PI*Math.pow(radius,2))/3;
+
+
+  C = 0.5;
+  A = Math.PI*Math.pow(radius, 2);
+
+  //luftmotstånd parametrar
+  //ball.D = (density*C*A)/2;
 
   ball.D = 0.02;
   ball.m = 1;
@@ -407,7 +428,7 @@ function calculateVelocitiesWind(obj) {
 function updateAccelWind(obj) {
 
 
-  console.log(obj.vf_ang);
+  //console.log(obj.vf_ang);
   //vilkor for att cos ar jamn
   if (obj.vf_ang > 0) {
 
@@ -415,7 +436,7 @@ function updateAccelWind(obj) {
   } else {
     obj.accelX =   +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
   }
-    obj.accelY = -gravity - (obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
+    obj.accelY = -GRAVITY - (obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
 
  // console.log ( obj.accelX );
 }
@@ -425,17 +446,17 @@ function updateAccelWind(obj) {
  */
 function checkCollision(obj) {
 
-  var studskoefficient = 0.5;
-  // check if the ball hits the ground
+  // check if the ball hits the ground 
+
   if (obj.velocityY < 0 ) {
 
     if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
-      obj.velocityY = -obj.velocityY * studskoefficient;
-      obj.velocityX = obj.velocityX * studskoefficient;
+      obj.velocityY = -obj.velocityY * obj.bmaterial;
+      obj.velocityX = obj.velocityX * obj.bmaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      console.log(obj.velocityY);
+      //console.log(obj.velocityY);
 
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
