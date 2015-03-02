@@ -463,15 +463,14 @@ function checkCollision(obj) {
   //console.log(collisionTime);
   //t = new Date().getTime(); //reset t
   
-  if ( (obj.position.y - ball.radius ) < 0 ) {
+  if ( (obj.position.y - ball.radius ) < 0 && obj.position.y > 0) {
     // change sign of the velocity in y-direction.
     obj.velocityY = -obj.velocityY * studskoefficient;
     obj.velocityX = obj.velocityX * studskoefficient;
 
-
     console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ))
 
-    // check if the total velocity is to low for a bounce. the number 25 need to be checked
+    // check if the total velocity is to low for a bounce. the number 5 need to be checked
     if ( Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) )  < 5) {
 
       stopRender();
