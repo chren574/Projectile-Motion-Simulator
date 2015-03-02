@@ -225,8 +225,6 @@ function init() {
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
 
-
-
   //TODO parse the initial value for the direction of the vector.
   // Arrowhelper - wind
   //var wind_angle = 180*Math.PI/180;
@@ -249,15 +247,6 @@ function init() {
 
 
 function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) {
-
-/*
-  ball = new THREE.Mesh(
-  new THREE.SphereGeometry(0.5, 32, 32),
-  new THREE.MeshPhongMaterial({
-    map: THREE.ImageUtils.loadTexture('textures/ball.jpg'),
-    specular: new THREE.Color('grey')      })
-);
-*/
  
  /*
  //custom shaders
@@ -267,25 +256,17 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 } );
 */
 
-/*
-  var material = new THREE.MeshBasicMaterial({
-    color: 0xb7ff00, 
-    wireframe: true 
-    //color : 0x0033ff
-  });
-  */
 
-  ball = new THREE.Mesh( 
-        new THREE.IcosahedronGeometry( radius, 4 ), 
-        material 
-  );
-  
-  //old code
-  var material = new THREE.MeshPhongMaterial({
-    color : 0x0033ff
-  });
-  var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
-  ball = new THREE.Mesh(spheregeometry, material);
+  // radius, segmentsWidth, segmentsHeight
+  var sphereGeom =  new THREE.SphereGeometry( radius, 32, 16 ); 
+    
+  // basic moon
+  var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.jpg' );
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
+  ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
+
+  //------------------------------
+
   
   //ball.__proto__ = ball1
 
@@ -365,7 +346,6 @@ function render() {
   
   //update position of the ball 
   updatePosition(ball, dt);
-
 
   checkCollision(ball);
 
@@ -452,38 +432,61 @@ function updateAccelWind(obj) {
  */
 function checkCollision(obj) {
 
-  var studskoefficient = 0.7;
+  var studskoefficient = 0.8;
+  var stuts = true;  
+  
 
   // check if the ball hits the ground 
 
-
-  // Calculate the delta time.
-  //var collisionTime = new Date().getTime() / 1000;
-  
-  //console.log(collisionTime);
-  //t = new Date().getTime(); //reset t
-  
-  if ( (obj.position.y - ball.radius ) < 0 && obj.position.y > 0) {
+  if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
     // change sign of the velocity in y-direction.
     obj.velocityY = -obj.velocityY * studskoefficient;
     obj.velocityX = obj.velocityX * studskoefficient;
 
-    console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ))
+    //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
+    console.log(obj.velocityY);
+
 
     // check if the total velocity is to low for a bounce. the number 5 need to be checked
-    if ( Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) )  < 5) {
+    if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 0.5) {
 
       stopRender();
 
     } 
   }
 
+}
 
+// Converted from Python version: http://doswa.com/2009/01/02/fourth-order-runge-kutta-numerical-integration.html
+//function rk4(x, v, a, dt) {
+  function rk4(obj, dt) {
 
+  // Returns final (position, velocity) array after time dt has passed.
+  //        x: initial position
+  //        v: initial velocity
+  //        a: acceleration function a(x,v,dt) (must be callable)
+  //        dt: timestep
 
+  var x1 = obj.position.x;
+  var v1 = obj.velocityX ;
+  var a1 = a(x1, v1, 0);
 
+  var x2 = x + 0.5*v1*dt;
+  var v2 = v + 0.5*a1*dt;
+  var a2 = a(x2, v2, dt/2);
 
+  var x3 = x + 0.5*v2*dt;
+  var v3 = v + 0.5*a2*dt;
+  var a3 = a(x3, v3, dt/2);
 
+  var x4 = x + v3*dt;
+  var v4 = v + a3*dt;
+  var a4 = a(x4, v4, dt);
+
+  var xf = x + (dt/6)*(v1 + 2*v2 + 2*v3 + v4);
+  var vf = v + (dt/6)*(a1 + 2*a2 + 2*a3 + a4);
+
+  return [xf, vf];
 }
 
 
