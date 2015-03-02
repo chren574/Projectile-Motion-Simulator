@@ -99,7 +99,6 @@ function launch() {
     createBall(initialVelocity, radius, angle, wind_angle, velocity_wind);
     t = new Date().getTime(); 
     animate();
-
   }
 }
 
@@ -427,10 +426,7 @@ function updateAccelWind(obj) {
 function checkCollision(obj) {
 
   var studskoefficient = 0.5;
-  
-
-  // check if the ball hits the ground 
-
+  // check if the ball hits the ground
   if (obj.velocityY < 0 ) {
 
     if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
