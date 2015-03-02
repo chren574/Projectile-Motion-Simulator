@@ -19,7 +19,12 @@ input[type="number"] {
     width: 50px;
     text-align: center;
 }
-
+#settings{
+	height:100%;
+	overflow:auto;
+	text-align: center;
+	margin: 1px;
+}
 #ballsettings{
 	height: min;
 	overflow:auto;
