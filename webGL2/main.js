@@ -150,6 +150,21 @@ function init() {
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
 
+
+/*
+
+  // Not working, tried to resize the scene when the browser window changed.
+  function onWindowResize() {
+
+    camera.aspect = container.offsetWidth / container.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( container.offsetWidth, container.offsetHeight );
+
+  }
+
+  window.addEventListener( 'resize', onWindowResize );
+*/
+
   //------------------------------------------------------
   // STATS 
 
@@ -230,10 +245,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 );
 */
  
-
-
-
-
  /*
  //custom shaders
  material = new THREE.ShaderMaterial( {
@@ -264,10 +275,9 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   
   //ball.__proto__ = ball1
 
-  ball.position.x = -180;
+  ball.position.x = -200;
   ball.position.y = 0 + radius;
 
-  ball.time = 0;
   //ball.initialVelocity = initialVelocity;
   
   ball.angle = angle;
@@ -290,7 +300,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   ball.D = 0.02;
   ball.m = 1;
-
 
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
@@ -317,22 +326,16 @@ function animate() {
 function render() {
 
   
+  /*
   //Avsluta renderingsloopen nar bollen slår i marken 
   if ( (ball.position.y - ball.radius ) < 0) {
     stopRender();
   }
+  */
 
-  //calculate the delta time.
+  // Calculate the delta time.
   var dt = (new Date().getTime() - t )/200; //1000 default
   t = new Date().getTime(); //reset t
-
-/*
-  //calculate and update the ball position
-  updateVelocity(ball, dt);
-  //update position of the ball 
-  updatePosition(ball, dt);
-  
-*/
   
   //console.log(dt);
 
@@ -344,33 +347,30 @@ function render() {
   //update position of the ball 
   updatePosition(ball, dt);
 
+  checkCollision(ball);
 
   //draw the shadows for the ball
   drawBallShadow();
-
-  /*
-  ball.position.x = LIB.distX(ball.velocity, ball.angle, dt) - 160;
-  ball.position.y = LIB.distY(ball.velocity, ball.angle, dt, gravity) + ball.radius;
-  */
-
-  //ball.position.x = LIB.distX_vind(ball.position.x, ball.velocity, ball.angle, ball.time, wind_angle, velocity_wind, radius) - 160;
-  //ball.position.y = LIB.distY_vind(ball.position.y, ball.velocity, ball.angle, ball.time, gravity, wind_angle, initialVelocity_wind, radius) + ball.radius;
-
-  //update the time for the ball
-
-  //ball.time += 0.01;
 
   //render the scene
   renderer.render(scene, camera);
 }
 
+/**
+ * Quit the current rendering.
+ * 
+ */
 function stopRender() {
   cancelAnimationFrame(animationId);
 }
 
+/**
+ * Draws the dot after the ball.
+ * 
+ */
 function drawBallShadow() {
 
-    if(time_old == 4) {  
+    if(time_old == 5) {  
     var point = dot.clone();
     point.position.set( ball.position.x, ball.position.y, 0 )
     scene.add ( point );
@@ -382,17 +382,27 @@ function drawBallShadow() {
   time_old += 1;
 }
 
+
+/**
+ * Calculate the new velocity of each component.
+ */
 function updateVelocity(obj, dt) {
   obj.velocityX = obj.velocityX + obj.accelX*dt;
   obj.velocityY = obj.velocityY + obj.accelY*dt;
 }
 
+/**
+ * Calculate the new positon based on the velocity and acceleration.
+ */
 function updatePosition(obj, dt) {
   obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
   obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
 }
 
-//pure vector calculus
+/**
+ * Calculate the wind velocity.
+ * 
+ */
 function calculateVelocitiesWind(obj) {
 
   // vind 
@@ -401,6 +411,9 @@ function calculateVelocitiesWind(obj) {
 
 }
 
+/**
+ * .
+ */
 function updateAccelWind(obj) {
 
   //vilkor for att cos ar jamn
@@ -410,12 +423,43 @@ function updateAccelWind(obj) {
   } else {
     obj.accelX =   +(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
   }
-
     obj.accelY = -gravity -(obj.D/obj.m) * obj.vf2*Math.sin( obj.vf_ang );
 
  // console.log ( obj.accelX );
 }
 
+/**
+ * .
+ */
+function checkCollision(obj) {
+
+  var studskoefficient = 0.5;
+
+
+  // check if the ball hits the ground 
+  if ( (obj.position.y - ball.radius ) < 0 ) {
+    // change sign of the velocity in y-direction.
+    obj.velocityY = -obj.velocityY * studskoefficient;
+
+
+    console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ))
+
+
+    // check if the total velocity is to low for a bounce. the number 25 need to be checked
+    if ( Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) )  < 25) {
+
+      stopRender();
+
+    } 
+  }
+
+
+
+
+
+
+
+}
 
 
 
