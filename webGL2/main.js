@@ -17,11 +17,8 @@ var running = false;
 arrowHelper = 0;
 
 //Start varibles
-//var initialVelocity = 40;
-//var velocity_wind = 10;
+
 var time_old = 0;
-//var ball_angle = 70;
-//var wind_angle = 70;
 var gravity = 9.82;
 var radius = 0.5;
 
@@ -164,9 +161,7 @@ function init() {
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
 
-
 /*
-
   // Not working, tried to resize the scene when the browser window changed.
   function onWindowResize() {
 
@@ -181,8 +176,8 @@ function init() {
 
   //------------------------------------------------------
   // STATS 
-
   // displays current and past frames per second attained by scene
+
   stats = new Stats();
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.top = '14px';
@@ -205,10 +200,6 @@ function init() {
 
   //------------------------------------------------------
   // GEOMETRY
-
-  // most objects displayed are a "mesh":
-  // a collection of points ("geometry") and
-  // a set of surface parameters ("material") 
 
   //Dots
   var dotGeometry = new THREE.Geometry();
@@ -241,7 +232,6 @@ function init() {
   //scene.add( arrowHelper );
 
   renderer.render(scene, camera);
-  //requestAnimationFrame(render);
 
 }
 
@@ -267,9 +257,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   //------------------------------
 
-  
-  //ball.__proto__ = ball1
-
   ball.position.x = -200;
   ball.position.y = 0 + radius;
 
@@ -289,9 +276,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
   ball.velocity_wind = velocity_wind;
   ball.Uang = (wind_angle);
-  //ball.Uang = (wind_angle*Math.PI/180); //bollen drar iväg
-  //console.log(wind_angle);
-  //console.log(ball.Uang);
 
   ball.D = 0.02;
   ball.m = 1;
@@ -458,6 +442,7 @@ function checkCollision(obj) {
 }
 
 // Converted from Python version: http://doswa.com/2009/01/02/fourth-order-runge-kutta-numerical-integration.html
+//                    javascript: http://mtdevans.com/2013/05/fourth-order-runge-kutta-algorithm-in-javascript-with-demo/
 //function rk4(x, v, a, dt) {
   function rk4(obj, dt) {
 
