@@ -88,6 +88,7 @@ function launch() {
 	var material = document.getElementById("material").value;
     materialList = parseFloat(material);
 	
+	//Density and bounce property
 	var Glas = [2.6, 0.9];
 	var Steel = [7.82, 0.8];
 	var Brass = [0.48, 0.4];
