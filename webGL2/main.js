@@ -313,9 +313,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   //ball.mass = 1;
   console.log("mass: " + ball.mass);
 
-  
-
-
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
 
@@ -425,11 +422,15 @@ function updatePosition(obj, dt) {
  */
 function calculateVelocitiesWind(obj) {
  
-  obj.vf2 =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
-  obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)));
+  obj.vf2 =  Math.sqrt( Math.pow(( obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
+  obj.vf_ang = Math.atan(Math.abs((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) ) );
 
+/*
+  console.log('vx    :'+ obj.velocityX );
+  console.log('wx    :'+ (obj.velocity_wind)*Math.cos(obj.Uang) );
+  console.log('vx+wx :'+ (obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)) );
 
-
+  */
 
 }
 
@@ -439,14 +440,23 @@ function calculateVelocitiesWind(obj) {
 function updateAccelWind(obj) {
 
 
+/*
+  console.log('start angle: ' + obj.angle);
+  console.log('wind  angle: ' + obj.Uang);
+  console.log('vf2   angle: ' + obj.vf_ang);
+  */
+
   //console.log(obj.vf_ang);
   //vilkor for att cos ar jamn
-  if (obj.vf_ang > 0) {
-
+  
+  if ( (obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)) > 0) {
     obj.accelX =   -(obj.D/obj.mass) * obj.vf2*Math.cos( obj.vf_ang );  
   } else {
     obj.accelX =   +(obj.D/obj.mass) * obj.vf2*Math.cos( obj.vf_ang );  
   }
+  /*
+    obj.accelX =          - (obj.D/obj.mass) * obj.vf2*Math.cos( obj.vf_ang ); 
+    */
     obj.accelY = -GRAVITY - (obj.D/obj.mass) * obj.vf2*Math.sin( obj.vf_ang );
 
  // console.log ( obj.accelX );
