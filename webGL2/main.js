@@ -308,7 +308,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
   ball.vf_ang = 0;
 
   ball.velocity_wind = velocity_wind;
-  ball.Uang = (wind_angle);
+  ball.Uang = (-wind_angle);
   //ball.Uang = (wind_angle*Math.PI/180); //bollen drar iväg
   //console.log(wind_angle);
   //console.log(ball.Uang);
