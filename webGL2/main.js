@@ -137,9 +137,8 @@ function init() {
 
   //------------------------------------------------------
   // RENDERER
-
   // create a WebGL renderer, camera
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   
   // get the DOM element to attach to
   var container = document.getElementById("container");
@@ -214,8 +213,6 @@ function init() {
   //arrowHelper.setDirection(dir)
   scene.add( arrowHelper );
 
-
-
   renderer.render(scene, camera);
   //requestAnimationFrame(render);
 
@@ -223,17 +220,6 @@ function init() {
 
 
 function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) {
-
-  // funktion som ska slumpa fram en random hexadecimal färg
-  var newColor = function getRandomColor() {
-    var letters = '0123456789abcdef'.split('');
-    var color = '0x';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    console.log(color);
-    return color;
-  }
 
 /*
   ball = new THREE.Mesh(
@@ -243,33 +229,37 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
     specular: new THREE.Color('grey')      })
 );
 */
-/*
-  var ball1 = {
-    initialVelocity: 20, 
-    angle: 45,
-    time : 0,
-    radius : 10,
+ 
 
-    printVelocity: function () {
-      return this.initialVelocity;
-    },
-    changeVelocity: function () {
-      this.initialVelocity += 5;
-    }
-                  
-  }
+
+
+
+ /*
+ //custom shaders
+ material = new THREE.ShaderMaterial( {
+    vertexShader: document.getElementById( 'vertexShader' ).textContent,
+    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+} );
 */
-  // Windvector
 
-
-
-  var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
-  
-  var material = new THREE.MeshPhongMaterial({
-  color : 0x0033ff
-  //color : newColor()  //om slumpfärg ska användas
+/*
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xb7ff00, 
+    wireframe: true 
+    //color : 0x0033ff
   });
+  */
 
+  ball = new THREE.Mesh( 
+        new THREE.IcosahedronGeometry( radius, 4 ), 
+        material 
+  );
+  
+  //old code
+  var material = new THREE.MeshPhongMaterial({
+    color : 0x0033ff
+  });
+  var spheregeometry = new THREE.SphereGeometry( radius , 32, 32 );
   ball = new THREE.Mesh(spheregeometry, material);
   
   //ball.__proto__ = ball1
