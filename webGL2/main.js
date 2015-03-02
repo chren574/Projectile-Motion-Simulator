@@ -84,9 +84,9 @@ function launch() {
     //mass = parseFloat(ballMass);
 	
 	var material = document.getElementById("material").value;
-    matt = parseFloat(material);
+    groundMaterial = parseFloat(material);
 
-	console.log(matt);
+	console.log("material properties=" + groundMaterial);
 	
     var wind_angle = (180+wind_angle)*Math.PI/180;
 
@@ -426,17 +426,14 @@ function updateAccelWind(obj) {
  */
 function checkCollision(obj) {
 
-  var studskoefficient = 0.5;
-  
-
   // check if the ball hits the ground 
 
   if (obj.velocityY < 0 ) {
 
     if ( (obj.position.y - ball.radius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
-      obj.velocityY = -obj.velocityY * studskoefficient;
-      obj.velocityX = obj.velocityX * studskoefficient;
+      obj.velocityY = -obj.velocityY * groundMaterial;
+      obj.velocityX = obj.velocityX * groundMaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
       console.log(obj.velocityY);
