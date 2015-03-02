@@ -248,7 +248,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind) 
 
 
   // radius, segmentsWidth, segmentsHeight
-  var sphereGeom =  new THREE.SphereGeometry( radius, 32, 16 ); 
+  var sphereGeom =  new THREE.SphereGeometry( radius, 32, 32 ); 
     
   // basic moon
   var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.jpg' );
