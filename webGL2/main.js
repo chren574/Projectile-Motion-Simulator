@@ -80,9 +80,14 @@ function launch() {
     var radius = document.getElementById("ballSize").value;
     radius = parseFloat(radius)*200;
 
-    var ballMass = document.getElementById("ballMass").value;
-    mass = parseFloat(ballMass);
+    //var ballMass = document.getElementById("ballMass").value;
+    //mass = parseFloat(ballMass);
+	
+	var material = document.getElementById("material").value;
+    matt = parseFloat(material);
 
+	console.log(matt);
+	
     var wind_angle = (180+wind_angle)*Math.PI/180;
 
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
