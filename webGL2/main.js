@@ -16,7 +16,6 @@ var running = false;
 
 arrowHelper = 0;
 
-
 //Start varibles
 //var initialVelocity = 40;
 //var velocity_wind = 10;
@@ -355,13 +354,18 @@ function render() {
   
   //console.log(dt);
 
+  //
   calculateVelocitiesWind(ball);
 
+  //
   updateAccelWind(ball)
 
+  //
   updateVelocity(ball, dt);
+  
   //update position of the ball 
   updatePosition(ball, dt);
+
 
   checkCollision(ball);
 
@@ -420,8 +424,7 @@ function updatePosition(obj, dt) {
  * 
  */
 function calculateVelocitiesWind(obj) {
-
-  // vind 
+ 
   obj.vf2 =  Math.sqrt( Math.pow(( obj.velocityX + (obj.velocity_wind) * Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
   obj.vf_ang = Math.atan((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)));
 
@@ -433,7 +436,7 @@ function calculateVelocitiesWind(obj) {
 function updateAccelWind(obj) {
 
   //vilkor for att cos ar jamn
-  if (obj.vf_ang >= 0) {
+  if (obj.vf_ang > 0) {
 
     obj.accelX =   -(obj.D/obj.m) * obj.vf2*Math.cos( obj.vf_ang );  
   } else {
@@ -449,20 +452,27 @@ function updateAccelWind(obj) {
  */
 function checkCollision(obj) {
 
-  var studskoefficient = 0.5;
-
+  var studskoefficient = 0.7;
 
   // check if the ball hits the ground 
+
+
+  // Calculate the delta time.
+  //var collisionTime = new Date().getTime() / 1000;
+  
+  //console.log(collisionTime);
+  //t = new Date().getTime(); //reset t
+  
   if ( (obj.position.y - ball.radius ) < 0 ) {
     // change sign of the velocity in y-direction.
     obj.velocityY = -obj.velocityY * studskoefficient;
+    obj.velocityX = obj.velocityX * studskoefficient;
 
 
     console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ))
 
-
     // check if the total velocity is to low for a bounce. the number 25 need to be checked
-    if ( Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) )  < 25) {
+    if ( Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) )  < 5) {
 
       stopRender();
 
