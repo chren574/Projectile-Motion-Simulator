@@ -73,6 +73,8 @@ function launch() {
 
   if(running == false) {
 
+    running = true;
+
     scene.remove(arrowHelper);
 
     initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
@@ -380,6 +382,7 @@ function render() {
  */
 function stopRender() {
   cancelAnimationFrame(animationId);
+  running = false;
 }
 
 /**
