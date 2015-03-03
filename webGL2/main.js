@@ -1,4 +1,5 @@
 // // set the scene size
+  console.log("---> we are on top of main.js ");
 
 // TODO försök att ändra så storleken inte är konstant.
 var WIDTH = 1000,
@@ -70,6 +71,7 @@ function keyPress(e) {
 }
 
 function launch() {
+  console.log("---> launch() is called ");
 
   if(running == false) {
 
@@ -86,8 +88,7 @@ function launch() {
     var angle_wind = document.getElementById("angle_wind").value;
     wind_angle = parseFloat((angle_wind));
 
-    var radius = document.getElementById("ballSize").value;
-    radius = parseFloat(radius);
+
 
   	//Material - this is a string.
   	chosenMaterial = document.getElementById("material").value;
@@ -115,6 +116,8 @@ function launch() {
 
 function clearish() {
 
+  console.log("---> showWind() is called ");
+
   running = false;
   cancelAnimationFrame(animationId);
 
@@ -139,10 +142,16 @@ renderer.render(scene, camera);
   
 }
 function showWind(){
+  console.log("---> showWind() is called ");
   document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
 }
 
 function init() {
+
+  console.log("---> init() is called ");
+
+  radius = document.getElementById("ballSize").value;
+  radius = parseFloat(radius);
 
   //------------------------------------------------------
   // SCENE 
@@ -175,19 +184,6 @@ function init() {
 
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
-
-/*
-  // Not working, tried to resize the scene when the browser window changed.
-  function onWindowResize() {
-
-    camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( container.offsetWidth, container.offsetHeight );
-
-  }
-
-  window.addEventListener( 'resize', onWindowResize );
-*/
 
   //------------------------------------------------------
   // STATS 
@@ -250,8 +246,29 @@ function init() {
 
 }
 
+function updateBall (chosenMaterial) {
+
+  console.log("---> updateBall() is called ");
+
+
+  console.log(chosenMaterial.value);
+
+  // basic texture
+  var ballTexture = Materials[chosenMaterial.value].ballTexture;
+
+  scene.add(ball);
+
+  // Add the ball to the list with all the balls
+  canonBallArray.push(ball);
+
+  //render the new ball thats been added
+  renderer.render(scene, camera);
+
+}
 
 function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial) {
+
+  console.log("---> createBall() is called ");
  
  /*
  //custom shaders
@@ -261,16 +278,24 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 } );
 */
 
+  console.log(chosenMaterial.value);
+  
 
-  // radius, segmentsWidth, segmentsHeight
+    // radius, segmentsWidth, segmentsHeight
   var sceneRadius = radius*200;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
     
   // basic texture
   var ballTexture = Materials[chosenMaterial].ballTexture;
+  
+  //console.log(ballTexture);
+
   var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
   var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
-  ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
+  ball = new THREE.Mesh( sphereGeom, moonMaterial );
+
+  ball.position.x = -200;
+  ball.position.y = 0 + radius;
 
   //------------------------------
 
@@ -278,8 +303,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.radius = radius;
   ball.sceneRadius = sceneRadius;
 
-  ball.position.x = -200;
-  ball.position.y = 0 + radius;
+
 
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
   ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
@@ -317,6 +341,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
 
+/*
   scene.add(ball);
 
   // Add the ball to the list with all the balls
@@ -324,10 +349,12 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 
   //render the new ball thats been added
   renderer.render(scene, camera);
+*/
 }
 
 
 function animate() {
+  //console.log("---> animate() is called ");
 
   animationId = requestAnimationFrame(animate);
 
@@ -338,15 +365,7 @@ function animate() {
 
 
 function render() {
-
   
-  /*
-  //Avsluta renderingsloopen nar bollen slår i marken 
-  if ( (ball.position.y - ball.radius ) < 0) {
-    stopRender();
-  }
-  */
-
   // Calculate the delta time.
   var dt = (new Date().getTime() - t )/200; //1000 default
   t = new Date().getTime(); //reset t
