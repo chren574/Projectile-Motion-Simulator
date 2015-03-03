@@ -148,6 +148,7 @@ function init() {
   setupScene();
   
 }
+
 function setupParameters() {
     console.log("---> setupParameters() is called ");
 
@@ -168,13 +169,14 @@ function setupParameters() {
     //Material - this is a string.
     BALL_OBJ.chosenMaterial = document.getElementById("material").value;
 
+    /*
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
     console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
     console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.initialAngle);
     console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.initialAngle_wind);
     console.log("BALL_OBJ.radius              : " + BALL_OBJ.radius);
     console.log("BALL_OBJ.chosenMaterial      : " + BALL_OBJ.chosenMaterial);
-
+    */
 }
 
 
@@ -276,18 +278,15 @@ function setupScene () {
 
 }
 
-function updateBall (chosenMaterial) {
+function updateBall(newMaterial) {
 
   console.log("---> updateBall() is called ");
-  console.log("chosenMaterial: " + chosenMaterial.value);
+  console.log("newMaterial: " + newMaterial.value);
+
+  //BALL_OBJ.chosenMaterial = newMaterial.value;
 
   // basic texture
-  var ballTexture = Materials[chosenMaterial.value].ballTexture;
-
-  scene.add(ball);
-
-  // Add the ball to the list with all the balls
-  canonBallArray.push(ball);
+  var ballTexture = Materials[newMaterial.value].ballTexture;
 
   //render the new ball thats been added
   renderer.render(scene, camera);
@@ -298,15 +297,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 
   console.log("---> createBall() is called ");
  
- /*
- //custom shaders
- material = new THREE.ShaderMaterial( {
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-} );
-*/  
-
-    // radius, segmentsWidth, segmentsHeight
+  // radius, segmentsWidth, segmentsHeight
   var sceneRadius = radius*200;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
     
@@ -327,8 +318,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.angle = angle;
   ball.radius = radius;
   ball.sceneRadius = sceneRadius;
-
-
 
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
   ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
@@ -366,7 +355,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
 
-/*
+
   scene.add(ball);
 
   // Add the ball to the list with all the balls
@@ -374,7 +363,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 
   //render the new ball thats been added
   renderer.render(scene, camera);
-*/
+
 }
 
 
