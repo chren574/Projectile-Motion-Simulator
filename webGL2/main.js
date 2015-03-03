@@ -25,6 +25,17 @@ var Materials = {
   "Wood"  : { density : 0.57 , ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
 };
 
+
+var BALL_OBJ = {
+  initialVelocity : 0,
+  inittialAngle : 0,
+  initialVelocity_wind : 0,
+  initialAngle_wind : 0,
+  chosenMaterial : "",
+
+
+};
+
 arrowHelper = 0;
 
 //Start varibles
@@ -88,8 +99,6 @@ function launch() {
     var angle_wind = document.getElementById("angle_wind").value;
     wind_angle = parseFloat((angle_wind));
 
-
-
   	//Material - this is a string.
   	chosenMaterial = document.getElementById("material").value;
     //chosenMaterial = parseFloat(material);
@@ -114,9 +123,10 @@ function launch() {
   }
 }
 
-function clearish() {
 
-  console.log("---> showWind() is called ");
+
+function clearish() {
+  console.log("---> clearish() is called ");
 
   running = false;
   cancelAnimationFrame(animationId);
@@ -141,17 +151,35 @@ function clearish() {
 renderer.render(scene, camera);
   
 }
+
 function showWind(){
   console.log("---> showWind() is called ");
+
   document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
 }
 
 function init() {
-
   console.log("---> init() is called ");
 
   radius = document.getElementById("ballSize").value;
   radius = parseFloat(radius);
+
+  setupParameters();
+  setupScene();
+  
+
+
+
+}
+function setupParameters() {
+
+
+}
+
+
+function setupScene () {
+
+  //Setup The Scene --------------------------------------
 
   //------------------------------------------------------
   // SCENE 
@@ -249,9 +277,7 @@ function init() {
 function updateBall (chosenMaterial) {
 
   console.log("---> updateBall() is called ");
-
-
-  console.log(chosenMaterial.value);
+  console.log("chosenMaterial: " + chosenMaterial.value);
 
   // basic texture
   var ballTexture = Materials[chosenMaterial.value].ballTexture;
@@ -276,10 +302,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
     vertexShader: document.getElementById( 'vertexShader' ).textContent,
     fragmentShader: document.getElementById( 'fragmentShader' ).textContent
 } );
-*/
-
-  console.log(chosenMaterial.value);
-  
+*/  
 
     // radius, segmentsWidth, segmentsHeight
   var sceneRadius = radius*200;
@@ -332,11 +355,11 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   //ball.D = 0.02;
   //ball.m = 1;
 
-  console.log("radius" + ball.radius);
+  console.log("Radius: " + ball.radius);
   console.log("D: " + ball.D);
   
   //ball.mass = 1;
-  console.log("mass: " + ball.mass);
+  console.log("Mass: " + ball.mass);
 
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
@@ -365,7 +388,7 @@ function animate() {
 
 
 function render() {
-  
+
   // Calculate the delta time.
   var dt = (new Date().getTime() - t )/200; //1000 default
   t = new Date().getTime(); //reset t
