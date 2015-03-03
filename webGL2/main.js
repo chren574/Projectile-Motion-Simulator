@@ -1,4 +1,5 @@
 // // set the scene size
+  console.log("---> we are on top of main.js ");
 
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
@@ -6,13 +7,6 @@ var running = false;
 
 // Materials skrivet som JSON -- JavaScript Object Notation.
 //Density and bounce property
-/*var Materials = {
-  "Glas"  : { density : 2600 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
-  "Steel" : { density : 7820, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
-  "Brass" : { density : 480 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
-  "Lead"  : { density : 11350, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
-  "Wood"  : { density :  690, ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
-};*/
 
 var Materials = {
   "Golf"  : { density : 1184 , ballMaterial : 0.858, ballTexture : "images/golf.jpg" },
@@ -20,16 +14,26 @@ var Materials = {
   "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
   "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
   "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
-  "Glass"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+  "Glas"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
 }
+
+// the ball object that hold all the parameters
+var BALL_OBJ = {
+  initialVelocity : 0,
+  initialAngle : 0,
+  initialVelocity_wind : 0,
+  initialAngle_wind : 0,
+  radius : 0,
+  chosenMaterial : "",
+};
+
+var GRAVITY = 9.82;
+var AIR_DENSITY = 1.2754;
 
 arrowHelper = 0;
 
 //Start varibles
-
 var time_old = 0;
-var GRAVITY = 9.82;
-var AIR_DENSITY = 1.2754;
 var canonBallArray = [];
 var pointArray = [];
 
@@ -69,37 +73,16 @@ function keyPress(e) {
 }
 
 function launch() {
+  console.log("---> launch() is called ");
 
-  if(running == false) {
-
-    running = true;
-
-    scene.remove(arrowHelper);
-
-    initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-
-    var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
-    velocity_wind = parseFloat(initialVelocity_wind);
-
-    var angle = document.getElementById("angle").value;
-    ball_angle = parseFloat(angle*Math.PI/180);
-
-    var angle_wind = document.getElementById("angle_wind").value;
-    wind_angle = parseFloat((angle_wind));
-
-    var radius = document.getElementById("ballSize").value;
-    radius = parseFloat(radius);
-
-  	//Material - this is a string.
-  	chosenMaterial = document.getElementById("material").value;
-    //chosenMaterial = parseFloat(material);
-
-    var density = Materials[chosenMaterial].density;
-    var ballMaterial = Materials[chosenMaterial].ballMaterial;
-
+  //if(running == false) {
+ 
 	  //----------------------------------------------------------
     
-    var wind_angle = (180+wind_angle)*Math.PI/180;
+    
+    /*
+    //scene.remove(arrowHelper);
+    var wind_angle = (180+BALL_OBJ.initialAngle_wind)*Math.PI/180;
 
     // wind arrow
     if (windCheck.checked == true) {
@@ -108,18 +91,20 @@ function launch() {
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
-    }
+
+    */
+    //}
     
-    createBall(initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial );
-    
+    // start the time and the animation
     t = new Date().getTime(); 
     animate();
-  }
+  //}
 }
 
 function clearish() {
+  console.log("---> clearish() is called ");
 
-  running = false;
+  //running = false;
   cancelAnimationFrame(animationId);
 
   scene.remove(arrowHelper);
@@ -142,11 +127,62 @@ function clearish() {
 renderer.render(scene, camera);
   
 }
+
 function showWind(){
+  console.log("---> showWind() is called ");
+
   document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
 }
 
 function init() {
+  console.log("---> init() is called ");
+
+  //parse the parameters from the browser
+  setupParameters();
+  //seup the scene in three js
+  setupScene();
+  // create the ball 
+  createBall();
+  
+}
+
+function setupParameters() {
+    console.log("---> setupParameters() is called ");
+
+    //parse the velocities
+    BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
+    BALL_OBJ.initialVelocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
+    
+    ////parse the angles
+    var angle = document.getElementById("angle").value;
+    BALL_OBJ.initialAngle = parseFloat(angle*Math.PI/180);
+
+    var angle_wind = document.getElementById("angle_wind").value;
+    BALL_OBJ.initialAngle_wind = parseFloat((angle_wind));
+
+    BALL_OBJ.radius = parseFloat(document.getElementById("ballSize").value);
+
+    //parse the material
+    //Material - this is a string.
+    BALL_OBJ.chosenMaterial = document.getElementById("material").value;
+
+    /*
+    // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
+    console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
+    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
+    console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.initialAngle);
+    console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.initialAngle_wind);
+    console.log("BALL_OBJ.radius              : " + BALL_OBJ.radius);
+    console.log("BALL_OBJ.chosenMaterial      : " + BALL_OBJ.chosenMaterial);
+    */
+
+}
+
+
+function setupScene () {
+  console.log("---> setupScene() is called ");
+
+  //Setup The Scene --------------------------------------
 
   //------------------------------------------------------
   // SCENE 
@@ -241,39 +277,61 @@ function init() {
 
 }
 
+function updateBall(newMaterial) {
+  console.log("---> updateBall() is called ");
+  
 
-function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial) {
+  console.log("newMaterial: " + newMaterial.value);
+
+  //BALL_OBJ.chosenMaterial = newMaterial.value;
+
+  // basic texture
+  var ballTexture = Materials[newMaterial.value].ballTexture;
+
+  var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
+    renderer.render(scene, camera);
+  })
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
+  ball.moonMaterial;
+
+
+
+}
+
+//function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial) {
+function createBall () {
+  console.log("---> createBall() is called ");
+
+  //maybe done twice but for safety
+  setupParameters();
  
- /*
- //custom shaders
- material = new THREE.ShaderMaterial( {
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-} );
-*/
-
-
   // radius, segmentsWidth, segmentsHeight
+  //var sceneRadius = BALL_OBJ.radius*200;
   var sceneRadius = 10;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
-    
+  
   // basic texture
-  var ballTexture = Materials[chosenMaterial].ballTexture;
-  var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
-  var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
-  ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
-
-  //------------------------------
-
-  ball.angle = angle;
-  ball.radius = radius;
-  ball.sceneRadius = sceneRadius;
+  var ballTexture = Materials[BALL_OBJ.chosenMaterial].ballTexture;
+  
+  var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
+    renderer.render(scene, camera);
+  })
+  //Texture.needsUpdate = true;
+  Texture.needsUpdate = true;
+  //var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
+  ball = new THREE.Mesh( sphereGeom, moonMaterial );
 
   ball.position.x = -220;
-  ball.position.y = 0 + radius;
+  ball.position.y = 0 + sceneRadius;
 
-  ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
-  ball.velocityY = initialVelocity*Math.sin(angle*Math.PI/180)
+  //------------------------------
+  ball.angle = BALL_OBJ.initialAngle;
+  ball.radius = BALL_OBJ.radius;
+  ball.sceneRadius = sceneRadius;
+
+  ball.velocityX = BALL_OBJ.initialVelocity*Math.cos(ball.angle);
+  ball.velocityY = BALL_OBJ.initialVelocity*Math.sin(ball.angle);
 
   ball.accelX = 0;
   ball.accelY = -GRAVITY;
@@ -281,42 +339,62 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.vf2 = 0;
   ball.vf_ang = 0;
 
-  ball.velocity_wind = velocity_wind;
-  ball.Uang = wind_angle;
+  ball.velocity_wind = BALL_OBJ.initialVelocity_wind;
+  ball.Uang = BALL_OBJ.initialAngle_wind;
 
-  ball.density = density;
-  ball.bmaterial = ballMaterial;
-
-
-  C = 0.5;
-  ball.area = Math.PI*Math.pow(radius, 2);
+  ball.density = Materials[BALL_OBJ.chosenMaterial].density;
+  ball.bmaterial = Materials[BALL_OBJ.chosenMaterial].ballMaterial;
 
   //luftmotstånd parametrar
   // Need to compensate with a factor 10 maybe
-  ball.mass = (density * (4*Math.PI*Math.pow(radius,2))/3 );
+  C = 0.5;
+  ball.area = Math.PI*Math.pow(ball.radius, 2);
+
+  ball.mass = (ball.density * (4*Math.PI*Math.pow(ball.radius,2))/3 );
   ball.D = ((AIR_DENSITY * C * ball.area)/2 );
 
-  console.log("radius" + ball.radius);
-  console.log("D: " + ball.D);
-  
-  //ball.mass = 1;
-  console.log("mass: " + ball.mass);
+  /*
+  dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
+  arrowHelper.setDirection(dir);
+  */
 
+
+  // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
+  // can be commented out
+  console.log("ball.angle         : " + ball.angle);
+  console.log("ball.radius        : " + ball.radius);
+  console.log("ball.sceneRadius   : " + ball.sceneRadius);
+  console.log("ball.angle         : " + ball.angle );
+  console.log("ball.velocityX     : " + ball.velocityX);
+  console.log("ball.velocityY     : " + ball.velocityY);
+  console.log("ball.accelX        : " + ball.accelX);
+  console.log("ball.accelY        : " + ball.accelY);
+  console.log("ball.vf2           : " + ball.vf2);
+  console.log("ball.vf_ang        : " + ball.vf_ang);
+  console.log("ball.velocity_wind : " + ball.velocity_wind);
+  console.log("ball.Uang          : " + ball.Uang);
+  console.log("ball.density       : " + ball.density);
+  console.log("ball.bmaterial     : " + ball.bmaterial);
+  
+/*
   if (windCheck.checked == true) {
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
   }
-  scene.add(ball);
+*/
 
+  scene.add(ball);
   // Add the ball to the list with all the balls
   canonBallArray.push(ball);
 
   //render the new ball thats been added
   renderer.render(scene, camera);
+
 }
 
 
 function animate() {
+  //console.log("---> animate() is called ");
 
   animationId = requestAnimationFrame(animate);
 
@@ -328,11 +406,9 @@ function animate() {
 
 function render() {
 
-
   // Calculate the delta time.
   var dt = (new Date().getTime() - t )/200; //1000 default
-  t = new Date().getTime(); //reset t
-  
+  t = new Date().getTime(); //reset t  
   //console.log(dt);
 
   //
@@ -361,8 +437,9 @@ function render() {
  * 
  */
 function stopRender() {
+  //stop rendering the current ball and create a new one.
   cancelAnimationFrame(animationId);
-  running = false;
+  createBall();
 }
 
 /**
@@ -396,14 +473,10 @@ function updateVelocity(obj, dt) {
  * Calculate the new positon based on the velocity and acceleration.
  */
 function updatePosition(obj, dt) {
+  
   obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
   obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
 
-  if ( obj.position.y < -100) {
-
-        stopRender();
-
-    }
 }
 
 /**
@@ -461,7 +534,7 @@ function checkCollision(obj) {
 
   if (obj.velocityY < 0 && obj.position.x < planeWidth/2 && obj.position.x > -planeWidth/2) {
 
-    if ( (obj.position.y - ball.sceneRadius ) < 0  && obj.position.y > 0 ) {
+    if ( (obj.position.y - obj.sceneRadius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
       obj.velocityY = -obj.velocityY * obj.bmaterial;
       obj.velocityX = obj.velocityX * obj.bmaterial;

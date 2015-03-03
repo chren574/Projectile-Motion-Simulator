@@ -5,6 +5,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r70/three.min.js"></script>
 		<link rel="stylesheet" href="style.css">
 		
+		<!-- jQuery -->
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		
 		<!-- javascript files -->
 		<script src="js/Stats.js"></script>
 		<script src="main.js"></script>
@@ -16,8 +19,6 @@
 	<body onload="init();">
 
 		<div id="wrapper" >
-
-
 
 			<div id="container" >
 				<!-- <canvas id="a" width="300" height="225"></canvas> -->
@@ -31,7 +32,7 @@
 				Angle <br> <input type="number" id="angle" name="angle" min="0" max="359" value="45"><br><br>
 				Radie <br> <input type="number" id="ballSize" name="ballSize" min="0" max="0.25" step="0.01" value="0.05"><br><br>
 
-				Material <br> <select name="material" id="material"> 
+				Material <br> <select name="material" id="material" onchange="updateBall(this);"> 
 								<option value="Golf">Golf ball</option>
 								<option value="Tennis">Tennis ball</option>
 								<option value="Billiard">Billiard ball</option>
@@ -54,36 +55,24 @@
 				 </p>
 			 </div>
 
+
 			<button onclick="clearish()" id="button">Clear</button>
 			<button onclick="launch()" id="button">Launch</button>
 			</div>
 		</div>
 
 
-	<script type="x-shader/x-vertex" id="vertexShader">
-    varying vec2 vUv;
-
-	void main() {
-
-	    vUv = uv;
-	    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-	}
-
+	
+	<script type="text/javascript">
+        $(document).ready(function() {
+		   	$('select').on('change', function() {
+	  			
+	  			//alert( this.value );
+			});
+		});
 	</script>
 
-	<script type="x-shader/x-vertex" id="fragmentShader">
-	    
-	varying vec2 vUv;
 
-	void main() {
-
-	    // colour is RGBA: u, v, 0, 1
-	    gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
-
-	}
-
-	</script>
 
 	</body>
 </html>
