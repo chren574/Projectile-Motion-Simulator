@@ -179,6 +179,7 @@ function init() {
   // RENDERER
   // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0x00000,1);
   
   // get the DOM element to attach to
   //var container = document.getElementById("container");
@@ -226,10 +227,18 @@ function init() {
   pointArray.push(dot);
 
   //Plane geometry and material
+<<<<<<< HEAD
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
   plane = new THREE.Mesh( geometry, material );
+=======
+  planeWidth = 500;
+  var geometry = new THREE.BoxGeometry( planeWidth, 300, 100 );
+  var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
+  var plane = new THREE.Mesh( geometry, material );
+>>>>>>> e52658ea3146308acf003fea2cd7a40bed7aaf0a
   plane.rotation.x = Math.PI/2;
+  plane.position.y = -50;
   scene.add( plane );
 
   renderer.render(scene, camera);
@@ -249,7 +258,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 
 
   // radius, segmentsWidth, segmentsHeight
-  var sceneRadius = radius*200;
+  var sceneRadius = 10;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
     
   // basic texture
@@ -264,7 +273,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.radius = radius;
   ball.sceneRadius = sceneRadius;
 
-  ball.position.x = -200;
+  ball.position.x = -220;
   ball.position.y = 0 + radius;
 
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
@@ -448,7 +457,7 @@ function checkCollision(obj) {
 
   // check if the ball hits the ground 
 
-  if (obj.velocityY < 0 ) {
+  if (obj.velocityY < 0 && obj.position.x < planeWidth/2 && obj.position.x > -planeWidth/2) {
 
     if ( (obj.position.y - ball.sceneRadius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
