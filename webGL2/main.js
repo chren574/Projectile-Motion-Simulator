@@ -111,12 +111,15 @@ function launch() {
     
     var wind_angle = (180+wind_angle)*Math.PI/180;
 
+    // wind arrow
+    if (windCheck.checked == true) {
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
     origin = new THREE.Vector3( 300, 300, 0 );
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
-
+    }
+    
     createBall(initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial );
     
     t = new Date().getTime(); 
@@ -294,9 +297,10 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   //ball.mass = 1;
   console.log("mass: " + ball.mass);
 
+  if (windCheck.checked == true) {
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
-
+  }
   scene.add(ball);
 
   // Add the ball to the list with all the balls
