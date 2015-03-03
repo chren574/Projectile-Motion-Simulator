@@ -17,11 +17,11 @@ var running = false;
 // Materials skrivet som JSON -- JavaScript Object Notation.
 //Density and bounce property
 var Materials = {
-  "Glas"  : { density : 2.6 , ballMaterial : 0.9 },
-  "Steel" : { density : 7.82, ballMaterial : 0.8 },
-  "Brass" : { density : 0.48 , ballMaterial : 0.4 },
-  "Lead"  : { density : 11.35, ballMaterial : 0.2 },
-  "Wood"  : { density : 0.57 , ballMaterial : 0.6 },
+  "Glas"  : { density : 2.6 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
+  "Steel" : { density : 7.82, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
+  "Brass" : { density : 0.48 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
+  "Lead"  : { density : 11.35, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
+  "Wood"  : { density : 0.57 , ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
 };
 
 arrowHelper = 0;
@@ -90,7 +90,7 @@ function launch() {
     radius = parseFloat(radius);
 
   	//Material - this is a string.
-  	var chosenMaterial = document.getElementById("material").value;
+  	chosenMaterial = document.getElementById("material").value;
     //chosenMaterial = parseFloat(material);
 
     var density = Materials[chosenMaterial].density;
@@ -267,7 +267,8 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
     
   // basic texture
-  var moonTexture = THREE.ImageUtils.loadTexture( 'images/ball.jpg' );
+  var ballTexture = Materials[chosenMaterial].ballTexture;
+  var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
   var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
   ball = new THREE.Mesh( sphereGeom.clone(), moonMaterial );
 
@@ -481,7 +482,7 @@ function checkCollision(obj) {
 
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
-      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 0.5) {
+      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 2) {
 
         stopRender();
 
