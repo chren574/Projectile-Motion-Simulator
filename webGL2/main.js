@@ -16,13 +16,22 @@ var running = false;
 
 // Materials skrivet som JSON -- JavaScript Object Notation.
 //Density and bounce property
-var Materials = {
+/*var Materials = {
   "Glas"  : { density : 2600 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
   "Steel" : { density : 7820, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
   "Brass" : { density : 480 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
   "Lead"  : { density : 11350, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
   "Wood"  : { density :  690, ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
-};
+};*/
+
+var Materials = {
+  "Golf"  : { density : 1184 , ballMaterial : 0.858, ballTexture : "images/golf.jpg" },
+  "Tennis" : { density : 400, ballMaterial : 0.712 , ballTexture : "images/tennis.jpg"},
+  "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
+  "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
+  "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
+  "Glas"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+}
 
 arrowHelper = 0;
 
