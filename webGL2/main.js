@@ -1,29 +1,28 @@
 // // set the scene size
   console.log("---> we are on top of main.js ");
 
-// TODO försök att ändra så storleken inte är konstant.
-var WIDTH = 1000,
-    HEIGHT = 600;
-
-// set some camera attributes
-var VIEW_ANGLE = 75,
-ASPECT = WIDTH / HEIGHT,
-NEAR = 1,
-FAR = 10000;
-
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
 
 // Materials skrivet som JSON -- JavaScript Object Notation.
 //Density and bounce property
+/*var Materials = {
+  "Glas"  : { density : 2600 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
+  "Steel" : { density : 7820, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
+  "Brass" : { density : 480 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
+  "Lead"  : { density : 11350, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
+  "Wood"  : { density :  690, ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
+};*/
+
 var Materials = {
-  "Glas"  : { density : 2.6 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
-  "Steel" : { density : 7.82, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
-  "Brass" : { density : 0.48 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
-  "Lead"  : { density : 11.35, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
-  "Wood"  : { density : 0.57 , ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
-};
+  "Golf"  : { density : 1184 , ballMaterial : 0.858, ballTexture : "images/golf.jpg" },
+  "Tennis" : { density : 400, ballMaterial : 0.712 , ballTexture : "images/tennis.jpg"},
+  "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
+  "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
+  "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
+  "Glass"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+}
 
 
 var BALL_OBJ = {
@@ -85,8 +84,7 @@ function launch() {
   console.log("---> launch() is called ");
 
   //if(running == false) {
-
-    
+ 
 	  //----------------------------------------------------------
     
     
@@ -94,15 +92,20 @@ function launch() {
     //scene.remove(arrowHelper);
     var wind_angle = (180+BALL_OBJ.initialAngle_wind)*Math.PI/180;
 
+    // wind arrow
+    if (windCheck.checked == true) {
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
-    origin = new THREE.Vector3( 300, 300, 0 );
+    origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
+<<<<<<< HEAD
 
     */
 
     //createBall();
+    //}
+    
     
     t = new Date().getTime(); 
     animate();
@@ -193,6 +196,16 @@ function setupScene () {
   scene = new THREE.Scene();
 
   //------------------------------------------------------
+  var container = document.getElementById("container");
+
+  WIDTH = container.offsetWidth,
+  HEIGHT = container.offsetHeight;
+
+  VIEW_ANGLE = 75,
+  ASPECT = WIDTH / HEIGHT,
+  NEAR = 1,
+  FAR = 10000;
+
   // CAMERA
   // create camera and a scene
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT , NEAR, FAR);
@@ -209,9 +222,10 @@ function setupScene () {
   // RENDERER
   // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0x00000,1);
   
   // get the DOM element to attach to
-  var container = document.getElementById("container");
+  //var container = document.getElementById("container");
   
   // start the renderer
   //renderer.setSize(WIDTH, HEIGHT);
@@ -256,26 +270,15 @@ function setupScene () {
   pointArray.push(dot);
 
   //Plane geometry and material
-  var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
-  var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+
+  planeWidth = 500;
+  var geometry = new THREE.BoxGeometry( planeWidth, 300, 100 );
+  var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
   var plane = new THREE.Mesh( geometry, material );
+
   plane.rotation.x = Math.PI/2;
+  plane.position.y = -50;
   scene.add( plane );
-
-  //TODO parse the initial value for the direction of the vector.
-  // Arrowhelper - wind
-  //var wind_angle = 180*Math.PI/180;
-
-  //dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
-  //origin = new THREE.Vector3( 300, 300, 0 );
-  //hex = 0xffff00;
-
-  //arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
-  //arrowHelper.setLength (50, 10, 10);
-  //arrowHelper.position.set( 300, 300, 0 );
-
-  //arrowHelper.setDirection(dir)
-  //scene.add( arrowHelper );
 
   renderer.render(scene, camera);
 
@@ -310,7 +313,8 @@ function createBall () {
   setupParameters();
  
   // radius, segmentsWidth, segmentsHeight
-  var sceneRadius = BALL_OBJ.radius*200;
+  //var sceneRadius = BALL_OBJ.radius*200;
+  var sceneRadius = 10;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
   
   // basic texture
@@ -325,7 +329,7 @@ function createBall () {
   var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
   ball = new THREE.Mesh( sphereGeom, moonMaterial );
 
-  ball.position.x = -200;
+  ball.position.x = -220;
   ball.position.y = 0 + sceneRadius;
 
   //------------------------------
@@ -356,19 +360,10 @@ function createBall () {
   ball.mass = (ball.density * (4*Math.PI*Math.pow(ball.radius,2))/3 );
   ball.D = ((AIR_DENSITY * C * ball.area)/2 );
 
-  //ball.D = 0.02;
-  //ball.mass = 1;
-
-/*
-  console.log("Radius: " + ball.radius);
-  console.log("D: " + ball.D);
-  console.log("Mass: " + ball.mass);
-  */
-
-/*
+  /*
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
-*/
+  */
 
   console.log("ball.angle         : " + ball.angle);
   console.log("ball.radius        : " + ball.radius);
@@ -388,6 +383,13 @@ function createBall () {
 
   //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
   //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
+
+/*
+  if (windCheck.checked == true) {
+  dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
+  arrowHelper.setDirection(dir);
+  }
+*/
 
   scene.add(ball);
   // Add the ball to the list with all the balls
@@ -480,6 +482,12 @@ function updateVelocity(obj, dt) {
 function updatePosition(obj, dt) {
   obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
   obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
+
+  if ( obj.position.y < -100) {
+
+        stopRender();
+
+    }
 }
 
 /**
@@ -535,7 +543,7 @@ function checkCollision(obj) {
 
   // check if the ball hits the ground 
 
-  if (obj.velocityY < 0 ) {
+  if (obj.velocityY < 0 && obj.position.x < planeWidth/2 && obj.position.x > -planeWidth/2) {
 
     if ( (obj.position.y - obj.sceneRadius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
@@ -543,11 +551,11 @@ function checkCollision(obj) {
       obj.velocityX = obj.velocityX * obj.bmaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      //console.log(obj.velocityY);
+      console.log("POS: " +obj.position.y);
 
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
-      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 2) {
+      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 2 ) {
 
         stopRender();
 
