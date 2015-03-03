@@ -1,15 +1,5 @@
 // // set the scene size
 
-// TODO försök att ändra så storleken inte är konstant.
-var WIDTH = 1000,
-    HEIGHT = 600;
-
-// set some camera attributes
-var VIEW_ANGLE = 75,
-ASPECT = WIDTH / HEIGHT,
-NEAR = 1,
-FAR = 10000;
-
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
 var running = false;
@@ -30,7 +20,7 @@ var Materials = {
   "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
   "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
   "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
-  "Glas"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+  "Glass"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
 }
 
 arrowHelper = 0;
@@ -114,7 +104,7 @@ function launch() {
     // wind arrow
     if (windCheck.checked == true) {
     dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
-    origin = new THREE.Vector3( 300, 300, 0 );
+    origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
@@ -163,6 +153,16 @@ function init() {
   scene = new THREE.Scene();
 
   //------------------------------------------------------
+  var container = document.getElementById("container");
+
+  WIDTH = container.offsetWidth,
+  HEIGHT = container.offsetHeight;
+
+  VIEW_ANGLE = 75,
+  ASPECT = WIDTH / HEIGHT,
+  NEAR = 1,
+  FAR = 10000;
+
   // CAMERA
   // create camera and a scene
   camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT , NEAR, FAR);
@@ -181,7 +181,7 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   
   // get the DOM element to attach to
-  var container = document.getElementById("container");
+  //var container = document.getElementById("container");
   
   // start the renderer
   //renderer.setSize(WIDTH, HEIGHT);
@@ -228,7 +228,7 @@ function init() {
   //Plane geometry and material
   var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
   var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-  var plane = new THREE.Mesh( geometry, material );
+  plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
 
