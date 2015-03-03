@@ -30,7 +30,7 @@ var Materials = {
   "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
   "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
   "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
-  "Glas"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+  "Glass"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
 }
 
 arrowHelper = 0;
@@ -176,6 +176,7 @@ function init() {
   // RENDERER
   // create a WebGL renderer, camera
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0x00000,1);
   
   // get the DOM element to attach to
   var container = document.getElementById("container");
@@ -236,10 +237,12 @@ function init() {
   pointArray.push(dot);
 
   //Plane geometry and material
-  var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
-  var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+  planeWidth = 500;
+  var geometry = new THREE.BoxGeometry( planeWidth, 300, 100 );
+  var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
   var plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = Math.PI/2;
+  plane.position.y = -50;
   scene.add( plane );
 
   //TODO parse the initial value for the direction of the vector.
@@ -274,7 +277,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
 
 
   // radius, segmentsWidth, segmentsHeight
-  var sceneRadius = radius*200;
+  var sceneRadius = 10;
   var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
     
   // basic texture
@@ -289,7 +292,7 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.radius = radius;
   ball.sceneRadius = sceneRadius;
 
-  ball.position.x = -200;
+  ball.position.x = -220;
   ball.position.y = 0 + radius;
 
   ball.velocityX = initialVelocity*Math.cos(angle*Math.PI/180)
@@ -482,7 +485,7 @@ function checkCollision(obj) {
 
   // check if the ball hits the ground 
 
-  if (obj.velocityY < 0 ) {
+  if (obj.velocityY < 0 && obj.position.x < planeWidth/2 && obj.position.x > -planeWidth/2) {
 
     if ( (obj.position.y - ball.sceneRadius ) < 0  && obj.position.y > 0 ) {
       // change sign of the velocity in y-direction.
