@@ -7,13 +7,6 @@ var running = false;
 
 // Materials skrivet som JSON -- JavaScript Object Notation.
 //Density and bounce property
-/*var Materials = {
-  "Glas"  : { density : 2600 , ballMaterial : 0.9, ballTexture : "images/glas.jpg" },
-  "Steel" : { density : 7820, ballMaterial : 0.8 , ballTexture : "images/steel.jpg"},
-  "Brass" : { density : 480 , ballMaterial : 0.4 , ballTexture : "images/brass.jpg"},
-  "Lead"  : { density : 11350, ballMaterial : 0.2 , ballTexture : "images/lead.jpg"},
-  "Wood"  : { density :  690, ballMaterial : 0.6 , ballTexture : "images/wood.jpg"}
-};*/
 
 var Materials = {
   "Golf"  : { density : 1184 , ballMaterial : 0.858, ballTexture : "images/golf.jpg" },
@@ -21,10 +14,10 @@ var Materials = {
   "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
   "Wooden"  : { density : 690, ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
   "Steel"  : { density :  7820, ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
-  "Glass"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+  "Glas"  : { density :  2500, ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
 }
 
-
+// the ball object that hold all the parameters
 var BALL_OBJ = {
   initialVelocity : 0,
   initialAngle : 0,
@@ -32,16 +25,15 @@ var BALL_OBJ = {
   initialAngle_wind : 0,
   radius : 0,
   chosenMaterial : "",
-
 };
+
+var GRAVITY = 9.82;
+var AIR_DENSITY = 1.2754;
 
 arrowHelper = 0;
 
 //Start varibles
-
 var time_old = 0;
-var GRAVITY = 9.82;
-var AIR_DENSITY = 1.2754;
 var canonBallArray = [];
 var pointArray = [];
 
@@ -99,14 +91,11 @@ function launch() {
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
     scene.add( arrowHelper );
-<<<<<<< HEAD
 
     */
-
-    //createBall();
     //}
     
-    
+    // start the time and the animation
     t = new Date().getTime(); 
     animate();
   //}
@@ -148,8 +137,11 @@ function showWind(){
 function init() {
   console.log("---> init() is called ");
 
+  //parse the parameters from the browser
   setupParameters();
+  //seup the scene in three js
   setupScene();
+  // create the ball 
   createBall();
   
 }
@@ -175,6 +167,7 @@ function setupParameters() {
     BALL_OBJ.chosenMaterial = document.getElementById("material").value;
 
     /*
+    // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
     console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
     console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.initialAngle);
@@ -365,6 +358,9 @@ function createBall () {
   arrowHelper.setDirection(dir);
   */
 
+
+  // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
+  // can be commented out
   console.log("ball.angle         : " + ball.angle);
   console.log("ball.radius        : " + ball.radius);
   console.log("ball.sceneRadius   : " + ball.sceneRadius);
@@ -380,10 +376,6 @@ function createBall () {
   console.log("ball.density       : " + ball.density);
   console.log("ball.bmaterial     : " + ball.bmaterial);
   
-
-  //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
-  //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
-
 /*
   if (windCheck.checked == true) {
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
@@ -445,6 +437,7 @@ function render() {
  * 
  */
 function stopRender() {
+  //stop rendering the current ball and create a new one.
   cancelAnimationFrame(animationId);
   createBall();
 }
@@ -480,14 +473,10 @@ function updateVelocity(obj, dt) {
  * Calculate the new positon based on the velocity and acceleration.
  */
 function updatePosition(obj, dt) {
+  
   obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
   obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
 
-  if ( obj.position.y < -100) {
-
-        stopRender();
-
-    }
 }
 
 /**
