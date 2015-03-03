@@ -277,15 +277,14 @@ function setupScene () {
   //arrowHelper.setDirection(dir)
   //scene.add( arrowHelper );
 
-
-
   renderer.render(scene, camera);
 
 }
 
 function updateBall(newMaterial) {
-
   console.log("---> updateBall() is called ");
+  
+
   console.log("newMaterial: " + newMaterial.value);
 
   //BALL_OBJ.chosenMaterial = newMaterial.value;
@@ -293,15 +292,22 @@ function updateBall(newMaterial) {
   // basic texture
   var ballTexture = Materials[newMaterial.value].ballTexture;
 
-  //render the new ball thats been added
-  renderer.render(scene, camera);
+  var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
+    renderer.render(scene, camera);
+  })
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
+  ball.moonMaterial;
+
+
 
 }
 
 //function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, density, ballMaterial) {
 function createBall () {
-
   console.log("---> createBall() is called ");
+
+  //maybe done twice but for safety
+  setupParameters();
  
   // radius, segmentsWidth, segmentsHeight
   var sceneRadius = BALL_OBJ.radius*200;
@@ -310,21 +316,25 @@ function createBall () {
   // basic texture
   var ballTexture = Materials[BALL_OBJ.chosenMaterial].ballTexture;
   
-  var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
-  var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
+  var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
+    renderer.render(scene, camera);
+  })
+  //Texture.needsUpdate = true;
+  Texture.needsUpdate = true;
+  //var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
   ball = new THREE.Mesh( sphereGeom, moonMaterial );
 
   ball.position.x = -200;
   ball.position.y = 0 + sceneRadius;
 
   //------------------------------
-
   ball.angle = BALL_OBJ.initialAngle;
   ball.radius = BALL_OBJ.radius;
   ball.sceneRadius = sceneRadius;
 
-  ball.velocityX = BALL_OBJ.initialVelocity*Math.cos(angle*Math.PI/180)
-  ball.velocityY = BALL_OBJ.initialVelocity*Math.sin(angle*Math.PI/180)
+  ball.velocityX = BALL_OBJ.initialVelocity*Math.cos(ball.angle);
+  ball.velocityY = BALL_OBJ.initialVelocity*Math.sin(ball.angle);
 
   ball.accelX = 0;
   ball.accelY = -GRAVITY;
@@ -349,15 +359,36 @@ function createBall () {
   //ball.D = 0.02;
   //ball.mass = 1;
 
+/*
   console.log("Radius: " + ball.radius);
   console.log("D: " + ball.D);
   console.log("Mass: " + ball.mass);
-
+  */
 
 /*
   dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
   arrowHelper.setDirection(dir);
 */
+
+  console.log("ball.angle         : " + ball.angle);
+  console.log("ball.radius        : " + ball.radius);
+  console.log("ball.sceneRadius   : " + ball.sceneRadius);
+  console.log("ball.angle         : " + ball.angle );
+  console.log("ball.velocityX     : " + ball.velocityX);
+  console.log("ball.velocityY     : " + ball.velocityY);
+  console.log("ball.accelX        : " + ball.accelX);
+  console.log("ball.accelY        : " + ball.accelY);
+  console.log("ball.vf2           : " + ball.vf2);
+  console.log("ball.vf_ang        : " + ball.vf_ang);
+  console.log("ball.velocity_wind : " + ball.velocity_wind);
+  console.log("ball.Uang          : " + ball.Uang);
+  console.log("ball.density       : " + ball.density);
+  console.log("ball.bmaterial     : " + ball.bmaterial);
+  
+
+  //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
+  //console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
+
   scene.add(ball);
   // Add the ball to the list with all the balls
   canonBallArray.push(ball);
@@ -413,6 +444,7 @@ function render() {
  */
 function stopRender() {
   cancelAnimationFrame(animationId);
+  createBall();
 }
 
 /**
