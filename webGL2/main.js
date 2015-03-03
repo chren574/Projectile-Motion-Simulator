@@ -227,16 +227,12 @@ function init() {
   pointArray.push(dot);
 
   //Plane geometry and material
-<<<<<<< HEAD
-  var geometry = new THREE.PlaneGeometry( 500, 300, 20 );
-  var material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-  plane = new THREE.Mesh( geometry, material );
-=======
+
   planeWidth = 500;
   var geometry = new THREE.BoxGeometry( planeWidth, 300, 100 );
   var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
   var plane = new THREE.Mesh( geometry, material );
->>>>>>> e52658ea3146308acf003fea2cd7a40bed7aaf0a
+
   plane.rotation.x = Math.PI/2;
   plane.position.y = -50;
   scene.add( plane );
