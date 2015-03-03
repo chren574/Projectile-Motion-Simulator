@@ -28,11 +28,11 @@ var Materials = {
 
 var BALL_OBJ = {
   initialVelocity : 0,
-  inittialAngle : 0,
+  initialAngle : 0,
   initialVelocity_wind : 0,
   initialAngle_wind : 0,
+  radius : 0,
   chosenMaterial : "",
-
 
 };
 
@@ -88,21 +88,6 @@ function launch() {
 
     scene.remove(arrowHelper);
 
-    initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-
-    var initialVelocity_wind = document.getElementById("initialVelocity_wind").value;
-    velocity_wind = parseFloat(initialVelocity_wind);
-
-    var angle = document.getElementById("angle").value;
-    ball_angle = parseFloat(angle*Math.PI/180);
-
-    var angle_wind = document.getElementById("angle_wind").value;
-    wind_angle = parseFloat((angle_wind));
-
-  	//Material - this is a string.
-  	chosenMaterial = document.getElementById("material").value;
-    //chosenMaterial = parseFloat(material);
-
     var density = Materials[chosenMaterial].density;
     var ballMaterial = Materials[chosenMaterial].ballMaterial;
 
@@ -122,8 +107,6 @@ function launch() {
     animate();
   }
 }
-
-
 
 function clearish() {
   console.log("---> clearish() is called ");
@@ -161,23 +144,42 @@ function showWind(){
 function init() {
   console.log("---> init() is called ");
 
-  radius = document.getElementById("ballSize").value;
-  radius = parseFloat(radius);
-
   setupParameters();
   setupScene();
   
-
-
-
 }
 function setupParameters() {
+    console.log("---> setupParameters() is called ");
 
+    //parse the velocities
+    BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
+    BALL_OBJ.initialVelocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
+    
+    ////parse the angles
+    var angle = document.getElementById("angle").value;
+    BALL_OBJ.initialAngle = parseFloat(angle*Math.PI/180);
+
+    var angle_wind = document.getElementById("angle_wind").value;
+    BALL_OBJ.initialAngle_wind = parseFloat((angle_wind));
+
+    BALL_OBJ.radius = parseFloat(document.getElementById("ballSize").value);
+
+    //parse the material
+    //Material - this is a string.
+    BALL_OBJ.chosenMaterial = document.getElementById("material").value;
+
+    console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
+    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
+    console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.initialAngle);
+    console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.initialAngle_wind);
+    console.log("BALL_OBJ.radius              : " + BALL_OBJ.radius);
+    console.log("BALL_OBJ.chosenMaterial      : " + BALL_OBJ.chosenMaterial);
 
 }
 
 
 function setupScene () {
+  console.log("---> setupScene() is called ");
 
   //Setup The Scene --------------------------------------
 
