@@ -398,6 +398,12 @@ function updateVelocity(obj, dt) {
 function updatePosition(obj, dt) {
   obj.position.x += obj.velocityX * dt + ( obj.accelX * Math.pow(dt,2) * 0.5);
   obj.position.y += obj.velocityY * dt + ( obj.accelY * Math.pow(dt,2) * 0.5);
+
+  if ( obj.position.y < -100) {
+
+        stopRender();
+
+    }
 }
 
 /**
@@ -461,11 +467,11 @@ function checkCollision(obj) {
       obj.velocityX = obj.velocityX * obj.bmaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      //console.log(obj.velocityY);
+      console.log("POS: " +obj.position.y);
 
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
-      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 2) {
+      if ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 2 ) {
 
         stopRender();
 
