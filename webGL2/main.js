@@ -187,19 +187,6 @@ function init() {
   // attach the render-supplied DOM element
   container.appendChild( renderer.domElement );
 
-/*
-  // Not working, tried to resize the scene when the browser window changed.
-  function onWindowResize() {
-
-    camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( container.offsetWidth, container.offsetHeight );
-
-  }
-
-  window.addEventListener( 'resize', onWindowResize );
-*/
-
   //------------------------------------------------------
   // STATS 
   // displays current and past frames per second attained by scene
@@ -241,21 +228,6 @@ function init() {
   var plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = Math.PI/2;
   scene.add( plane );
-
-  //TODO parse the initial value for the direction of the vector.
-  // Arrowhelper - wind
-  //var wind_angle = 180*Math.PI/180;
-
-  //dir = new THREE.Vector3( -Math.cos(wind_angle), -Math.sin(wind_angle), 0 );
-  //origin = new THREE.Vector3( 300, 300, 0 );
-  //hex = 0xffff00;
-
-  //arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
-  //arrowHelper.setLength (50, 10, 10);
-  //arrowHelper.position.set( 300, 300, 0 );
-
-  //arrowHelper.setDirection(dir)
-  //scene.add( arrowHelper );
 
   renderer.render(scene, camera);
 
@@ -316,9 +288,6 @@ function createBall (initialVelocity, radius, angle, wind_angle, velocity_wind, 
   ball.mass = (density * (4*Math.PI*Math.pow(radius,2))/3 );
   ball.D = ((AIR_DENSITY * C * ball.area)/2 );
 
-  //ball.D = 0.02;
-  //ball.m = 1;
-
   console.log("radius" + ball.radius);
   console.log("D: " + ball.D);
   
@@ -350,13 +319,6 @@ function animate() {
 
 function render() {
 
-  
-  /*
-  //Avsluta renderingsloopen nar bollen slår i marken 
-  if ( (ball.position.y - ball.radius ) < 0) {
-    stopRender();
-  }
-  */
 
   // Calculate the delta time.
   var dt = (new Date().getTime() - t )/200; //1000 default
