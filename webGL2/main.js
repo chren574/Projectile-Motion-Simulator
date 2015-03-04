@@ -84,6 +84,10 @@ function launch() {
 
   // check if there is a ball in the air.
   if( !running ) {
+
+    if (!windCheck.checked) {
+    scene.remove(arrowHelper);
+    }
  
     reloadSettings();
     running = true;
@@ -97,7 +101,7 @@ function launch() {
 function clearish() {
   console.log("---> clearish() is called ");
 
-  //running = false;
+  running = false;
   cancelAnimationFrame(animationId);
 
   scene.remove(arrowHelper);
@@ -150,14 +154,14 @@ function setupParameters() {
 
     //parse the velocities
     BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-    BALL_OBJ.initialVelocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
+    BALL_OBJ.Velocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
     
     ////parse the angles
     var angle = document.getElementById("angle").value;
     BALL_OBJ.initialAngle = parseFloat(angle*Math.PI/180);
 
     var angle_wind = document.getElementById("angle_wind").value;
-    BALL_OBJ.initialAngle_wind = parseFloat(angle_wind*Math.PI/180);
+    BALL_OBJ.Angle_wind = parseFloat((angle_wind)*Math.PI/180) + Math.PI;
 
     BALL_OBJ.radius = parseFloat(document.getElementById("ballSize").value);
 
@@ -167,9 +171,9 @@ function setupParameters() {
 
     // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
-    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
-    console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.initialAngle);
-    console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.initialAngle_wind);
+    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.Velocity_wind);
+    console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.Angle);
+    console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.Angle_wind);
     console.log("BALL_OBJ.radius              : " + BALL_OBJ.radius);
     console.log("BALL_OBJ.chosenMaterial      : " + BALL_OBJ.chosenMaterial);
 }
@@ -277,16 +281,21 @@ function setupScene () {
 
   //Wind arrow
   //scene.remove(arrowHelper);
-  var local_wind_angle = (((BALL_OBJ.initialAngle_wind*180/Math.PI)+180)*Math.PI/180);
+  
+  if (windCheck.checked == true) {
 
-  //if (windCheck.checked == true) {
+    windArrow();
+    /*
+    var local_wind_angle = BALL_OBJ.Angle_wind;
+
     dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
     origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
     hex = 0xffff00;
     arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
 
     scene.add( arrowHelper );
-  //}
+  */
+  }
 
 
   //render the scene
@@ -339,8 +348,8 @@ function reloadSettings() {
   ball.vf2 = 0;
   ball.vf_ang = 0;
 
-  ball.velocity_wind = BALL_OBJ.initialVelocity_wind;
-  ball.Uang          = BALL_OBJ.initialAngle_wind;
+  ball.velocity_wind = BALL_OBJ.Velocity_wind;
+  ball.Uang          = BALL_OBJ.Angle_wind;
 
   ball.density   = Materials[BALL_OBJ.chosenMaterial].density;
   ball.bmaterial = Materials[BALL_OBJ.chosenMaterial].ballMaterial;
@@ -377,16 +386,12 @@ function reloadSettings() {
   console.log("ball.D             : " + ball.D);
   
 
-  dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
-  arrowHelper.setDirection(dir);
-  
 
-/*
   if (windCheck.checked == true) {
-  dir.set( -Math.cos(ball.Uang), -Math.sin(ball.Uang), 0 );
-  arrowHelper.setDirection(dir);
+    scene.remove(arrowHelper);
+    windArrow();
   }
-*/
+
 
 }
 
@@ -396,6 +401,8 @@ function reloadSettings() {
  */
 function createBall () {
   console.log("---> createBall() is called ");
+
+  scene.remove(arrowHelper);
  
   //var sceneRadius = BALL_OBJ.radius*100;
   
@@ -422,6 +429,10 @@ function createBall () {
   
   // Add the ball to the list with all the balls
   canonBallArray.push(ball);
+
+  if (windCheck.checked == true) {
+    windArrow();
+  }
 
   //render the new ball thats been added
   renderer.render(scene, camera);
@@ -499,6 +510,17 @@ function drawBallShadow() {
     time_old = 0;
    }
   time_old += 1;
+}
+
+function windArrow() {
+  var local_wind_angle = BALL_OBJ.Angle_wind;
+
+  dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
+  origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
+  hex = 0xffff00;
+  arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
+
+  scene.add( arrowHelper );
 }
 
 
