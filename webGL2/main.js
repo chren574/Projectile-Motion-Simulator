@@ -24,14 +24,14 @@ var BALL_OBJ = {
   initialAngle_wind : 0,
   radius : 0,
   chosenMaterial : "",
-  /*sceneRadius : function () {
-    if (radius != 0 ){
-      return radius*100;  
+  sceneRadius : function () {
+    if (this.radius > 0 ){
+      return this.radius*100;  
     } else {
       return 10;
     }  
-  },*/
-  sceneRadius : 15,
+  },
+  //sceneRadius : 15,
 };
 
 var GRAVITY = 9.82;
@@ -111,8 +111,6 @@ function clearish() {
   for ( i = canonBallArray.length - 1; i >= 0 ; i -- ) {
     obj = canonBallArray[ i ];
 
-    // scene.remove(ball);
-    //   scene.remove(point);
     scene.remove(obj);
     delete canonBallArray[ i ];
   }
@@ -154,7 +152,7 @@ function setupParameters() {
 
     //parse the velocities
     BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
-    BALL_OBJ.Velocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
+    BALL_OBJ.initialVelocity_wind = parseFloat(document.getElementById("initialVelocity_wind").value);
     
     ////parse the angles
     var angle = document.getElementById("angle").value;
@@ -171,11 +169,17 @@ function setupParameters() {
 
     // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
-    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.Velocity_wind);
+    console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
     console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.Angle);
     console.log("BALL_OBJ.initialAngle_wind   : " + BALL_OBJ.Angle_wind);
     console.log("BALL_OBJ.radius              : " + BALL_OBJ.radius);
     console.log("BALL_OBJ.chosenMaterial      : " + BALL_OBJ.chosenMaterial);
+    
+
+    console.log("---------------------" );
+    console.log("BALL_OBJ.sceneRadius      : " + BALL_OBJ.sceneRadius() );
+
+
 }
 /**
  * Setup the scene and render it
@@ -210,8 +214,8 @@ function setupScene () {
 
   // the camera starts at 0,0,0
   // so pull it back
-  camera.position.z = 300;
-  camera.position.y = 100;
+  camera.position.z = 250;
+  camera.position.y = 75;
 
   //------------------------------------------------------
   // RENDERER
@@ -297,7 +301,6 @@ function setupScene () {
   */
   }
 
-
   //render the scene
   renderer.render(scene, camera);
 
@@ -308,22 +311,11 @@ function setupScene () {
  */
 function updateBall(newMaterial) {
   
-  /*
-  console.log("---> updateBall() is called ");
-  
-  console.log("newMaterial: " + newMaterial.value);
-
-  //BALL_OBJ.chosenMaterial = newMaterial.value;
-
-  // basic texture
   var ballTexture = Materials[newMaterial.value].ballTexture;
+  img.src = ballTexture;
 
-  var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
-    renderer.render(scene, camera);
-  })
-  var moonMaterial = new THREE.MeshBasicMaterial( { map: Texture } );
-  ball.moonMaterial;
-  */
+    //render the new ball thats been added
+  renderer.render(scene, camera);
 
 }
 /**
@@ -337,7 +329,7 @@ function reloadSettings() {
   //------------------------------
   ball.angle = BALL_OBJ.initialAngle;
   ball.radius = BALL_OBJ.radius;
-  ball.sceneRadius = BALL_OBJ.sceneRadius;
+  ball.sceneRadius = BALL_OBJ.sceneRadius();
 
   ball.velocityX = BALL_OBJ.initialVelocity*Math.cos(ball.angle);
   ball.velocityY = BALL_OBJ.initialVelocity*Math.sin(ball.angle);
@@ -348,7 +340,7 @@ function reloadSettings() {
   ball.vf2 = 0;
   ball.vf_ang = 0;
 
-  ball.velocity_wind = BALL_OBJ.Velocity_wind;
+  ball.velocity_wind = BALL_OBJ.initialVelocity_wind;
   ball.Uang          = BALL_OBJ.Angle_wind;
 
   ball.density   = Materials[BALL_OBJ.chosenMaterial].density;
@@ -359,11 +351,15 @@ function reloadSettings() {
   C = 0.5;
   ball.area = Math.PI*Math.pow(ball.radius, 2);
 
-  //ball.mass = (ball.density * (4*Math.PI*Math.pow(ball.radius,2))/3 );
-  //ball.D = ((AIR_DENSITY * C * ball.area)/2 );
+  ball.mass = ball.density * 0.75*Math.PI*Math.pow(ball.radius,3);
+  ball.D = ((AIR_DENSITY * C * ball.area)/2 );
 
+  /*
   ball.mass = 1;
   ball.D = 0.02;
+*/
+
+
 
   // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
   // can be commented out
@@ -384,6 +380,10 @@ function reloadSettings() {
   console.log("ball.area          : " + ball.area);
   console.log("ball.mass          : " + ball.mass);
   console.log("ball.D             : " + ball.D);
+  console.log("ball.D/ball.mass   : " + (ball.D/ball.mass));
+
+
+
   
 
 
@@ -402,27 +402,33 @@ function reloadSettings() {
 function createBall () {
   console.log("---> createBall() is called ");
 
-  scene.remove(arrowHelper);
+  //cene.remove(arrowHelper);
  
-  //var sceneRadius = BALL_OBJ.radius*100;
-  
-  //var sceneRadius = 10;
-  var sceneRadius = BALL_OBJ.sceneRadius;
-  var sphereGeom =  new THREE.SphereGeometry(sceneRadius, 32, 32 ); 
+  var setRadius = BALL_OBJ.sceneRadius();
+
+  var sphereGeom =  new THREE.SphereGeometry(setRadius, 32, 32 ); 
   
   // basic texture
   var ballTexture = Materials[BALL_OBJ.chosenMaterial].ballTexture;
-  
+
+  //------------------
+  img = new Image();
+  texture = new THREE.Texture(img);
+  img.onload = function () { texture.needsUpdate = true; };
+  img.src = ballTexture;
+  texture.needsUpdate = true;
+  //------------------
   var moonTexture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
     renderer.render(scene, camera);
   });
   
   //var moonTexture = THREE.ImageUtils.loadTexture( ballTexture );
-  var moonMaterial = new THREE.MeshBasicMaterial( { map: moonTexture } );
+  var moonMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+
   ball = new THREE.Mesh( sphereGeom, moonMaterial );
 
   ball.position.x = -220;
-  ball.position.y = 0 + sceneRadius;
+  ball.position.y = 0 + BALL_OBJ.sceneRadius();
   
   //add the ball to the scene
   scene.add(ball);
