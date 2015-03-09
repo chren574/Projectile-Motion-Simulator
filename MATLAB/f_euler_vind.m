@@ -7,11 +7,21 @@ for n = 2:len
     %----------------------------------
     % Med Luftmotstand och vind
     % Berakningar for vinden
-    vf2 = (vx_v(n-1) + U*cos(Uang))^2 + (vy_v(n-1) + U*sin(Uang))^2;      
-    vf_ang = atan((vy_v(n-1) + U*sin(Uang))/(vx_v(n-1) + U*cos(Uang)));     
+    vf2 = sqrt( (vx_v(n-1) + U*cos(Uang))^2 + (vy_v(n-1) + U*sin(Uang))^2 );      
+    vf_ang = atan(abs( (vy_v(n-1) + U*sin(Uang))/(vx_v(n-1) + U*cos(Uang)) ) );     
     % Acceleratioen
-    ax_v(n) =    -(D/m)*vf2*cos(vf_ang);
-    ay_v(n) = -g -(D/m)*vf2*sin(vf_ang);
+    if (vx_v(n-1) + U*cos(Uang)) > 0
+        ax_v(n) =    -(D/m)*vf2*cos(vf_ang);
+    else
+        ax_v(n) =    +(D/m)*vf2*cos(vf_ang);
+    end
+    
+    if (vy_v(n-1) + U*sin(Uang)) > 0
+        ay_v(n) = -g -(D/m)*vf2*sin(vf_ang);
+    else
+        ay_v(n) = -g +(D/m)*vf2*sin(vf_ang);
+    end
+    
     % Berknar hastigheten
     vx_v(n) = vx_v(n-1) + ax_v(n-1)*deltaT;
     vy_v(n) = vy_v(n-1) + ay_v(n-1)*deltaT;
@@ -38,7 +48,6 @@ y_v = y_v(1:n);
 % test = length(x);
 % fprintf('%i \n',test);
 
-disp('hello');
 
 end
 

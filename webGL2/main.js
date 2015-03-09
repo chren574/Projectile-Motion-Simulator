@@ -316,6 +316,8 @@ function updateBall(newMaterial) {
 
     //render the new ball thats been added
   renderer.render(scene, camera);
+    animationId = requestAnimationFrame(animate);
+  cancelAnimationFrame(animationId);
 
 }
 /**
@@ -453,6 +455,7 @@ function animate() {
   //console.log("---> animate() is called ");
 
   animationId = requestAnimationFrame(animate);
+
   render();
   stats.update();
 

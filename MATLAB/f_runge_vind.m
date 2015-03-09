@@ -1,4 +1,4 @@
-function [ uprime ] = f__runge_vind( t, u )
+function [ uprime ] = f_runge_vind( t, v )
 % input parameters
 % u = [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)]) 
 % output parameters
@@ -6,6 +6,7 @@ function [ uprime ] = f__runge_vind( t, u )
     
     uprime=zeros(4,1);
     
+    %todo 
     % Konstanter
     m = 0.145;               % Massa m [kg]
     g = 9.82;                % Tyngdacceleration g [m/s^2]    
@@ -13,23 +14,24 @@ function [ uprime ] = f__runge_vind( t, u )
     r = 0.15;
     A = r^2*pi;             % Arean A [m^2]
     C = 0.5;
-    p = 1.2;                 % Densiteten p []
+    p = 1.2;                % Densiteten p []
     D = (p*C*A)/2;
     % Konstanter vind
+
     U = 0;
     Uang = 0;
     
     % Calculation wind
-    vf2 = (u(2) + U*cos(Uang))^2 + (u(3) + U*sin(Uang))^2;    
-    vf_ang = atan((u(3) + U*sin(Uang))/(u(1) + U*cos(Uang)));
+    vf2 = sqrt( (v(2) + U*cos(Uang))^2 + (v(3) + U*sin(Uang))^2 );    
+    vf_ang = atan( abs ((v(3) + U*sin(Uang))/(v(2) + U*cos(Uang)) ) );
         
     % Hastighet x
-    uprime(1)= u(2);
+    uprime(1)= v(2);
     % Acceleration x
     %var1 uprime(2)= (D*u(2)*(sqrt(u(2)^2+u(4)^2)))/m;
     uprime(2)= -(D/m)*vf2*cos(vf_ang);
     % Hastighet y
-    uprime(3)= u(4);
+    uprime(3)= v(4);
     % Acceleration y
     %var1 uprime(4)= (D*u(2)*(sqrt(u(2)^2+u(4)^2))-(m*g))/m;
     uprime(4)= -g -(D/m)*vf2*sin(vf_ang);
