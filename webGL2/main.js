@@ -80,7 +80,7 @@ function keyPress(e) {
 }
 
 function launch() {
-  console.log("---> launch() is called ");
+  //console.log("---> launch() is called ");
 
   // check if there is a ball in the air.
   if( !running ) {
@@ -99,7 +99,7 @@ function launch() {
 }
 
 function clearish() {
-  console.log("---> clearish() is called ");
+  //console.log("---> clearish() is called ");
 
   running = false;
   cancelAnimationFrame(animationId);
@@ -127,7 +127,7 @@ function clearish() {
 }
 
 function showWind(){
-  console.log("---> showWind() is called ");
+  //console.log("---> showWind() is called ");
 
   document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
 }
@@ -136,7 +136,7 @@ function showWind(){
  * 
  */
 function init() {
-  console.log("---> init() is called ");
+  //console.log("---> init() is called ");
 
   //parse the parameters from the browser
   setupParameters();
@@ -148,7 +148,7 @@ function init() {
  * 
  */
 function setupParameters() {
-    console.log("---> setupParameters() is called ");
+    //console.log("---> setupParameters() is called ");
 
     //parse the velocities
     BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
@@ -168,6 +168,7 @@ function setupParameters() {
     BALL_OBJ.chosenMaterial = document.getElementById("material").value;
 
     // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
+    /*
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
     console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
     console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.Angle);
@@ -178,7 +179,7 @@ function setupParameters() {
 
     console.log("---------------------" );
     console.log("BALL_OBJ.sceneRadius      : " + BALL_OBJ.sceneRadius() );
-
+*/
 
 }
 /**
@@ -186,7 +187,7 @@ function setupParameters() {
  * 
  */
 function setupScene () {
-  console.log("---> setupScene() is called ");
+  //console.log("---> setupScene() is called ");
 
   //Setup The Scene --------------------------------------
 
@@ -365,6 +366,7 @@ function reloadSettings() {
 
   // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
   // can be commented out
+  /*
   console.log("ball.angle         : " + ball.angle);
   console.log("ball.radius        : " + ball.radius);
   console.log("ball.sceneRadius   : " + ball.sceneRadius);
@@ -383,7 +385,7 @@ function reloadSettings() {
   console.log("ball.mass          : " + ball.mass);
   console.log("ball.D             : " + ball.D);
   console.log("ball.D/ball.mass   : " + (ball.D/ball.mass));
-
+*/
 
 
   
@@ -402,7 +404,7 @@ function reloadSettings() {
  * 
  */
 function createBall () {
-  console.log("---> createBall() is called ");
+  //console.log("---> createBall() is called ");
 
   //cene.remove(arrowHelper);
  
@@ -616,7 +618,7 @@ function checkCollision(obj) {
       obj.velocityX = obj.velocityX * obj.bmaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      //console.log("POS: " +obj.position.y);
+      //console.log("POS: " +obj.position.x);
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
       // could be nice to just check the velocity in one direction also like || abs(obj.velocityX) < 2 || abs(obj.velocityY) 
