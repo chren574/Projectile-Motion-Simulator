@@ -7,7 +7,7 @@
 clear all;
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
-m = 0.5;                 % Massa m [kg]
+m = 0.15;                 % Massa m [kg]
 r = 0.15;                % Radie r [m]
 
 %%%%% Konstanter luftmotstand %%%%%
@@ -19,12 +19,12 @@ D = (p*C*A)/2;
 % Initialvarden
 v0 = 50;                 % initial hastigheten
 angle = 35;              % Vinkel  [grader]
-theta = angle*pi/180;    % Vinkel  [radianer]
+theta = angle*pi/180;    % Konvertera angle till radianer  [radianer]
 
 % Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
 tf = 10 ;                % sluttid
-deltaT = 0.05;           % tidssteg --> andra for att se fel
+deltaT = 0.01;           % tidssteg --> andra for att se fel
 t = t0:deltaT:tf;        % tidsvektorn
 
 len=length(t);
@@ -61,16 +61,9 @@ Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 %% Simulering Euler vind
 
+% Simulering Euler vind
 [x_v, y_v] = f_euler_vind(len,deltaT, g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
 figure;plot(x_v, y_v, 'b')
-
-%axis tight;
-xlabel('Distance [m]');
-ylabel('Height y [m]');
-titel = ['Wind simulation'];
-title(titel);
-ylim([0, inf]) % Axelgrans i y-led
-
 hold on;
 
 % Simulering Euler luftmotstand
@@ -78,10 +71,16 @@ hold on;
 plot(x, y, 'r')
 
 % Simulering Euler utan luftmotstand
-[x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
+[x_u, y_u] = f_euler_utan(len,deltaT, g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
 plot(x_u, y_u, 'g')
 %xlim([0, 10]) % Axelgrans i x-led
 
+%axis tight;
+xlabel('Distance [m]');
+ylabel('Height y [m]');
+titel = ['Wind simulation'];
+title(titel);
+ylim([0, inf]) % Axelgrans i y-led
 
 
 %%

@@ -1,5 +1,5 @@
 function [ x_v, y_v ] = f_euler_vind( len,deltaT,g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang)
-%UNTITLED5 Summary of this function goes here
+%f_euler_vind - Euler calculation of the projectile with wind
 %   Detailed explanation goes here
 for n = 2:len
 % for n = 1:1000
@@ -8,19 +8,16 @@ for n = 2:len
     % Med Luftmotstand och vind
     % Berakningar for vinden
     vf2 = sqrt( (vx_v(n-1) + U*cos(Uang))^2 + (vy_v(n-1) + U*sin(Uang))^2 );      
-    vf_ang = atan(abs( (vy_v(n-1) + U*sin(Uang))/(vx_v(n-1) + U*cos(Uang)) ) );     
-    % Acceleratioen
-    if (vx_v(n-1) + U*cos(Uang)) > 0
+    vf_ang = atan(abs( (vy_v(n-1) + U*sin(Uang)) / (vx_v(n-1) + U*cos(Uang)) ) );     
+    % Accelerationen
+    if ( vx_v(n-1) + U*cos(Uang) ) > 0
         ax_v(n) =    -(D/m)*vf2*cos(vf_ang);
     else
         ax_v(n) =    +(D/m)*vf2*cos(vf_ang);
     end
     
-    if (vy_v(n-1) + U*sin(Uang)) > 0
         ay_v(n) = -g -(D/m)*vf2*sin(vf_ang);
-    else
-        ay_v(n) = -g +(D/m)*vf2*sin(vf_ang);
-    end
+
     
     % Berknar hastigheten
     vx_v(n) = vx_v(n-1) + ax_v(n-1)*deltaT;

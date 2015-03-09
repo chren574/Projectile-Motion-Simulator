@@ -6,10 +6,10 @@ for n = 2:len
     %----------------------------------
     % Med Luftmotstand
     % Acceleratioen
-    ax(n) =    -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vx(n-1);
-    ay(n) = -g -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2)*vy(n-1);
-%var1    ax(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2)))/m;
-%var1    ay(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2))-(m*g))/m;   
+    ax(n) =    -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2);
+    ay(n) = -g -(D/m) * sqrt(vx(n-1)^2 + vy(n-1)^2);
+ %  ax(n) = (D*vx(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2)))/m;
+ %  ay(n) = (D*vy(n-1)*(sqrt(vx(n-1)^2+vy(n-1)^2))-(m*g))/m;   
     % Berknar hastigheten
     vx(n) = vx(n-1) + ax(n-1)*deltaT;
     vy(n) = vy(n-1) + ay(n-1)*deltaT;
@@ -30,8 +30,8 @@ end
 % test = length(x);
 % fprintf('%i \n',test);
 % resize the vector
-x = x(1:n+1);
-y = y(1:n+1);
+x = x(1:n);
+y = y(1:n);
 % test = length(x);
 % fprintf('%i \n',test);
 

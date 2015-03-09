@@ -27,7 +27,6 @@ end
 x_u = x_u(1:n);
 y_u = y_u(1:n);
 
-disp('hello');
 
 end
 
