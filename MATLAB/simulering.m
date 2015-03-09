@@ -17,8 +17,8 @@ p = 1.2;                % Densiteten p []
 D = (p*C*A)/2;
 
 % Initialvarden
-v0 = 40;                 % initial hastigheten
-angle = 70;              % Vinkel  [grader]
+v0 = 50;                 % initial hastigheten
+angle = 35;              % Vinkel  [grader]
 theta = angle*pi/180;    % Vinkel  [radianer]
 
 % Tidsvektorn for simuleringen
@@ -55,7 +55,7 @@ x_u(1)=0; y_u(1) = 0;     % Startpositionen x och y-led.
 x_v(1)=0; y_v(1) = 0;     % Startpositionen x och y-led.
 
 % Parametrar for vind
-U = 10;                        % vindens hastighet
+U = 0;                        % vindens hastighet
 wind_angle = 0;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
@@ -76,7 +76,6 @@ hold on;
 % Simulering Euler luftmotstand
 [x, y] = f_euler_luft(len,deltaT, g, x, y, vx ,vy , ax , ay, D, m );
 plot(x, y, 'r')
-
 
 % Simulering Euler utan luftmotstand
 [x_u, y_u] = f_euler_utan(len,deltaT,g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
@@ -113,7 +112,6 @@ ylim([0, inf]) % Axelgrans i y-led
 
 
 %%
-
 
 plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c*');
 
