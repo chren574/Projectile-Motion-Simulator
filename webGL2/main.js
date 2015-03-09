@@ -170,6 +170,7 @@ function setupParameters() {
 
     /*
     // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
+    /*
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
     console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
     console.log("BALL_OBJ.initialAngle        : " + BALL_OBJ.Angle);
@@ -369,6 +370,7 @@ function reloadSettings() {
   /*
   // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
   // can be commented out
+  /*
   console.log("ball.angle         : " + ball.angle);
   console.log("ball.radius        : " + ball.radius);
   console.log("ball.sceneRadius   : " + ball.sceneRadius);
@@ -387,6 +389,7 @@ function reloadSettings() {
   console.log("ball.mass          : " + ball.mass);
   console.log("ball.D             : " + ball.D);
   console.log("ball.D/ball.mass   : " + (ball.D/ball.mass));
+
   */
 
   if (windCheck.checked == true) {
@@ -616,7 +619,7 @@ function checkCollision(obj) {
       obj.velocityX = obj.velocityX * obj.bmaterial;
 
       //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      //console.log("POS: " +obj.position.y);
+      //console.log("POS: " +obj.position.x);
 
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
       // could be nice to just check the velocity in one direction also like || abs(obj.velocityX) < 2 || abs(obj.velocityY) 
