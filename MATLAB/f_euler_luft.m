@@ -35,7 +35,6 @@ y = y(1:n+1);
 % test = length(x);
 % fprintf('%i \n',test);
 
-disp('hello');
 
 end
 

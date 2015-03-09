@@ -107,8 +107,6 @@ xlabel('x (m)');
 ylabel('y (m)');
 title('Projectile Trajectories');
 
-
-
 % Jamfor med ode45 losning
 %argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
 [t,u]=ode45(@ft2,[0, 3],[0 ;20*cos(45*pi/180) ;0 ;20*sin(45*pi/180)]);
