@@ -1,5 +1,5 @@
 // // set the scene size
-  console.log("---> we are on top of main.js ");
+  //console.log("---> we are on top of main.js ");
 
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
@@ -80,7 +80,7 @@ function keyPress(e) {
 }
 
 function launch() {
-  console.log("---> launch() is called ");
+  //console.log("---> launch() is called ");
 
   // check if there is a ball in the air.
   if( !running ) {
@@ -99,7 +99,7 @@ function launch() {
 }
 
 function clearish() {
-  console.log("---> clearish() is called ");
+  //console.log("---> clearish() is called ");
 
   running = false;
   cancelAnimationFrame(animationId);
@@ -127,7 +127,7 @@ function clearish() {
 }
 
 function showWind(){
-  console.log("---> showWind() is called ");
+  //console.log("---> showWind() is called ");
 
   document.getElementById("windsettings").style.display = windCheck.checked ? "block" : "none";
 }
@@ -136,7 +136,7 @@ function showWind(){
  * 
  */
 function init() {
-  console.log("---> init() is called ");
+  //console.log("---> init() is called ");
 
   //parse the parameters from the browser
   setupParameters();
@@ -148,7 +148,7 @@ function init() {
  * 
  */
 function setupParameters() {
-    console.log("---> setupParameters() is called ");
+    //console.log("---> setupParameters() is called ");
 
     //parse the velocities
     BALL_OBJ.initialVelocity = parseFloat(document.getElementById("initialVelocity").value);
@@ -167,6 +167,8 @@ function setupParameters() {
     //Material - this is a string.
     BALL_OBJ.chosenMaterial = document.getElementById("material").value;
 
+
+    /*
     // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
     console.log("BALL_OBJ.initialVelocity     : " + BALL_OBJ.initialVelocity);
     console.log("BALL_OBJ.initialVelocity_wind: " + BALL_OBJ.initialVelocity_wind);
@@ -178,7 +180,7 @@ function setupParameters() {
 
     console.log("---------------------" );
     console.log("BALL_OBJ.sceneRadius      : " + BALL_OBJ.sceneRadius() );
-
+    */
 
 }
 /**
@@ -186,7 +188,7 @@ function setupParameters() {
  * 
  */
 function setupScene () {
-  console.log("---> setupScene() is called ");
+  //console.log("---> setupScene() is called ");
 
   //Setup The Scene --------------------------------------
 
@@ -349,7 +351,7 @@ function reloadSettings() {
   ball.bmaterial = Materials[BALL_OBJ.chosenMaterial].ballMaterial;
 
   //luftmotstånd parametrar
-  // Need to compensate with a factor 10 maybe
+  // Need to compensate area and D with a factor 10 maybe
   C = 0.5;
   ball.area = Math.PI*Math.pow(ball.radius, 2);
 
@@ -363,6 +365,8 @@ function reloadSettings() {
 
 
 
+
+  /*
   // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
   // can be commented out
   console.log("ball.angle         : " + ball.angle);
@@ -383,11 +387,7 @@ function reloadSettings() {
   console.log("ball.mass          : " + ball.mass);
   console.log("ball.D             : " + ball.D);
   console.log("ball.D/ball.mass   : " + (ball.D/ball.mass));
-
-
-
-  
-
+  */
 
   if (windCheck.checked == true) {
     scene.remove(arrowHelper);
@@ -402,7 +402,7 @@ function reloadSettings() {
  * 
  */
 function createBall () {
-  console.log("---> createBall() is called ");
+  //console.log("---> createBall() is called ");
 
   //cene.remove(arrowHelper);
  
