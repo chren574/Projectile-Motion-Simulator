@@ -4,21 +4,27 @@
 % 2015-02-10
 % 
 
+
 clear all;
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
-m = 0.15;                 % Massa m [kg]
-r = 0.15;                % Radie r [m]
+m = 0.145;                % Massa m [kg]
+r = 0.0366;               % Radie r [m]
+%Golfboll
+%m = 0.02;                % Massa m [kg]
+%r = 0.046;               % Radie r [m]
 
-%%%%% Konstanter luftmotstand %%%%%
+%%%%% Konstanter luftmotstand
 A = r^2*pi;             % Arean A [m^2]
 C = 0.5;
 p = 1.2;                % Densiteten p []
 D = (p*C*A)/2;
 
 % Initialvarden
-v0 = 50;                 % initial hastigheten
-angle = 35;              % Vinkel  [grader]
+v0 = 50;                  % initial hastigheten
+%angle = 35;              % Vinkel  [grader]
+angle = 45;               % Vinkel  [grader]
+%angle = 45;              % Vinkel  [grader]
 theta = angle*pi/180;    % Konvertera angle till radianer  [radianer]
 
 % Tidsvektorn for simuleringen
@@ -55,25 +61,28 @@ x_u(1)=0; y_u(1) = 0;     % Startpositionen x och y-led.
 x_v(1)=0; y_v(1) = 0;     % Startpositionen x och y-led.
 
 % Parametrar for vind
-U = 0;                        % vindens hastighet
-wind_angle = 0;              % Vinkel  [grader]
+U = 0;                         % vindens hastighet
+wind_angle = 180;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 %% Simulering Euler vind
 
 % Simulering Euler vind
-[x_v, y_v] = f_euler_vind(len,deltaT, g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-figure;plot(x_v, y_v, 'b')
+[x_v, y_v] = f_euler_vind(len, deltaT, g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
+figure;plot(x_v, y_v, 'b*')
 hold on;
 
 % Simulering Euler luftmotstand
-[x, y] = f_euler_luft(len,deltaT, g, x, y, vx ,vy , ax , ay, D, m );
+[x, y] = f_euler_luft(len, deltaT, g, x, y, vx ,vy , ax , ay, D, m );
 plot(x, y, 'r')
 
 % Simulering Euler utan luftmotstand
-[x_u, y_u] = f_euler_utan(len,deltaT, g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
-plot(x_u, y_u, 'g')
-%xlim([0, 10]) % Axelgrans i x-led
+[x_u, y_u] = f_euler_utan(len, deltaT, g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
+%plot(x_u, y_u, 'g')
+
+fprintf('Theta: %f \n',theta);
+%fprintf('Vx   : %f \n',vx_v);
+%fprintf('Vy   : %f \n',vy_v);
 
 %axis tight;
 xlabel('Distance [m]');
@@ -81,7 +90,8 @@ ylabel('Height y [m]');
 titel = ['Wind simulation'];
 title(titel);
 ylim([0, inf]) % Axelgrans i y-led
-
+%ylim([0, 100]) % Axelgrans i y-led
+%xlim([0,200]) % Axelgrans i x-led
 
 %%
 % Argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
@@ -112,7 +122,7 @@ ylim([0, inf]) % Axelgrans i y-led
 
 %%
 
-plot(x_u, y_u, 'g', x, y,'r' , x_v, y_v, 'c*');
+plot(x_u, y_u, 'r', x, y,'g' , x_v, y_v, 'b');
 
 grid on;
 hold on;

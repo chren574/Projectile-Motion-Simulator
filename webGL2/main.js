@@ -16,6 +16,8 @@ var Materials = {
   "Glas"     : { density : 2500 , ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
 };
 
+//var dt2 = 0;
+
 // the ball object that hold all the parameters
 var BALL_OBJ = {
   initialVelocity : 0,
@@ -474,6 +476,8 @@ function render() {
   t = new Date().getTime();                 //reset t  
   //console.log(dt);
 
+  // test to render a constant time step
+  //dt2+=0.001;
   //
   calculateVelocitiesWind(ball);
 
@@ -493,6 +497,7 @@ function render() {
 
   //render the scene
   renderer.render(scene, camera);
+
 }
 
 /**
@@ -504,6 +509,7 @@ function stopRender() {
   cancelAnimationFrame(animationId);
   createBall();
   running = false;
+  //dt2 = 0;
 }
 
 /**
@@ -559,7 +565,7 @@ function updatePosition(obj, dt) {
  */
 function calculateVelocitiesWind(obj) {
  
-  obj.vf2    = Math.sqrt(Math.pow((obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
+  obj.vf2    = (Math.pow((obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
   obj.vf_ang = Math.atan(Math.abs((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) ) );
 
 
