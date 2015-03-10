@@ -16,9 +16,6 @@ for n = 2:len
     vx(n) = vx(n-1) + ax(n-1)*deltaT;
     vy(n) = vy(n-1) + ay(n-1)*deltaT;
     
-    fprintf('Vx   : %f \n',vx(n));
-    fprintf('Vy   : %f \n',vy(n));
-    
     % Berknar den nya positionen 
     x(n) = x(n-1) + vx(n-1)*deltaT + 0.5*ax(n-1)*deltaT^2;
     y(n) = y(n-1) + vy(n-1)*deltaT + 0.5*ay(n-1)*deltaT^2;  

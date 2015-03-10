@@ -230,7 +230,6 @@ function setupScene () {
   //var container = document.getElementById("container");
   
   // start the renderer
-  //renderer.setSize(WIDTH, HEIGHT);
   renderer.setSize(container.offsetWidth, container.offsetHeight);
 
   // attach the render-supplied DOM element
@@ -253,7 +252,7 @@ function setupScene () {
   var greenPoint = new THREE.PointLight(0x404040, 3, 500);
   greenPoint.position.set( 0, 150, 70 );
   scene.add(greenPoint);
-  scene.add(new THREE.PointLightHelper(greenPoint, 3));
+  //scene.add(new THREE.PointLightHelper(greenPoint, 3));
 
   //HemisphereLight(skyColorHex, groundColorHex, intensity)
 
@@ -275,7 +274,6 @@ function setupScene () {
   pointArray.push(dot);
 
   //Plane geometry and material
-
   planeWidth = 500;
   var geometry = new THREE.BoxGeometry( planeWidth, 300, 100 );
   var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
@@ -292,16 +290,9 @@ function setupScene () {
   if (windCheck.checked == true) {
 
     windArrow();
-    /*
-    var local_wind_angle = BALL_OBJ.Angle_wind;
-
-    dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
-    origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
-    hex = 0xffff00;
-    arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
 
     scene.add( arrowHelper );
-  */
+  
   }
 
   //render the scene
@@ -363,9 +354,6 @@ function reloadSettings() {
   ball.mass = 1;
   ball.D = 0.02;
 */
-
-
-
 
   /*
   // DO NOT DELETE! --> this is used for Error handling --> DO NOT DELETE!
@@ -477,6 +465,9 @@ function render() {
   // test to render a constant time step
   //dt2+=0.001;
   //
+
+  console.log(dt);
+  
   calculateVelocitiesWind(ball);
 
   //
@@ -532,7 +523,7 @@ function windArrow() {
   var local_wind_angle = BALL_OBJ.Angle_wind;
 
   dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
-  origin = new THREE.Vector3( container.offsetWidth - 0.7*container.offsetWidth, container.offsetHeight - 0.6*container.offsetHeight, 0 );
+  origin = new THREE.Vector3( 200, 225, 0 );
   hex = 0xffff00;
   arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
 

@@ -11,19 +11,19 @@ function [ uprime ] = f_runge_vind( t, v )
     m = 0.145;               % Massa m [kg]
     g = 9.82;                % Tyngdacceleration g [m/s^2]    
     % Konstanter luftmotstand
-    r = 0.15;
+    r = 0.0366;               % Radie r [m]
     A = r^2*pi;             % Arean A [m^2]
     C = 0.5;
     p = 1.2;                % Densiteten p []
     D = (p*C*A)/2;
-    % Konstanter vind
-
-    U = 0;
-    Uang = 0;
+    % Parametrar vind
+    U = 10;
+    wind_angle = 0;                % Vinkel  [grader]
+    Uang = wind_angle*pi/180;      % Vinkel  [radianer]
     
     % Calculation wind
-    vf2 = sqrt( (v(2) + U*cos(Uang))^2 + (v(3) + U*sin(Uang))^2 );    
-    vf_ang = atan( abs ((v(3) + U*sin(Uang))/(v(2) + U*cos(Uang)) ) );
+    vf2 =  (v(2) + U*cos(Uang))^2 + (v(3) + U*sin(Uang))^2 ;    
+    vf_ang = atan( abs ((v(3) + U*sin(Uang))/ (v(2) + U*cos(Uang)) ) );
         
     % Hastighet x
     uprime(1)= v(2);

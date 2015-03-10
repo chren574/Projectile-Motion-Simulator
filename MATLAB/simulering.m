@@ -8,8 +8,8 @@
 clear all;
 %%%%% Konstanter %%%%%
 g = 9.82;                % Tyngdacceleration g [m/s^2]
-m = 0.145;                % Massa m [kg]
-r = 0.0366;               % Radie r [m]
+m = 0.14;                % Massa m [kg]
+r = 0.03;                % Radie r [m]
 %Golfboll
 %m = 0.02;                % Massa m [kg]
 %r = 0.046;               % Radie r [m]
@@ -30,7 +30,7 @@ theta = angle*pi/180;    % Konvertera angle till radianer  [radianer]
 % Tidsvektorn for simuleringen
 t0 = 0;                  % starttid
 tf = 10 ;                % sluttid
-deltaT = 0.01;           % tidssteg --> andra for att se fel
+deltaT = 0.1;           % tidssteg --> andra for att se fel
 t = t0:deltaT:tf;        % tidsvektorn
 
 len=length(t);
@@ -61,15 +61,15 @@ x_u(1)=0; y_u(1) = 0;     % Startpositionen x och y-led.
 x_v(1)=0; y_v(1) = 0;     % Startpositionen x och y-led.
 
 % Parametrar for vind
-U = 0;                         % vindens hastighet
-wind_angle = 180;              % Vinkel  [grader]
+U = 10;                         % vindens hastighet
+wind_angle = 0;              % Vinkel  [grader]
 Uang = wind_angle*pi/180;      % Vinkel  [radianer]
 
 %% Simulering Euler vind
 
 % Simulering Euler vind
 [x_v, y_v] = f_euler_vind(len, deltaT, g, x_v, y_v, vx_v ,vy_v, ax_v, ay_v, D, m, U, Uang);
-figure;plot(x_v, y_v, 'b*')
+figure;plot(x_v, y_v, 'b')
 hold on;
 
 % Simulering Euler luftmotstand
@@ -78,7 +78,7 @@ plot(x, y, 'r')
 
 % Simulering Euler utan luftmotstand
 [x_u, y_u] = f_euler_utan(len, deltaT, g, x_u, y_u, vx_u ,vy_u, ax_u, ay_u);
-%plot(x_u, y_u, 'g')
+plot(x_u, y_u, 'g')
 
 fprintf('Theta: %f \n',theta);
 %fprintf('Vx   : %f \n',vx_v);
@@ -93,31 +93,30 @@ ylim([0, inf]) % Axelgrans i y-led
 %ylim([0, 100]) % Axelgrans i y-led
 %xlim([0,200]) % Axelgrans i x-led
 
-%%
+%
 % Argument ode45(funktionen, [t0 tf], [x0 ; v0*cos(rad) ;y0 ; v0*sin(rad)])
 
 % Ej luftmotstand med ode45 losning
 
 [t ,runge_utan]=ode45(@f_runge_utan,[0, 10],[0 ;v0*cos(theta) ;0 ;v0*sin(theta)]);
+plot(runge_utan(:,1), runge_utan(:,3), 'g*')
+%ylim([0, inf]) % Axelgrans i y-led
 
-plot(runge_utan(:,1), runge_utan(:,3), 'g+')
-ylim([0, inf]) % Axelgrans i y-led
 
-
-%%
+%
 % Luftmotstand med ode45 losning 
 
 [t ,runge_luft]=ode45(@f_runge_luft,[0, 10],[0 ; v0*cos(theta) ;0 ;v0*sin(theta)]);
 
 plot(runge_luft(:,1), runge_luft(:,3), 'r*')
-ylim([0, inf]) % Axelgrans i y-led
+%ylim([0, inf]) % Axelgrans i y-led
 
-%%
+%
 % Vind ekvationen med ode45 losning 
 
 [t ,runge_vind]=ode45(@f_runge_vind,[0, 10],[0 ; v0*cos(theta) ;0 ;v0*sin(theta)]);
 plot(runge_vind(:,1), runge_vind(:,3), 'b*')
-ylim([0, inf]) % Axelgrans i y-led
+%ylim([0, inf]) % Axelgrans i y-led
 
 
 %%
@@ -130,8 +129,14 @@ axis tight;
 ylim([0, inf]) % Axelgrans i y-led
 xlabel('Distance [m]');
 ylabel('Height y [m]');
-titel = ['Canon simulation, timestep = ', num2str(deltaT)];
+titel = ['Projectile motion , timestep = ', num2str(deltaT)];
 title(titel);
+
+plot(runge_utan(:,1), runge_utan(:,3), 'r*')
+plot(runge_luft(:,1), runge_luft(:,3), 'g*')
+plot(runge_vind(:,1), runge_vind(:,3), 'b*')
+
+
 
 %%
 
