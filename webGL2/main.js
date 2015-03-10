@@ -8,12 +8,12 @@ var running = false;
 // Materials skrivet som JSON -- JavaScript Object Notation.
 // Density, bounce property and texture location.
 var Materials = {
-  "Golf"     : { density : 1184 , ballMaterial : 0.858 , ballTexture : "images/golf.jpg" },
-  "Tennis"   : { density : 400  , ballMaterial : 0.712 , ballTexture : "images/tennis.jpg"},
-  "Billiard" : { density : 1700 , ballMaterial : 0.804 , ballTexture : "images/billiard.jpg"},
-  "Wooden"   : { density : 690  , ballMaterial : 0.603 , ballTexture : "images/wood.jpg"},
-  "Steel"    : { density : 7820 , ballMaterial : 0.597 , ballTexture : "images/steel.jpg"},
-  "Glas"     : { density : 2500 , ballMaterial : 0.658 , ballTexture : "images/glas.jpg"}
+  "Golf"     : { density : 1184 , ballMaterial : 0.858 , radius : 0.021 , ballTexture : "images/golf.png" },
+  "Tennis"   : { density : 400  , ballMaterial : 0.712 , radius : 0.035 , ballTexture : "images/tennis.png"},
+  "Billiard" : { density : 1700 , ballMaterial : 0.804 , radius : 0.027 , ballTexture : "images/billiard.jpg"},
+  "Wooden"   : { density : 690  , ballMaterial : 0.603 , radius : 0.03 , ballTexture : "images/wood.jpg"},
+  "Steel"    : { density : 7820 , ballMaterial : 0.597 , radius : 0.03 , ballTexture : "images/steel.jpg"},
+  "Glas"     : { density : 2500 , ballMaterial : 0.658 , radius : 0.03 , ballTexture : "images/glas.jpg"}
 };
 
 //var dt2 = 0;
@@ -162,8 +162,6 @@ function setupParameters() {
 
     var angle_wind = document.getElementById("angle_wind").value;
     BALL_OBJ.Angle_wind = parseFloat((angle_wind)*Math.PI/180) + Math.PI;
-
-    BALL_OBJ.radius = parseFloat(document.getElementById("ballSize").value);
 
     //parse the material
     //Material - this is a string.
@@ -335,7 +333,7 @@ function reloadSettings() {
   setupParameters();
   //------------------------------
   ball.angle = BALL_OBJ.initialAngle;
-  ball.radius = BALL_OBJ.radius;
+  ball.radius = Materials[BALL_OBJ.chosenMaterial].radius;
   ball.sceneRadius = BALL_OBJ.sceneRadius();
 
   ball.velocityX = BALL_OBJ.initialVelocity*Math.cos(ball.angle);
