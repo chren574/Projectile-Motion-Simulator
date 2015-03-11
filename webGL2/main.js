@@ -1,5 +1,4 @@
-// // set the scene size
-  //console.log("---> we are on top of main.js ");
+//console.log("---> we are on top of main.js ");
 
 var camera, scene, renderer, stats;
 var geometry, material, mesh;
@@ -15,8 +14,6 @@ var Materials = {
   "Steel"    : { density : 7820 , ballMaterial : 0.597 , radius : 0.03 , ballTexture : "images/steel.jpg"},
   "Glas"     : { density : 2500 , ballMaterial : 0.658 , radius : 0.03 , ballTexture : "images/glas.jpg"}
 };
-
-//var dt2 = 0;
 
 // the ball object that hold all the parameters
 var BALL_OBJ = {
@@ -197,7 +194,6 @@ function setupScene () {
   // SCENE 
   scene = new THREE.Scene();
 
-  //------------------------------------------------------
   var container = document.getElementById("container");
 
   WIDTH = container.offsetWidth,
@@ -286,7 +282,6 @@ function setupScene () {
 
   //Wind arrow
   //scene.remove(arrowHelper);
-  
   if (windCheck.checked == true) {
 
     windArrow();
@@ -467,7 +462,7 @@ function render() {
   //
 
   console.log(dt);
-  
+
   calculateVelocitiesWind(ball);
 
   //
@@ -498,7 +493,6 @@ function stopRender() {
   cancelAnimationFrame(animationId);
   createBall();
   running = false;
-  //dt2 = 0;
 }
 
 /**
@@ -518,18 +512,6 @@ function drawBallShadow() {
    }
   time_old += 1;
 }
-
-function windArrow() {
-  var local_wind_angle = BALL_OBJ.Angle_wind;
-
-  dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
-  origin = new THREE.Vector3( 200, 225, 0 );
-  hex = 0xffff00;
-  arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
-
-  scene.add( arrowHelper );
-}
-
 
 /**
  * Calculate the new velocity of each component.
@@ -556,7 +538,6 @@ function calculateVelocitiesWind(obj) {
  
   obj.vf2    = (Math.pow((obj.velocityX+(obj.velocity_wind)*Math.cos(obj.Uang)),2) + Math.pow((obj.velocityY + obj.velocity_wind*Math.sin(obj.Uang)),2) );     
   obj.vf_ang = Math.atan(Math.abs((obj.velocityY + (obj.velocity_wind)*Math.sin(obj.Uang))/ (obj.velocityX + obj.velocity_wind*Math.cos(obj.Uang)) ) );
-
 
 /*
   console.log('vx    :'+ obj.velocityX );
@@ -613,9 +594,6 @@ function checkCollision(obj) {
       obj.velocityY = -obj.velocityY * obj.bmaterial;
       obj.velocityX = obj.velocityX * obj.bmaterial;
 
-      //console.log(Math.sqrt( Math.pow((obj.velocityX),2 ) + Math.pow((obj.velocityY),2 ) ));
-      //console.log("POS: " +obj.position.x);
-
       // check if the total velocity is to low for a bounce. the number 5 need to be checked
       // could be nice to just check the velocity in one direction also like || abs(obj.velocityX) < 2 || abs(obj.velocityY) 
       if ( ( Math.sqrt( Math.pow((obj.velocityX), 2 ) + Math.pow((obj.velocityY), 2 ) )  < 7 )  ) {
@@ -656,6 +634,17 @@ function checkCollision(obj) {
   var vf = v + (dt/6)*(a1 + 2*a2 + 2*a3 + a4);
 
   return [xf, vf];
+}
+
+function windArrow() {
+  var local_wind_angle = BALL_OBJ.Angle_wind;
+
+  dir = new THREE.Vector3( -Math.cos(local_wind_angle), -Math.sin(local_wind_angle), 0 );
+  origin = new THREE.Vector3( 200, 225, 0 );
+  hex = 0xffff00;
+  arrowHelper = new THREE.ArrowHelper( dir, origin, 50, hex, 15, 15);
+
+  scene.add( arrowHelper );
 }
 
 
