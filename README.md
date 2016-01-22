@@ -5,7 +5,7 @@ There are several types of balls to choose from with different properties. The p
 
 The application is optimized for Chrome(ium) and to run it, klick on this link [application](https://cdn.rawgit.com/chren574/Projectile-Motion-Simulator/master/index.html).
 
-For more details about this project, please see the [report](https://cdn.rawgit.com/chren574/Projectile-Motion-Simulator/master/Projekt_Rapport.pdf).
+For more details about this project, please see the [report](https://cdn.rawgit.com/chren574/Projectile-Motion-Simulator/master/Projekt_Rapport.pdf) (Written in swedish).
 
 
 ![GitHub Logo](/images/kastbana_v2.png)
