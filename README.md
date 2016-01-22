@@ -1,7 +1,7 @@
 # Projectile Motion Simulator
 
-The project is developed in MATLAB first and later implemented in JavaScrip with the API´s WebGL and Three.js .
-There are several types of balls to choose from with different properties. The parameters that are possible to change is the velocity of the ball, the angle and if you want to apply wind.
+The project is developed in MATLAB first and later implemented in JavaScrip with the API´s WebGL and Three.js.
+There is several types of balls to choose from with different properties. The parameters that is possible to change is the velocity of the ball, the angle and if you want to apply wind.
 
 The application is optimized for Chrome(ium) and to run it, click on this [link](https://cdn.rawgit.com/chren574/Projectile-Motion-Simulator/master/index.html).
 
