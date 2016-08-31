@@ -1,170 +1,150 @@
-
 var LIB = {
 
-  distX : function(v, ball_angle, dt){
-	  
-	//ax_u = 0;
+    distX: function(v, ball_angle, dt) {
 
-    // Hastighet
-    //vx_u = v * Math.cos( ball_angle * Math.PI / 180 );
+        //Calculate trajetory with gravity
+        x = v * Math.cos(ball_angle * Math.PI / 180) * dt;
 
-    // Position
-    //x_u = vx_u *time + 0.5*ax_u*Math.pow(time,2);
-   
-	//Calculate trajetory with gravity
-	x = v * Math.cos( ball_angle * Math.PI / 180 ) * dt;
-	  
-	return(x)
-  },
-  
-  distY : function(v, ball_angle, dt, gravity){
+        return (x)
+    },
 
-  	  //var ay_u = -gravity;
+    distY: function(v, ball_angle, dt, gravity) {
 
-  	  //vy_u + 
-  	  //var vy_u = v * Math.sin(ball_angle * Math.PI/ 180);
-	  //var vy_u = ay_u *time;
+        //Calculate trajetory with gravity
+        y = v * Math.sin(ball_angle * Math.PI / 180) * dt - (gravity * Math.pow(dt, 2) * 0.5);
 
-	  //y_u + 
-	  //var y_u = vy_u*time + 0.5*ay_u*Math.pow(time,2);
-	  
-	  //Calculate trajetory with gravity
-	  y = v * Math.sin(ball_angle * Math.PI/ 180) * dt - ( gravity * Math.pow(dt,2) * 0.5);
-	  
-	  return(y)
-  },
+        return (y)
+    },
 
-  distX_vind : function(x_pos, v, ball_angle, time, wind_angle, U, r, mass){
-	
-  	// Constants
-  	C = 0.5;
-  	p = 0.5;
-  	A = Math.PI*Math.pow(r, 2);
+    distX_vind: function(x_pos, v, ball_angle, time, wind_angle, U, r, mass) {
 
-	//luftmotstånd parametrar
-	var D = (p*C*A)/2;
-	var m = mass;
+        // Constants
+        C = 0.5;
+        p = 0.5;
+        A = Math.PI * Math.pow(r, 2);
 
-	//vind parametrar  
-  	var angle = wind_angle;              //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);    //Vinkel  [radianer]
-  	var U = U;
+        //luftmotstånd parametrar
+        var D = (p * C * A) / 2;
+        var m = mass;
 
-  	// Hastighet komponenter
-    vx_v = v * Math.cos( ball_angle * Math.PI / 180 );
-    vy_v = v * Math.sin( ball_angle * Math.PI / 180 );
+        //vind parametrar  
+        var angle = wind_angle; //Vinkel  [grader]
+        var Uang = (angle * Math.PI / 180); //Vinkel  [radianer]
+        var U = U;
 
-    // vind 
-    vf2 = Math.pow((vx_v + U*Math.cos(Uang)),2) + Math.pow((vy_v + U*Math.sin(Uang)),2);     
-    vf_ang = Math.atan((vy_v + U*Math.sin(Uang))/(vx_v + U*Math.cos(Uang))); 
-  	
-  	// Accelerationen
-	ax = -(D/m)*vf2*Math.cos(vf_ang);
+        // Velocity components
+        vx_v = v * Math.cos(ball_angle * Math.PI / 180);
+        vy_v = v * Math.sin(ball_angle * Math.PI / 180);
 
-    // Hastighet
-    vx = v * Math.cos( ball_angle * Math.PI / 180 );
+        // vind 
+        vf2 = Math.pow((vx_v + U * Math.cos(Uang)), 2) + Math.pow((vy_v + U * Math.sin(Uang)), 2);
+        vf_ang = Math.atan((vy_v + U * Math.sin(Uang)) / (vx_v + U * Math.cos(Uang)));
 
-    // Position
-    x = vx * time + 0.5*ax*Math.pow(time,2);
-     
-	return(x)
-  },
-  
-  distY_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r, mass){
+        // Accelerationen
+        ax = -(D / m) * vf2 * Math.cos(vf_ang);
 
-  	// Constants
-  	C = 0.5;
-  	p = 0.5;
-  	A = Math.PI*Math.pow(r, 2);
+        // Velocity
+        vx = v * Math.cos(ball_angle * Math.PI / 180);
 
-	//luftmotstånd parametrar
-	var D = (p*C*A)/2;
-	var m = mass;
-	var U = U;
-  	
-  	//vind parametrar 
-  	var angle = wind_angle;              		  //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);      //Vinkel  [radianer]
+        // Position
+        x = vx * time + 0.5 * ax * Math.pow(time, 2);
 
-	// Hastighet komponenter
-	vx_v = v * Math.cos( ball_angle * Math.PI / 180 );
-	vy_v = v * Math.sin( ball_angle * Math.PI / 180 );
+        return (x)
+    },
 
-	// vind
-	vf2 = Math.pow((vx_v + U*Math.cos(Uang)),2) + Math.pow((vy_v + U*Math.sin(Uang)),2);     
-	vf_ang = Math.atan((vy_v + U*Math.sin(Uang))/(vx_v + U*Math.cos(Uang))); 
+    distY_vind: function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r, mass) {
 
-  	//accelerationen
-	var ay = -gravity -(D/m) * vf2*Math.sin(vf_ang);
-	  //var ay = -gravity;
+        // Constants
+        C = 0.5;
+        p = 0.5;
+        A = Math.PI * Math.pow(r, 2);
 
-	//vy_u + 
-	var vy = v * Math.sin(ball_angle * Math.PI/ 180);
-	//var vy_u = ay_u *time;
+        // Drag parametraras
+        var D = (p * C * A) / 2;
+        var m = mass;
+        var U = U;
 
-	//y_u + 
-	var y = vy*time + 0.5*ay*Math.pow(time,2);
+        // Wind parametrar 
+        var angle = wind_angle; // Angle  [grader]
+        var Uang = (angle * Math.PI / 180); // Angle  [Radii]
+
+        // Velocity components
+        vx_v = v * Math.cos(ball_angle * Math.PI / 180);
+        vy_v = v * Math.sin(ball_angle * Math.PI / 180);
+
+        // Wind
+        vf2 = Math.pow((vx_v + U * Math.cos(Uang)), 2) + Math.pow((vy_v + U * Math.sin(Uang)), 2);
+        vf_ang = Math.atan((vy_v + U * Math.sin(Uang)) / (vx_v + U * Math.cos(Uang)));
+
+        // accelerationen in y-led
+        var ay = -gravity - (D / m) * vf2 * Math.sin(vf_ang);
+
+        // Velocity in y-led
+        var vy = v * Math.sin(ball_angle * Math.PI / 180);
+
+        // Position in y-led
+        var y = vy * time + 0.5 * ay * Math.pow(time, 2);
 
 
-	return(y)
-  },
-  
-  dist_vind : function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r){
+        return (y)
+    },
 
-  	// Constants
-  	C = 0.5;
-  	p = 1.2;
-  	A = Math.PI*Math.pow(r, 2);
+    dist_vind: function(y_pos, v, ball_angle, time, gravity, wind_angle, U, r) {
 
-	//luftmotstånd parametrar
-	var D = (p*C*A)/2;
-	var m = 0.5;
-	var U = U;
-  	
-  	//vind parametrar 
-  	var angle = wind_angle;              		  //Vinkel  [grader]
-	var Uang = (angle*Math.PI / 180);      //Vinkel  [radianer]
+        // Constants
+        C = 0.5;
+        p = 1.2;
+        A = Math.PI * Math.pow(r, 2);
 
-	vx_v = v * Math.cos( ball_angle * Math.PI / 180 );
-	vy_v = v * Math.sin( ball_angle * Math.PI / 180 );
+        //luftmotstånd parametrar
+        var D = (p * C * A) / 2;
+        var m = 0.5;
+        var U = U;
 
-	vf2 = Math.pow(v*Math.cos(ball_angle*Math.PI/180) + U*Math.cos(Uang), 2) + Math.pow(v*Math.sin(ball_angle*Math.PI/180) + U*Math.sin(Uang), 2); 
-	vf_ang = Math.atan((vy_v + U*Math.sin(Uang))/(vx_v + U*Math.cos(Uang)));
+        //vind parametrar 
+        var angle = wind_angle; //Vinkel  [grader]
+        var Uang = (angle * Math.PI / 180); //Vinkel  [radianer]
 
-  	//accelerationen
-  	var ax = -(D/m)*vf2*Math.cos(vf_ang);
-	var ay = -gravity -(D/m) * vf2*Math.sin(vf_ang);
-	  //var ay = -gravity;
+        vx_v = v * Math.cos(ball_angle * Math.PI / 180);
+        vy_v = v * Math.sin(ball_angle * Math.PI / 180);
 
-	//vy_u + 
-	var vx = v * Math.cos( ball_angle * Math.PI / 180 );
-	var vy = v * Math.sin(ball_angle * Math.PI/ 180);
-	//var vy_u = ay_u *time;
+        vf2 = Math.pow(v * Math.cos(ball_angle * Math.PI / 180) + U * Math.cos(Uang), 2) + Math.pow(v * Math.sin(ball_angle * Math.PI / 180) + U * Math.sin(Uang), 2);
+        vf_ang = Math.atan((vy_v + U * Math.sin(Uang)) / (vx_v + U * Math.cos(Uang)));
 
-	//y_u + 
-	var x = vx * time + 0.5*ax*Math.pow(time,2);
-	var y = vy*time + 0.5*ay*Math.pow(time,2);
+        //accelerationen
+        var ax = -(D / m) * vf2 * Math.cos(vf_ang);
+        var ay = -gravity - (D / m) * vf2 * Math.sin(vf_ang);
+        //var ay = -gravity;
+
+        //vy_u + 
+        var vx = v * Math.cos(ball_angle * Math.PI / 180);
+        var vy = v * Math.sin(ball_angle * Math.PI / 180);
+        //var vy_u = ay_u *time;
+
+        //y_u + 
+        var x = vx * time + 0.5 * ax * Math.pow(time, 2);
+        var y = vy * time + 0.5 * ay * Math.pow(time, 2);
 
 
-	return [x, y];
-  },
+        return [x, y];
+    },
 
     //Function for linear drag
-  distXdrag: function(v, vt, ball_angle, time, gravity) {
+    distXdrag: function(v, vt, ball_angle, time, gravity) {
 
-    x = (vt / gravity) * (v * Math.cos(ball_angle * Math.PI / 180)) * (1 - Math.exp(-gravity * time / vt));
+        x = (vt / gravity) * (v * Math.cos(ball_angle * Math.PI / 180)) * (1 - Math.exp(-gravity * time / vt));
 
-    return(x)
+        return (x)
 
-  },
+    },
     //Function for linear drag
-  distYdrag: function(v, vt, ball_angle, time, gravity) {
+    distYdrag: function(v, vt, ball_angle, time, gravity) {
 
-    y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
+        y = (vt / gravity) * ((v * Math.sin(ball_angle * Math.PI / 180)) + vt) * (1 - Math.exp(-gravity * time / vt)) - vt * time;
 
 
-    return(y)
-  }
+        return (y)
+    }
 
 
 };
