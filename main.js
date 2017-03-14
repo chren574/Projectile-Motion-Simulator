@@ -389,9 +389,9 @@ function createBall() {
     img.onload = function() { texture.needsUpdate = true; };
     img.src = ballTexture;
     texture.needsUpdate = true;
-
+    
     // Load texture
-    var Texture = THREE.ImageUtils.loadTexture(ballTexture, {}, function() {
+    var Texture = THREE.TextureLoader.load(ballTexture, {}, function() {
         renderer.render(scene, camera);
     });
 
