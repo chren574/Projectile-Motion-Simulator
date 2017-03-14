@@ -268,8 +268,8 @@ function setupScene() {
     //Dots to visulase the projection
     var dotGeometry = new THREE.Geometry();
     dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    var dotMaterial = new THREE.PointCloudMaterial({ size: 3, sizeAttenuation: false });
-    dot = new THREE.PointCloud(dotGeometry, dotMaterial);
+    var dotMaterial = new THREE.PointsMaterial({ size: 3, sizeAttenuation: false });
+    dot = new THREE.Points(dotGeometry, dotMaterial);
     pointArray.push(dot);
 
     //Plane geometry and material
@@ -390,8 +390,9 @@ function createBall() {
     img.src = ballTexture;
     texture.needsUpdate = true;
     
+    var loader = new THREE.TextureLoader();
     // Load texture
-    var Texture = THREE.TextureLoader.load(ballTexture, {}, function() {
+    var Texture = loader.load(ballTexture, {}, function() {
         renderer.render(scene, camera);
     });
 
